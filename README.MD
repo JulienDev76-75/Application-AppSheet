@@ -1,0 +1,2 @@
+Application développée avec Symfony. 
+
