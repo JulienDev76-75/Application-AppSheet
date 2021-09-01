@@ -3,31 +3,31 @@
 {% block title %}ROLE = DG{% endblock %}
 
 {% block body %}
-<h2 class="text-center mb-5 mt-5 pb-5">   Bonjour le monde, bienvenue sur votre Dashboard</h2>
+<h2 class="text-center mb-5 mt-5 pb-2 pt-5">Bonjour le monde, bienvenue sur votre Dashboard</h2>
 
-<div class="row row-cols-1 row-cols-md-4 g-4 mb-5 pb-5 pt-2 w-75 mx-auto">
-  <div class="col">
+<div class="row row-cols-3 row-cols-md-3 row-cols-lg-4 g-4 mb-5 pb-5 pt-5 mt-5 w-75 mx-auto">
+  <div class="col mb-3">
       <a href="{{ path('frequentation') }}"><img src="{{ asset('image/cafreq.png') }}" title="frequentation" alt="frequentation logo"></a>
   </div>
-  <div class="col">
+  <div class="col mb-3">
       <a href="{{ path('pass') }}"><img src="{{ asset('image/pass.png') }}" title="pass" alt="pass logo"></a>
   </div>
-  <div class="col">
+  <div class="col mb-3">
       <a href="{{ path('planCommunication') }}"><img src="{{ asset('image/plancom.png') }}" title="plan de communication" alt="plan de communication logo"></a>
   </div>
-  <div class="col">
+  <div class="col mb-3">
       <a href="{{ path('coutCommunication') }}"><img src="{{ asset('image/coutcom.png') }}"title="coût de communication" alt="coût de communication logo"></a>
   </div>
-  <div class="col">
+  <div class="col mb-3">
       <a href="{{ path('satisfaction') }}" ><img src="{{ asset('image/satisfaction.png') }}"  title="satisfaction client" alt="satisfaction logo"/></a>
   </div>
-    <div class="col">
+    <div class="col mb-3">
       <a href="{{ path('swot') }}"><img src="{{ asset('image/swot.png') }}" title="swot" alt="SWOT logo"/></a>
   </div>
-    <div class="col">
+    <div class="col mb-3">
           <a href="{{ path('carteCadeau') }}"><img src="{{ asset('image/cartecadeau.png') }}" title="coût de communication" alt="coût de communication logo"></a>
   </div>
-    <div class="col">
+    <div class="col mb-3 pb-5">
       <a class="my-auto h-auto" href="{{ path('listeDesSites') }}" ><img src="{{ asset('image/sites.png') }}"  title="liste des sites vert-marine" alt="Liste des sites Vert-Marine"></a> 
   </div>
 </div>
