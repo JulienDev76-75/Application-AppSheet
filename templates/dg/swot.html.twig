@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+{# This will be a comment #}
+{% block title %}ROLE = DIRECTEUR GENERAL, TOUTE VIEW POSSIBLE{% endblock %}
+{# Astuce :
+ - LA VUE NE CONCERNE QUE LE DR ET SES SITES
+ - DONC LE DR est la cle primaire, ses sites doivent être relié à lui
+ - site = $siteRepository->findby(
+            ['user' => $this->getUser()],
+        );
+        - boucle, modal reprends info de la bdd
+- ATTENTION : oublie pas vue DIFFERENTE ENTRE DG ET DR
+#}
+{% block body %}
+
+<h2 class="text-center mt-5 mb-5 text-danger">Liste des sites avec leurs forces et faiblesses :</h2>
+
+
+<div class="w-75 mx-auto">
+<table class="table table-bordered mb-5 mt-5">
+  <thead class="bg-dark text-white">
+    <tr>
+      <th scope="col">Site / D.R</th>
+      <th scope="col">Année</th>
+      <th scope="col">Forces</th>
+      <th scope="col">Faiblesses</th>
+      <th scope="col">Opportunités</th>
+      <th scope="col">Menaces</th>
+      <th scope="col">Détails</th>
+    </tr>
+  </thead>
+<tbody>
+    <tr class="bg-light">
+      <td>Arnaud Briand</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+</tbody>
+    <tbody>
+        <tr>
+            <td>AlfortVille</td>
+            <td>2017</td>
+            <td>Bien placé, très neuf, ce site sent bon la lavande, il y a un super fleuriste en face, il dispose de plein d'infrastructures qui permet de faire venir du monde</td>
+            <td>Pas de personnels, il existe de nombreux soucis au sein de cettes tructure, mais je rends le texte long exprès pour voir jusqu'où la table peut aller, et si je peux faire un déroulé, ou si le texte va s'étendre le maximum possible, si ce n'est pas le cas, améliore la mise en forme ou alors essaye de faire une version mini déroulé</td>
+            <td>Recruter du personnel rapidement, mais cela étant dit, c'est difficile de nos jours de recruter des gens qualifiés, tout comme pour les faiblesses, il faut que je meuble un maximum pour voir ce qu'il va se passer au sein du tableau, pour cela je dois écrire pas mal de texte qui n'a aucun sens, ou qui est ennuyeux à lire si on va jusqu'au bout des choses</td>
+            <td>Aucune personne ne veut venir nous rejoindre, c'est une menace fantome, cela dit, la table réagit plutôt bien à ce que je suis en train de faire, c'est même plutôt bon signe en fait dans le fond, ca veut dire que cela va être peut être responsive et que la personne n'aura qu'à chercher son site dans la barre</td>
+            <td><!-- Button trigger modal -->
+                <button type="button" class="btn btn-dark my-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Détails
+                </button>
+                <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                <p>Site : Alfortville</p></br>
+                                <hr class="w-50 mx-auto">
+                                <p class="pt-2">Directeur Régional : Arnaud Briand</p></br>
+                                <hr class="w-50 mx-auto">
+                                <p>Forces : Bien placé, très neuf, ce site sent bon la lavande, il y a un super fleuriste en face, il dispose de plein d'infrastructures qui permet de faire venir du monde</p></br>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td>Elbeuf</td>
+            <td>2019</td>
+            <td>Super grand</td>
+            <td>Mais super mal placé</td>
+            <td>Les gens adorent venir à la piscine</td>
+            <td>Aucune personne n'a de l'argent pour venir</td>
+            <td><!-- Button trigger modal -->
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Détails
+                </button>
+                <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                ...
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </td>
+        </tr>
+    </tbody>
+<tbody>
+    <tr class="bg-light">
+        <td>Fabienne Desbiolles</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tbody>
+        <tr>
+            <td>Aquasport</td>
+            <td>2017</td>
+            <td>Bien placé</td>
+            <td>La structure ne peut pas être agrandie</td>
+            <td>Espace fitness à emménager</td>
+            <td></td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td>Meudon</td>
+            <td>2019</td>
+            <td>Super grand</td>
+            <td>Mais super mal placé</td>
+            <td>Les gens adorent venir à la piscine</td>
+            <td>Aucune personne n'a de l'argent pour venir</td>
+        </tr>
+    </tbody>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<table class="table table-bordered">
+  ...
+</table>
+
+{% endblock %}
