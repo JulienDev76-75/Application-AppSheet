@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Entity\Sites;
+use App\Form\SiteType;
 
 /**
  * @IsGranted("IS_AUTHENTICATED_FULLY")
@@ -64,7 +66,7 @@ class DgController extends AbstractController
      */
     public function planCommunication(): Response
     {
-    return $this->render('dg/planCommunication.html.twig', [
+    return $this->render('dg/swot.html.twig', [
         'controller_name' => 'DgController',
     ]);
     }
@@ -116,5 +118,45 @@ class DgController extends AbstractController
         'controller_name' => 'DgController',
     ]);
     }
-    
+
+    /**
+     * @Route("/DGdashboard/nouveauSite", name="nouveauSite")
+     */
+    public function newSite(Request $request): Response
+    {
+        $site = new Sites();
+        $form = $this->createForm(SiteType::class, $site);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $site->setUser($this->getUser());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($site);
+            $entityManager->flush();
+
+             $this->addFlash(
+                 "success",
+                "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
+            );
+
+            return $this->redirectToRoute('DGdashboard');
+        }
+
+        return $this->render('registration/newSite.html.twig', [
+            'form' => $form->createView()
+         ]);
+    }
+
+    /**
+     * @Route("/DGdashboard/listeDesSites/{id}/supprimerSite", name="SupprimerSite" requirements ={'id' => '\d+'])
+     */
+    public function deleteSite(Sites $sites): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($sites);
+        $entityManager->flush();
+
+        //return $this->redirectToRoute('projectAndTask', ['id' => $task->getProject()->getId()]);
+    }
+
 }
