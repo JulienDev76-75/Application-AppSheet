@@ -4,5 +4,145 @@
 
 {% block body %}
 
-<p>je suis la page satisfaction</p>
+<h1 class="text-center mt-5 mb-5">Je suis la page satisfaction</h1>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-5 mt-5">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <canvas id="myChart" width="100" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+       <canvas id="myPie"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <canvas id="myLine" width="100" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <canvas id="myBubble" width="100" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Rouge', 'Bleu', 'Jaune', 'Vert', 'Violet', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+
+<script>
+var pie = document.getElementById('myPie').getContext('2d');
+let pieGraph = new Chart (pie, {
+    type : "pie",
+    data : {
+        labels : ["cat1", "cat2", "cat3"],
+        datasets : [{
+            label : "Répartition des sites",
+            data : [2,5,10],
+            backgroundColor: ["red", "green", "blue"]
+        }]
+    }
+})
+</script>
+
+<script>
+var polar = document.getElementById('myLine').getContext('2d');
+let polarGraph = new Chart (polar, {
+    type : "polarArea",
+    data : {
+        labels: [
+            'Red',
+            'Green',
+            'Yellow',
+            'Grey',
+            'Blue'
+            ],
+        datasets : [{
+            label: "Mon tout premier Polar graphique",
+            data: [11, 16, 7, 3, 14],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(75, 192, 192)',
+                'rgb(255, 205, 86)',
+                'rgb(201, 203, 207)',
+                'rgb(54, 162, 235)'
+                ]
+            }]
+    }
+})
+</script>
+
+<script>
+var bubble = document.getElementById('myBubble').getContext('2d');
+let bubbleGraph = new Chart (bubble, {
+    type : "doughnut",
+    data : {
+        labels: [
+            'Rouge',
+            'Vert',
+            'Jaune',
+            ],
+        datasets : [{
+            label: "Mon tout premier Donut en JS",
+            data: [300, 50, 140],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(75, 192, 192)',
+                'rgb(255, 205, 86)',
+                ]
+            }]
+    }
+})
+</script>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}

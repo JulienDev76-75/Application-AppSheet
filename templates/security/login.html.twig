@@ -13,8 +13,8 @@
             Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     {% endif %}
-    <div class="w-75 mx-auto">
-        <h1 class="h3 mb-5 mt-5 font-weight-normal text-center">Pour se connecter :</h1>
+    <div class="w-50 mx-auto border border-dark my-5 bg-light border border-danger p-5 pb-5 ">
+        <h1 class="h3 mb-5 mt-5 pt-2 pb-5 font-weight-normal text-center ">Pour se connecter :</h1>
         <label class="mb-3" for="inputEmail">Votre Email*</label>
         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
         <label class="mb-3 mt-3" for="inputPassword">Votre mot de passe</label>
@@ -36,7 +36,7 @@
             Valider
         </button>
         <hr>
-        <p>*En continuant avec Google, Apple ou votre adresse e-mail, vous acceptez les conditions d'utilisation et la politique de confidentialité de AppSheet.</p>
+        <p class=" text-login mb-5 pb-5">*En continuant avec Google, Apple ou votre adresse e-mail, vous acceptez les conditions d'utilisation et la politique de confidentialité de AppSheet.</p>
 </div>
 </form>
 {% endblock %}

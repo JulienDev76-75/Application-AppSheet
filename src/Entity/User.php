@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -36,6 +38,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $poste;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sites::class, mappedBy="user")
+     */
+    private $sites;
+
+    public function __construct()
+    {
+        $this->sites = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -124,5 +141,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getPoste(): ?string
+    {
+        return $this->poste;
+    }
+
+    public function setPoste(string $poste): self
+    {
+        $this->poste = $poste;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sites[]
+     */
+    public function getSites(): Collection
+    {
+        return $this->sites;
+    }
+
+    public function addSite(Sites $site): self
+    {
+        if (!$this->sites->contains($site)) {
+            $this->sites[] = $site;
+            $site->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSite(Sites $site): self
+    {
+        if ($this->sites->removeElement($site)) {
+            // set the owning side to null (unless already changed)
+            if ($site->getUser() === $this) {
+                $site->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

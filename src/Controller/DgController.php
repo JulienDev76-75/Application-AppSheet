@@ -5,7 +5,13 @@ namespace App\Controller;
 use App\Repository\SitesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
+/**
+ * @IsGranted("IS_AUTHENTICATED_FULLY")
+ */
 
 class DgController extends AbstractController
 {
@@ -58,7 +64,7 @@ class DgController extends AbstractController
      */
     public function planCommunication(): Response
     {
-    return $this->render('dg/swot.html.twig', [
+    return $this->render('dg/planCommunication.html.twig', [
         'controller_name' => 'DgController',
     ]);
     }
