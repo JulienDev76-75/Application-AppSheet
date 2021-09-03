@@ -14,40 +14,40 @@ class SiteType extends AbstractType
     {
         $builder
             ->add('ville', null, [
-                'label' => "nom de l'emplacement de l'équipement :"
+                'label' => "Ville :"
             ])
             ->add('type_contrat', null, [
-                'label' => "nom du type de contrat (Affermage, Marché Service, Régie Interne) :"
+                'label' => "Type de contrat (Affermage, Marché Service, Régie Interne) :"
             ])
             ->add('type_societe', null, [
-                'label' => "nom du type de société (FILL ou OPA) :"
+                'label' => "Type de société (FILL ou OPA) :"
             ])
             ->add('raison_sociale', null, [
-                'label' => "nom de la raison sociale :"
+                'label' => "Raison sociale :"
             ])
             ->add('nom_du_site', null, [
-                'label' => "nom du site :"
+                'label' => "Nom du site :"
             ])
             ->add('adresse1', null, [
-                'label' => "l'adresse du site :"
+                'label' => "Adresse principale :"
             ])
             ->add('adresse2', null, [
-                'label' => "adresse complémentaire optionnelle :"
+                'label' => "Adresse complémentaire :"
             ])
             ->add('code_postal', null, [
-                'label' => "le code postal du site:"
+                'label' => "Code postal :"
             ])
             ->add('date_debut', null, [
-                'label' => "date de début:"
+                'label' => "Date de début :"
             ])
             ->add('date_fin', null, [
-                'label' => "date de fin :"
+                'label' => "Date de fin :"
             ])
             ->add('date_premier_contrat', null, [
-                'label' => "date de premier contrat :"
+                'label' => "Date de premier contrat :"
             ])
             ->add('ctrl_acces', null, [
-                'label' => "nom de la personne qui a accès:"
+                'label' => "Accès :"
             ])
             ->add('enregistrer', SubmitType::class, [
                 'attr' => ['class' => 'bg-danger text-white w-50 mt-3 mb-5'],

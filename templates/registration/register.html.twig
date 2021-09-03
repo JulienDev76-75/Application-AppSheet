@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Inscription{% endblock %}
-
 {% block body %}
     {% for flashError in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
@@ -9,6 +8,7 @@
     <h2 class="text-center mt-5 pt-5 mb-5 pb-5 text-dark">S'inscrire</h2>
 
 <div class="container my-5 bg-light border border-danger p-5">
+
     {{ form_start(registrationForm) }}
     {{ form_row(registrationForm.email) }}
     {{ form_row(registrationForm.poste) }}

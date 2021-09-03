@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\Sites;
 use App\Form\SiteType;
+use App\Entity\Swot;
+use App\Form\SwotType;
 
 /**
  * @IsGranted("IS_AUTHENTICATED_FULLY")
@@ -99,12 +101,13 @@ class DgController extends AbstractController
      */
     public function sites(): Response
     {
-        //sites(SitesRepository $sitesrepo)
-        //$sites= $sitesrepo -> findAll();
-        //$siteNom = 
+        $sitesRepo = $this->getDoctrine()->getRepository(Sites::class);
+        $sites = $sitesRepo -> findby(
+            ['user' => $this->getUser()],
+        );  
 
     return $this->render('dg/listeDesSites.html.twig', [
-        'controller_name' => 'DgController',
+        'sites' => $sites,
     ]);
     }
 
@@ -148,15 +151,45 @@ class DgController extends AbstractController
     }
 
     /**
-     * @Route("/DGdashboard/listeDesSites/{id}/supprimerSite", name="SupprimerSite" requirements ={'id' => '\d+'])
+     * @Route("/DGdashboard/nouveauSwot", name="nouveauSwot")
      */
-    public function deleteSite(Sites $sites): Response
+    public function newSwot(Request $request): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($sites);
-        $entityManager->flush();
+        $swot = new Swot();
+        $form = $this->createForm(SwotType::class, $swot);
 
-        //return $this->redirectToRoute('projectAndTask', ['id' => $task->getProject()->getId()]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $swot->setUser($this->getUser());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($swot);
+            $entityManager->flush();
+
+             $this->addFlash(
+                 "success",
+                "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
+            );
+
+            return $this->redirectToRoute('DGdashboard');
+        }
+
+        return $this->render('registration/newSwot.html.twig', [
+            'form' => $form->createView()
+         ]);
     }
 
 }
+
+
+
+    ///**
+    // * @Route("/DGdashboard/listeDesSites/{id}/supprimerSite", name="SupprimerSite" requirements ={'id' => '\d+'])
+    // */
+    //public function deleteSite(Sites $sites): Response
+    //{
+    //   $entityManager = $this->getDoctrine()->getManager();
+    //    $entityManager->remove($sites);
+    //    $entityManager->flush();
+
+        //return $this->redirectToRoute('projectAndTask', ['id' => $task->getProject()->getId()]);
+    //}

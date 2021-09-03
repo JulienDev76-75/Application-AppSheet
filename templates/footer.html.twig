@@ -1,5 +1,5 @@
 <footer>
-<div class="text-center py-5 text-white bg-dark">
+<div class="text-center py-5 text-white bg-dark mt-5 mb-0">
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <a class="footer text-white" href="{{ path('DGdashboard') }}"><i class="fas fa-house-user"><br/></i></a>
         <a class="footer text-white" href="{{ path('listeDesSites') }}"><i class="fas fa-swimming-pool ms-4"><br/></i></a>
@@ -14,13 +14,11 @@
         <br/>
         <a class="footer text-white mt-3" href="{{ path('app_logout') }}"><i class="fas fa-times-circle"></i></a>
     {% else %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_register') }}">S'enregistrer</a>
-        </li>
+        <div>
+            <a class="footer text-white" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i></a>
+            <a class="footer text-white ms-5" href="{{ path('app_register') }}"><i class="fas fa-book-reader"></i></a>
+        </div>
     {% endif %} 
-    <p class="mt-3 pt-4 pb-1">© Copyright - Julien Coart - fait avec Symfony</p>
+    <p class="mt-5 pt-4 pb-1">© Copyright - Julien Coart - fait avec Symfony</p>
 </div>
 </footer>

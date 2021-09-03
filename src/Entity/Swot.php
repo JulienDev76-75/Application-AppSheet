@@ -48,6 +48,11 @@ class Swot
      */
     private $sites;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $site;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +126,18 @@ class Swot
     public function setSites(Sites $sites): self
     {
         $this->sites = $sites;
+
+        return $this;
+    }
+
+    public function getSite(): ?string
+    {
+        return $this->site;
+    }
+
+    public function setSite(string $site): self
+    {
+        $this->site = $site;
 
         return $this;
     }

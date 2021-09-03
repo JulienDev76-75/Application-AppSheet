@@ -3,6 +3,51 @@
 {% block title %}ROLE = DG{% endblock %}
 
 {% block body %}
+<h2 class="text-center mt-5 mb-5 text-danger">Liste des sites</h2>
+<div class="w-75 mx-auto">
+    <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th scope="col">Nom du complexe</th>
+                <th scope="col">Ville</th>
+                <th scope="col">Type de contrat</th>
+                <th scope="col">Type de société</th>
+                <th scope="col">Raison sociale</th>
+                <th scope="col">Adresse 1</th>
+                <th scope="col">Adresse 2</th>
+                <th scope="col">Code Postal</th>
+                <th scope="col">Date de début</th>
+                <th scope="col">Date de fin</th>
+                <th scope="col">Date de premier contrat</th>
+                <th scope="col">Ctrl Accès</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if sites is not empty %}
+            {% for site in sites %}
+                <tr class="bg-light">
+                    <td> {{site.ville}}</td>
+                    <td> {{site.typeContrat}}</td>
+                    <td> {{site.typeSociete}}</td>
+                    <td> {{site.raisonSociale}}</td>
+                    <td> {{site.nomDuSite}}</td>
+                    <td> {{site.adresse1}}</td>
+                    <td> {{site.adresse2}}</td>
+                    <td> {{site.codePostal}}</td>
+                    <td> {{site.dateDebut | date('d/m/Y')}}</td>
+                    <td> {{site.dateFin | date('d/m/Y')}}</td>
+                    <td> {{site.datePremierContrat | date('d/m/Y')}}</td>
+                    <td> {{site.ctrlAcces}}</td>
+                </tr>
+            {% endfor %}
+            {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site</h2>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
 
-<p>je suis la page liste des sites</p>
+<div class="text-center text-white mb-4 mt-2">
+ <a class="footer" href="{{ path('nouveauSite')}}"><i class="fas fa-plus-circle color-danger"></i><br/></i></a>
+</div>
 {% endblock %}
