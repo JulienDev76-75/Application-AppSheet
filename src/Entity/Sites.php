@@ -83,10 +83,6 @@ class Sites
      */
     private $user;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Swot::class, mappedBy="sites", cascade={"persist", "remove"})
-     */
-    private $swot;
 
     public function getId(): ?int
     {
@@ -245,23 +241,6 @@ class Sites
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getSwot(): ?Swot
-    {
-        return $this->swot;
-    }
-
-    public function setSwot(Swot $swot): self
-    {
-        // set the owning side of the relation if necessary
-        if ($swot->getSites() !== $this) {
-            $swot->setSites($this);
-        }
-
-        $this->swot = $swot;
 
         return $this;
     }

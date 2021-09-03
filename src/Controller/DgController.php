@@ -12,6 +12,7 @@ use App\Entity\Sites;
 use App\Form\SiteType;
 use App\Entity\Swot;
 use App\Form\SwotType;
+use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 
 /**
  * @IsGranted("IS_AUTHENTICATED_FULLY")
@@ -35,10 +36,16 @@ class DgController extends AbstractController
      */
     public function swot(): Response
     {
+        $swotRepo = $this->getDoctrine()->getRepository(Swot::class);
+        $swot = $swotRepo -> findby(
+            ['user' => $this->getUser()],
+        );  
+
     return $this->render('dg/swot.html.twig', [
-        'controller_name' => 'DgController',
+        'swot' => $swot,
     ]);
     }
+
 
 
     /**
@@ -138,7 +145,7 @@ class DgController extends AbstractController
             $entityManager->flush();
 
              $this->addFlash(
-                 "success",
+                "success",
                 "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
             );
 
@@ -178,18 +185,20 @@ class DgController extends AbstractController
          ]);
     }
 
+
+    ///**
+    // * @Route("/DGdashboard/swot/{id}/supprimerSwot", name="supprimerSwot")
+    // */
+    //function deleteSwot(Swot $swot): Response {
+    //    $entityManager = $this->getDoctrine()->getManager();
+    //    $entityManager -> remove($swot);
+
+    //    $entityManager->flush();
+
+    //    return $this->redirectToRoute('DGdashboard');
+    //}
+
 }
 
 
 
-    ///**
-    // * @Route("/DGdashboard/listeDesSites/{id}/supprimerSite", name="SupprimerSite" requirements ={'id' => '\d+'])
-    // */
-    //public function deleteSite(Sites $sites): Response
-    //{
-    //   $entityManager = $this->getDoctrine()->getManager();
-    //    $entityManager->remove($sites);
-    //    $entityManager->flush();
-
-        //return $this->redirectToRoute('projectAndTask', ['id' => $task->getProject()->getId()]);
-    //}

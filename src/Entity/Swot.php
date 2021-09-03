@@ -43,10 +43,10 @@ class Swot
     private $menaces;
 
     /**
-     * @ORM\OneToOne(targetEntity=Sites::class, inversedBy="swot", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sites")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $sites;
+    private $user;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -118,14 +118,14 @@ class Swot
         return $this;
     }
 
-    public function getSites(): ?Sites
+    public function getUser(): ?User
     {
-        return $this->sites;
+        return $this->user;
     }
 
-    public function setSites(Sites $sites): self
+    public function setUser(?User $user): self
     {
-        $this->sites = $sites;
+        $this->user = $user;
 
         return $this;
     }

@@ -26,11 +26,11 @@
         {% if sites is not empty %}
             {% for site in sites %}
                 <tr class="bg-light">
+                    <td> {{site.nomDuSite}}</td>
                     <td> {{site.ville}}</td>
                     <td> {{site.typeContrat}}</td>
                     <td> {{site.typeSociete}}</td>
                     <td> {{site.raisonSociale}}</td>
-                    <td> {{site.nomDuSite}}</td>
                     <td> {{site.adresse1}}</td>
                     <td> {{site.adresse2}}</td>
                     <td> {{site.codePostal}}</td>
