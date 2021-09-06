@@ -1,15 +1,7 @@
 {% extends 'base.html.twig' %}
 {# This will be a comment #}
 {% block title %}ROLE = DIRECTEUR GENERAL, TOUTE VIEW POSSIBLE{% endblock %}
-{# Astuce :
- - LA VUE NE CONCERNE QUE LE DR ET SES SITES
- - DONC LE DR est la cle primaire, ses sites doivent être relié à lui
- - site = $siteRepository->findby(
-            ['user' => $this->getUser()],
-        );
-        - boucle, modal reprends info de la bdd
-- ATTENTION : oublie pas vue DIFFERENTE ENTRE DG ET DR
-#}
+
 {% block body %}
 
 <h2 class="text-center mt-5 mb-5 text-danger">Liste des sites avec leurs forces et faiblesses :</h2>
@@ -38,8 +30,8 @@
             <td>{{swots.faiblesses}}</td>
             <td>{{swots.opportunites}}</td>
             <td>{{swots.menaces}}</td>
-            <td><a href="" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Modifier</a></td>
-            <td><a href="" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+            <td><a href="{{ path('editSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+            <td><a href="{{ path('supprimerSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
           </tr>
         {% endfor %}
     {% else %}

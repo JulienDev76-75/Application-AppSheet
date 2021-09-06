@@ -3,6 +3,7 @@
 {% block title %}ROLE = DG{% endblock %}
 
 {% block body %}
+{% if is_granted('ROLE_ADMIN') %}
 <div class="row row-cols-3 row-cols-md-3 row-cols-lg-4 g-4 mb-5 pb-5 pt-5 mt-5 w-75 mx-auto">
   <div class="col mb-3">
       <a href="{{ path('frequentation') }}"><img src="{{ asset('image/cafreq.png') }}" title="frequentation" alt="frequentation logo"></a>
@@ -28,5 +29,12 @@
     <div class="col mb-3 pb-5">
       <a class="my-auto h-auto" href="{{ path('listeDesSites') }}" ><img src="{{ asset('image/sites.png') }}"  title="liste des sites vert-marine" alt="Liste des sites Vert-Marine"></a> 
   </div>
+{% endif %}
+{% if is_granted('ROLE_DR') %}
+<p>Si vous voyez ca en plus, vous avez un rôle DR</p>
+{% endif %}
+{% if is_granted('ROLE_USER') %}
+<p>Si vous voyez cette phrase, vous avez en plus un rôle DS</p>
+{% endif %}
 </div>
 {% endblock %}

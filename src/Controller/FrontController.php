@@ -12,13 +12,10 @@ use App\Entity\Sites;
 use App\Form\SiteType;
 use App\Entity\Swot;
 use App\Form\SwotType;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 
-/**
- * @IsGranted("IS_AUTHENTICATED_FULLY")
- */
-
-class DgController extends AbstractController
+class FrontController extends AbstractController
 {
     /**
      * @Route("/DGdashboard", name="DGdashboard")
@@ -75,7 +72,7 @@ class DgController extends AbstractController
      */
     public function planCommunication(): Response
     {
-    return $this->render('dg/swot.html.twig', [
+    return $this->render('dg/planCommunication.html.twig', [
         'controller_name' => 'DgController',
     ]);
     }
@@ -143,12 +140,10 @@ class DgController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($site);
             $entityManager->flush();
-
-             $this->addFlash(
+            $this->addFlash(
                 "success",
                 "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
             );
-
             return $this->redirectToRoute('DGdashboard');
         }
 
@@ -185,18 +180,32 @@ class DgController extends AbstractController
          ]);
     }
 
+    /**
+     * @Route("/DGdashboard/swot/{id}/editSwot", name="editSwot")
+     */
+    public function editSwot(Swot $swot, Request $request) : Response {
+        $form = $this->createForm(SwotType::class, $swot);
+        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($swot);
+        $entityManager->flush();
 
-    ///**
-    // * @Route("/DGdashboard/swot/{id}/supprimerSwot", name="supprimerSwot")
-    // */
-    //function deleteSwot(Swot $swot): Response {
-    //    $entityManager = $this->getDoctrine()->getManager();
-    //    $entityManager -> remove($swot);
+        return $this->render('edit/editSwot.html.twig', [
+            'form' => $form->createView()
+         ]);
 
-    //    $entityManager->flush();
+    }
 
-    //    return $this->redirectToRoute('DGdashboard');
-    //}
+    /** 
+    * @Route("/DGdashboard/swot/{id}/supprimerSwot", name="supprimerSwot")
+    */
+    function deleteSwot(Swot $swot): Response {
+       $entityManager = $this->getDoctrine()->getManager();
+       $entityManager -> remove($swot);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('DGdashboard');
+    }
 
 }
 
