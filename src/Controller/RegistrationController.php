@@ -10,13 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Bridge\Twig\Mime\Email;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/register", name="app_register")
+     * @Route("/inscription", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, MailerInterface $mailer): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -31,13 +34,14 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            //génération du token, le token va être crée en bdd
+            $user->setActivationToken(md5(uniqid()));
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('DGdashboard');
-        }
+        }   
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
@@ -46,9 +50,9 @@ class RegistrationController extends AbstractController
 
     //Le but ici est de faire activer un compte après inscription, pour activer le token, le manager doit aller sur /activation/{Token généré en bdd}, but après est d'envoyer un e-mail
      /**
-     * @Route("/activation/{token}", name="acitvation")
+     * @Route("/activation/{token}", name="activation")
      */
-    public function activation ($token, UserRepository $userRepository){
+    public function activation($token, UserRepository $userRepository){
 
         //je vérifie si l'user a bien le token et on va le chercher en base de donnée, findOneBy marche avec la paire KEY=VALUE
         $user = $userRepository->findOneBy(['activation_token' => $token]);
@@ -67,7 +71,7 @@ class RegistrationController extends AbstractController
         $this->addFlash('message', 'Vous avez bien activé votre compte');
 
         //je fais retourner vers l'accueil
-        return $this->redirectToRoute('app_login');
+        return $this->redirectToRoute('DGdashboard');
     }
 
 }
