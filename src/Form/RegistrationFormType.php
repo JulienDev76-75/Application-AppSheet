@@ -22,7 +22,9 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'attr' => ['class' => 'mb-4']
+                'attr' => ['class' => 'mb-4 h-full-width',
+                'placeholder' => "e-mail de confirmation"],
+                'label' => "Email :"
             ])
             ->add('poste', null, [
                 'label' => 'Poste :'
@@ -32,7 +34,7 @@ class RegistrationFormType extends AbstractType
                 // this is read and encoded in the controller
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
-                'row_attr' => ['class' => 'mt-4'],
+                'row_attr' => ['class' => 'mt-4 h-full-width'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez rentrer un mot de passe',

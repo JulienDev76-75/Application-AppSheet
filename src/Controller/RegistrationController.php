@@ -19,8 +19,8 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/inscription", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, MailerInterface $mailer): Response
-    {
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer): Response
+    {   
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -41,11 +41,26 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-        }   
+            $message = (new \Swift_Message('Nouvelle inscription'))
+            ->setFrom("julien@example.fr")
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->renderView(
+                    'email/activation.html.twig', ['token' => $user->getActivationToken()]
+                ),
+                'text/html'
+            );
+
+            $mailer -> send($message);
+            $this->addFlash('message', 'votre inscription est faite');
+
+        }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+
+        return $this->redirectToRoute('DGdashboard');
     }
 
     //Le but ici est de faire activer un compte après inscription, pour activer le token, le manager doit aller sur /activation/{Token généré en bdd}, but après est d'envoyer un e-mail
@@ -73,5 +88,4 @@ class RegistrationController extends AbstractController
         //je fais retourner vers l'accueil
         return $this->redirectToRoute('DGdashboard');
     }
-
 }
