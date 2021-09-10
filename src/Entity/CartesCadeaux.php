@@ -48,9 +48,10 @@ class CartesCadeaux
     private $valorisation_utilisation;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="cartesCadeaux")
+     * @ORM\JoinColumn(nullable=false)  
      */
-    private $site_id;
+    private $site;
 
     public function getId(): ?int
     {
@@ -129,15 +130,16 @@ class CartesCadeaux
         return $this;
     }
 
-    public function getSiteId(): ?int
+    public function getSite(): ?Sites
     {
-        return $this->site_id;
+        return $this->site;
     }
 
-    public function setSiteId(int $site_id): self
+    public function setSite(?Sites $site): self
     {
-        $this->site_id = $site_id;
+        $this->site = $site;
 
         return $this;
     }
+
 }

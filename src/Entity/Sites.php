@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SitesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -82,6 +84,17 @@ class Sites
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CartesCadeaux::class, mappedBy="site", orphanRemoval=true)
+     */
+    private $cartesCadeaux;
+
+    public function __construct()
+    {
+        $this->cartesCadeauxes = new ArrayCollection();
+        $this->cartesCadeaux = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -241,6 +254,36 @@ class Sites
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CartesCadeaux[]
+     */
+    public function getCartesCadeaux(): Collection
+    {
+        return $this->cartesCadeaux;
+    }
+
+    public function addCartesCadeaux(CartesCadeaux $cartesCadeaux): self
+    {
+        if (!$this->cartesCadeaux->contains($cartesCadeaux)) {
+            $this->cartesCadeaux[] = $cartesCadeaux;
+            $cartesCadeaux->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartesCadeaux(CartesCadeaux $cartesCadeaux): self
+    {
+        if ($this->cartesCadeaux->removeElement($cartesCadeaux)) {
+            // set the owning side to null (unless already changed)
+            if ($cartesCadeaux->getSite() === $this) {
+                $cartesCadeaux->setSite(null);
+            }
+        }
 
         return $this;
     }
