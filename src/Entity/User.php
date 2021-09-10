@@ -57,6 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->sites = new ArrayCollection();
+        $this->cartesCadeaux = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -201,4 +202,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 }

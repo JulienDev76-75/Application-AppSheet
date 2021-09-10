@@ -4,5 +4,11 @@
 
 {% block body %}
 
-<p>je suis la page pass</p>
+<div>
+
+   {% for site in sites %}
+   <p>{{site.site}}</p>
+    {% endfor %}
+
+</div>
 {% endblock %}
