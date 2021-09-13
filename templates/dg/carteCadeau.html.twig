@@ -8,21 +8,7 @@ DR OU DS -> données par  DATE
 DG : DONNEE PAR SITE ET PAR ANNEE
 
 UN ROLE SPECIAL POUR PIERRE OU LE DEV POUR JUSTE AJOUTER DES CHAMPS POUR CAS SPECIFIQUE DONC IS GRANTED et bim
-
-exemple requete spécifique :
-      $projectRepository = $this->getDoctrine()->getRepository(Project::class);
-        $projects = $projectRepository->findby(
-            ['user' => $this->getu()],
-            ['projet_deadline' => 'DESC'],
-        );
-
-        return $this->render('front/index.html.twig', [
-            'projects' => $projects,
-        ]);
-        
-DG FIND ALL PROPRE PAGE OU AUTRE CONTROLLER
-DG A DEF DANS LES ROLE
-ROLE HIERARCHY A ANNULER #}
+#}
 
 
 {% block title %}ROLE = DG{% endblock %}
@@ -55,16 +41,21 @@ ROLE HIERARCHY A ANNULER #}
                 {% if cartesCadeauxTableau is not empty %}
                     {% for carteCadeauTableau in cartesCadeauxTableau %}
                         <tr class="bg-light">
-                            <td> {{carteCadeauTableau.date | date('d/m/Y')}}</td>
-                            <td> {{carteCadeauTableau.nombreCartesVendues}}</td>
-                            <td> {{carteCadeauTableau.valorisationVentes}}</td>
-                            <td> {{carteCadeauTableau.nombreCarteUtilisees}}</td>
-                            <td> {{carteCadeauTableau.valorisationUtilisation}}</td>
-                            <td> {{carteCadeauTableau.solde}}</td>
+                            <td> {{carteCadeauTableau.site}}</td>
                         </tr>
+                            {% for carteCadeauTableau in cartesCadeauxTableau %}
+                                <tr>
+                                    <td> {{carteCadeauTableau.date | date('d/m/Y')}}</td>
+                                    <td> {{carteCadeauTableau.nombreCartesVendues}}</td>
+                                    <td> {{carteCadeauTableau.valorisationVentes}}</td>
+                                    <td> {{carteCadeauTableau.nombreCarteUtilisees}}</td>
+                                    <td> {{carteCadeauTableau.valorisationUtilisation}}</td>
+                                    <td> {{carteCadeauTableau.solde}}</td>
+                                </tr>
+                            {% endfor %}
+                {% else %}
+                    <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter une carte cadeau à votre site</h2>
                     {% endfor %}
-                    {% else %}
-                        <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site</h2>
                 {% endif %}
             </tbody>
         </table>  

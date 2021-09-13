@@ -64,7 +64,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/carteCadeau", name="carteCadeau")
      */
-    public function carteCadeau(CartesCadeauxRepository $cartesRepo): Response
+    public function carteCadeau(CartesCadeauxRepository $cartesRepo, SitesRepository $siteRepo): Response
     {
 
         // Données de la bdd pour la graphique
@@ -81,8 +81,10 @@ class FrontController extends AbstractController
         }
 
         //données de la bdd pour le tableau - RAPPEL - tri par site et par dates des cartes cadeaux et par date
-        $cartesCadeauxTableau = $cartesRepo->findby(
-            ['user' => $this->getUser()],
+        $cartesCadeauxTableau = $cartesRepo->findBy(
+            ['user' => $this->getUser(),
+            ],
+            ['date' => 'ASC']
         );  
 
     return $this->render('dg/carteCadeau.html.twig', [
