@@ -54,6 +54,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $activation_token;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CartesCadeaux::class, mappedBy="user")
+     */
+    private $cartesCadeaux;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -199,6 +204,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActivationToken(?string $activation_token): self
     {
         $this->activation_token = $activation_token;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CartesCadeaux[]
+     */
+    public function getCartesCadeaux(): Collection
+    {
+        return $this->cartesCadeaux;
+    }
+
+    public function addCartesCadeaux(CartesCadeaux $cartesCadeaux): self
+    {
+        if (!$this->cartesCadeaux->contains($cartesCadeaux)) {
+            $this->cartesCadeaux[] = $cartesCadeaux;
+            $cartesCadeaux->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartesCadeaux(CartesCadeaux $cartesCadeaux): self
+    {
+        if ($this->cartesCadeaux->removeElement($cartesCadeaux)) {
+            // set the owning side to null (unless already changed)
+            if ($cartesCadeaux->getUser() === $this) {
+                $cartesCadeaux->setUser(null);
+            }
+        }
 
         return $this;
     }

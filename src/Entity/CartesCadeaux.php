@@ -53,6 +53,11 @@ class CartesCadeaux
      */
     private $site;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="cartesCadeaux")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,6 +143,18 @@ class CartesCadeaux
     public function setSite(?Sites $site): self
     {
         $this->site = $site;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

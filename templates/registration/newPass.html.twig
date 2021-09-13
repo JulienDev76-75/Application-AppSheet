@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+{% block body %}
+    <div class="container my-5 bg-light border border-danger p-5">
+        <h2 class="mb-5 mt-5 text-center text-dark">Enregistrez de nouveaux pass :</h2>
+            <div class="m-5 p-5">
+                <div class="row">
+                {{ form(form) }}
+                </div>
+        </div>
+    </div>
+{% endblock %}

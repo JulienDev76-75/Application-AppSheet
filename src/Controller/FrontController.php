@@ -2,14 +2,13 @@
 
 namespace App\Controller;
 
-use App\Repository\SitesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\Sites;
 use App\Form\SiteType;
+use App\Repository\SitesRepository;
 use App\Entity\Swot;
 use App\Form\SwotType;
 use App\Entity\CartesCadeaux;
@@ -18,8 +17,14 @@ use App\Repository\CartesCadeauxRepository;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 
+
 class FrontController extends AbstractController
 {
+
+    //
+    // ******************* DASHBOARD PAGES **********************
+    //
+
     /**
      * @Route("/DGdashboard", name="DGdashboard")
      */
@@ -45,7 +50,6 @@ class FrontController extends AbstractController
     ]);
     }
 
-
     /**
      * @Route("/DGdashboard/satisfaction", name="satisfaction")
      */
@@ -57,17 +61,15 @@ class FrontController extends AbstractController
     ]);
     }
 
-
     /**
-     * @Route("/DGdashboard/site/{id}/carteCadeau", name="carteCadeau")
+     * @Route("/DGdashboard/carteCadeau", name="carteCadeau")
      */
-    public function carteCadeau(CartesCadeauxRepository $cartesRepo, SitesRepository $siteRepo, int $id): Response
+    public function carteCadeau(CartesCadeauxRepository $cartesRepo): Response
     {
 
         // Données de la bdd pour la graphique
         $cartescadeaux = $cartesRepo->findBy(
-            ['dr' => $this->getUser()],
-            ['site' => 'ASC'],
+            ['user' => $this->getUser()],
         );
 
         $dates = [];
@@ -80,19 +82,13 @@ class FrontController extends AbstractController
 
         //données de la bdd pour le tableau - RAPPEL - tri par site et par dates des cartes cadeaux et par date
         $cartesCadeauxTableau = $cartesRepo->findby(
-            ['dr' => $this->getUser()],
-        );  
-
-        $sites = $cartesRepo ->findby(
-            ['dr' => $this->getUser()],
-            ['site' => 'ASC'],
+            ['user' => $this->getUser()],
         );  
 
     return $this->render('dg/carteCadeau.html.twig', [
         'dates' => json_encode($dates),
         'cartesvendues' => json_encode($cartesvendues),
         'cartesCadeauxTableau' => $cartesCadeauxTableau,
-        'sites' => $sites,
     ]);
     }
 
@@ -106,7 +102,6 @@ class FrontController extends AbstractController
         'controller_name' => 'DgController',
     ]);
     }
-
 
     /**
      * @Route("/DGdashboard/pass", name="pass")
@@ -124,7 +119,6 @@ class FrontController extends AbstractController
     ]);
     }
 
-
     /**
      * @Route("/DGdashboard/frequentation&CA", name="frequentation")
      */
@@ -135,6 +129,18 @@ class FrontController extends AbstractController
     ]);
     }
 
+    /**
+     * @Route("/DGdashboard/listeDesSites/{id}", name="singleSite", requirements={"id"="\d+"})
+     */
+    public function singleSite(int $id, SitesRepository $sitesRepo): Response
+    {
+        $sitesRepo = $this->getDoctrine()->getRepository(Sites::class);
+        $sites = $sitesRepo->find($id);
+
+        return $this->render('dg/singleSite.html.twig', [
+            'sites' => $sites,
+        ]);
+    }
 
     /**
      * @Route("/DGdashboard/listeDesSites", name="listeDesSites")
@@ -151,7 +157,6 @@ class FrontController extends AbstractController
     ]);
     }
 
-
     /**
      * @Route("/DGdashboard/coutCommunication", name="coutCommunication")
      */
@@ -161,6 +166,10 @@ class FrontController extends AbstractController
         'controller_name' => 'DgController',
     ]);
     }
+
+    //
+    // ********************** FORMULAIRE : ADD ELEMENTS **********************
+    //
 
     /**
      * @Route("/DGdashboard/nouveauSite", name="nouveauSite")
@@ -217,19 +226,19 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/DGdashboard/sites/{id}/nouveauCartesCadeaux", name="nouveauCartesCadeaux")
+     * @Route("/DGdashboard/listeDesSites/{id}/newCartesCadeaux", name="newCartesCadeaux", requirements={"id"="\d+"})
      */
     public function newcartescadeaux(Request $request, SitesRepository $sitesRepo, int $id): Response
     {
         $cadeaux = new CartesCadeaux();
         $form = $this->createForm(CartesCadeauxFormType::class, $cadeaux);
 
-        $site = new Sites();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sites = $sitesRepo->find($id);
             $cadeaux->setSite($sites);
+            $cadeaux->setUser($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($cadeaux);
             $entityManager->flush();
@@ -240,13 +249,17 @@ class FrontController extends AbstractController
                 "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
             );
 
-            return $this->redirectToRoute('nouveauCartesCadeaux');
+            return $this->redirectToRoute('listeDesSites');
         }
 
         return $this->render('registration/newCartesCadeaux.html.twig', [
             'form' => $form->createView()
          ]);
     }
+
+    //
+    // ********************** FORMULAIRE : EDIT ELEMENTS **********************
+    //
 
     /**
      * @Route("/DGdashboard/swot/{id}/editSwot", name="editSwot")
@@ -263,6 +276,10 @@ class FrontController extends AbstractController
          ]);
 
     }
+
+    //
+    // ********************** FORMULAIRE : DELETE ELEMENTS **********************
+    //
 
     /** 
     * @Route("/DGdashboard/swot/{id}/supprimerSwot", name="supprimerSwot")

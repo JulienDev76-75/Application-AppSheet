@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{# This will be a comment #}
+{% block title %}VU DS OU DR{% endblock %}
+
+{% block body %}
+
+<p>JE SUIS LA PAGE SINGLE SITE, DETAIL DU SITE ET POSSIBILITE AJOUTER C.C, PLAN DE COMMUNICATION ou encore COUT DE COMMUNICATION AFIN DE LES LIER EN BDD</p>
+
+<a href="{{ path('newCartesCadeaux', {id: sites.id})}}">LIEN</a>
+{#<a href="newRig">LIEN</a>#}
+{#<a href="newPass">LIEN</a>#}
+{#<a href="newPlanCommunicatin">LIEN</a>#}
+
+{% endblock %}

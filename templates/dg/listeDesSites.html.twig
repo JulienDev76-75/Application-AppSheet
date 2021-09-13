@@ -20,6 +20,7 @@
                 <th scope="col">Date de fin</th>
                 <th scope="col">Date de premier contrat</th>
                 <th scope="col">Ctrl Accès</th>
+                <th scope="col">Détail du site</th>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +39,8 @@
                     <td> {{site.dateFin | date('d/m/Y')}}</td>
                     <td> {{site.datePremierContrat | date('d/m/Y')}}</td>
                     <td> {{site.ctrlAcces}}</td>
+                    <td> <a href="{{ path('singleSite', {id: site.id})}}">Détails</a></td>
+                  
                 </tr>
             {% endfor %}
             {% else %}
