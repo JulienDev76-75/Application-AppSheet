@@ -19,6 +19,22 @@ class SwotRepository extends ServiceEntityRepository
         parent::__construct($registry, Swot::class);
     }
 
+
+    /**
+    * Recherche les mots clés sur la page Swot
+    * @return void
+    */
+    public function search($mots = null)
+    {
+    $query = $this->createQueryBuilder('a');
+    $query->andWhere('a.active = 1');
+    if ($mots != null){
+        $query->andWhere('MATCH_AGAINST(a.forces, a.faiblesses, a.opportunites, a.menaces) AGAINST(:mots boolean)>0')
+        ->setParameter('mots', $mots);
+    }
+    return $query->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Swot[] Returns an array of Swot objects
     //  */
@@ -28,7 +44,7 @@ class SwotRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->andWhere('s.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
+            ->orderBy('s.id', 'ASC')    
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()

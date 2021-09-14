@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=SwotRepository::class)
+ * @ORM\Table(name="swot", indexes={@ORM\Index(columns={"forces","faiblesses","opportunites","menaces"}, flags={"fulltext"})})
  */
 class Swot
 {
@@ -52,6 +53,11 @@ class Swot
      * @ORM\Column(type="string", length=255)
      */
     private $site;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
 
     public function getId(): ?int
     {
@@ -138,6 +144,18 @@ class Swot
     public function setSite(string $site): self
     {
         $this->site = $site;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

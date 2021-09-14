@@ -13,9 +13,12 @@ use App\Entity\Swot;
 use App\Form\SwotType;
 use App\Entity\CartesCadeaux;
 use App\Form\CartesCadeauxFormType;
+use App\Form\SearchSwotType;
 use App\Repository\CartesCadeauxRepository;
+use App\Repository\SwotRepository;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
+use App\Extension\MatchAgainst;
 
 
 class FrontController extends AbstractController
@@ -28,7 +31,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard", name="DGdashboard")
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         return $this->render('dg/index.html.twig', [
             'controller_name' => 'DgController',
@@ -38,15 +41,25 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/swot", name="swot")
      */
-    public function swot(): Response
+    public function swot(Request $request, SwotRepository $swotRepo): Response
     {
+        $form = $this->createForm(SearchSwotType::class);
+        $search = $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+            // Recherche des annonces correspondant aux mots clés
+            $swot = $swotRepo->search($search->get('mots')->getData());
+        }
+
         $swotRepo = $this->getDoctrine()->getRepository(Swot::class);
-        $swot = $swotRepo -> findby(
+        $swotList = $swotRepo -> findby(
             ['user' => $this->getUser()],
         );  
 
     return $this->render('dg/swot.html.twig', [
         'swot' => $swot,
+        'form' => $form->createView(),
+        'swotList' => $swotList
     ]);
     }
 
@@ -210,6 +223,7 @@ class FrontController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $swot->setUser($this->getUser());
+            $swot->setActive(1);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($swot);
             $entityManager->flush();
