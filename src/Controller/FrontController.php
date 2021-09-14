@@ -6,6 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\PlanCommunication;
+use App\Form\PlanCommunicationFormType;
+use App\Repository\PlanCommunicationRepository;
+use App\Entity\Satisfaction;
+use App\Form\SatisfactionType;
+use App\Repository\SatisfactionRepository;
 use App\Entity\Sites;
 use App\Form\SiteType;
 use App\Repository\SitesRepository;
@@ -18,8 +24,7 @@ use App\Repository\CartesCadeauxRepository;
 use App\Repository\SwotRepository;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
-use App\Extension\MatchAgainst;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class FrontController extends AbstractController
 {
@@ -160,12 +165,25 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/listeDesSites", name="listeDesSites")
      */
-    public function sites(): Response
+    public function sites(Request $request): Response
     {
+
         $sitesRepo = $this->getDoctrine()->getRepository(Sites::class);
         $sites = $sitesRepo -> findby(
             ['user' => $this->getUser()],
         );  
+
+        // (console.log) sur $filters à faire
+        $filters = $request->get("sites");
+        // On vérifie si on a une requête AJAX
+            if ($request->get('ajax')){
+        // render des données en Json
+                return new JsonResponse([
+                    $this->renderView('dg/listeDesSites.html.twig', [
+                    'sites' => $sites,
+                    ])
+                ]);
+            }
 
     return $this->render('dg/listeDesSites.html.twig', [
         'sites' => $sites,
@@ -260,8 +278,8 @@ class FrontController extends AbstractController
             $entityManager->flush();
 
 
-             $this->addFlash(
-                 "success",
+            $this->addFlash(
+                "success",
                 "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
             );
 
@@ -269,6 +287,66 @@ class FrontController extends AbstractController
         }
 
         return $this->render('registration/newCartesCadeaux.html.twig', [
+            'form' => $form->createView()
+         ]);
+    }
+
+    /**
+    * @Route("/DGdashboard/listeDesSites/{id}/newPlanCommunication", name="newPlanCommunication", requirements={"id"="\d+"})
+    */
+    public function newPlanCommunication(Request $request, SitesRepository $sitesRepo, int $id): Response
+    {
+        $planCom = new PlanCommunication();
+        $form = $this->createForm(PlanComFormType::class, $planCom);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sites = $sitesRepo->find($id);
+            $planCom->setSite($sites);
+            $planCom->setUser($this->getUser());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($planCom);
+            $entityManager->flush();
+
+            $this->addFlash(
+                "success",
+                "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
+            );
+
+            return $this->redirectToRoute('planCommunication');
+        }
+
+        return $this->render('registration/newPlanCommunication.html.twig', [
+            'form' => $form->createView()
+         ]);
+    }
+
+    /**
+    * @Route("/DGdashboard/listeDesSites/{id}/newSatisfaction", name="newSatisfaction", requirements={"id"="\d+"})
+    */
+    public function newSatisfaction(Request $request, SitesRepository $sitesRepo, int $id): Response
+    {
+        $satisfaction = new Satisfaction();
+        $form = $this->createForm(SatisfactionType::class, $satisfaction);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sites = $sitesRepo->find($id);
+            $satisfaction->setSite($sites);
+            $satisfaction->setUser($this->getUser());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($satisfaction);
+            $entityManager->flush();
+
+            $this->addFlash(
+                "success",
+                "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
+            );
+
+            return $this->redirectToRoute('Satisfaction');
+        }
+
+        return $this->render('registration/newSatisfaction.html.twig', [
             'form' => $form->createView()
          ]);
     }

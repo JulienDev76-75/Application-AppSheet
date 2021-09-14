@@ -59,10 +59,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $cartesCadeaux;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PlanCommunication::class, mappedBy="user")
+     */
+    private $planCommunications;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Satisfaction::class, mappedBy="user")
+     */
+    private $satisfactions;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
         $this->cartesCadeaux = new ArrayCollection();
+        $this->planCommunications = new ArrayCollection();
+        $this->satisfactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -232,6 +244,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($cartesCadeaux->getUser() === $this) {
                 $cartesCadeaux->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlanCommunication[]
+     */
+    public function getPlanCommunications(): Collection
+    {
+        return $this->planCommunications;
+    }
+
+    public function addPlanCommunication(PlanCommunication $planCommunication): self
+    {
+        if (!$this->planCommunications->contains($planCommunication)) {
+            $this->planCommunications[] = $planCommunication;
+            $planCommunication->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanCommunication(PlanCommunication $planCommunication): self
+    {
+        if ($this->planCommunications->removeElement($planCommunication)) {
+            // set the owning side to null (unless already changed)
+            if ($planCommunication->getUser() === $this) {
+                $planCommunication->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Satisfaction[]
+     */
+    public function getSatisfactions(): Collection
+    {
+        return $this->satisfactions;
+    }
+
+    public function addSatisfaction(Satisfaction $satisfaction): self
+    {
+        if (!$this->satisfactions->contains($satisfaction)) {
+            $this->satisfactions[] = $satisfaction;
+            $satisfaction->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSatisfaction(Satisfaction $satisfaction): self
+    {
+        if ($this->satisfactions->removeElement($satisfaction)) {
+            // set the owning side to null (unless already changed)
+            if ($satisfaction->getUser() === $this) {
+                $satisfaction->setUser(null);
             }
         }
 

@@ -127,6 +127,16 @@ class PlanCommunication
      */
     private $photo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="planCommunications")
+     */
+    private $site;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="planCommunications")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -392,6 +402,30 @@ class PlanCommunication
     public function setPhoto($photo): self
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getSite(): ?Sites
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Sites $site): self
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

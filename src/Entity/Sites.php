@@ -90,10 +90,16 @@ class Sites
      */
     private $cartesCadeaux;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PlanCommunication::class, mappedBy="site")
+     */
+    private $planCommunications;
+
     public function __construct()
     {
         $this->cartesCadeauxes = new ArrayCollection();
         $this->cartesCadeaux = new ArrayCollection();
+        $this->planCommunications = new ArrayCollection();
     }
 
 
@@ -290,6 +296,36 @@ class Sites
     
     public function __toString() {
         return $this->getNomDuSite();
+    }
+
+    /**
+     * @return Collection|PlanCommunication[]
+     */
+    public function getPlanCommunications(): Collection
+    {
+        return $this->planCommunications;
+    }
+
+    public function addPlanCommunication(PlanCommunication $planCommunication): self
+    {
+        if (!$this->planCommunications->contains($planCommunication)) {
+            $this->planCommunications[] = $planCommunication;
+            $planCommunication->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanCommunication(PlanCommunication $planCommunication): self
+    {
+        if ($this->planCommunications->removeElement($planCommunication)) {
+            // set the owning side to null (unless already changed)
+            if ($planCommunication->getSite() === $this) {
+                $planCommunication->setSite(null);
+            }
+        }
+
+        return $this;
     }
 
 }
