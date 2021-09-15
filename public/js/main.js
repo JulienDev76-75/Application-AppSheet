@@ -32,7 +32,6 @@ window.onload = () => {
 } 
 
 var wrapper, content, test;
-var more = '<div style="height:1000px; background:#EEE;"></div>';
 
 // this is the scroll event handler
 function scroller() {
@@ -48,8 +47,6 @@ function scroller() {
 wrapper = document.getElementById("wrapper");
 content = document.getElementById("content");
 test = document.getElementById("test");
-
-content.innerHTML = more;
 
 // hook the scroll handler to scroll event
 if (wrapper.addEventListener) // NK: Works on all new browsers

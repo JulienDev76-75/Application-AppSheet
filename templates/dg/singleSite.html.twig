@@ -7,41 +7,70 @@
 <h3 class="text-center mt-5 mb-5 pt-5">Détail du site :</h3>
 
 <div class="container my-5 bg-light border border-danger p-5"> 
-<p class="text-center">Nom du site : {{sites.nomDuSite}}<p>
-<p class="text-center">Ville : {{sites.ville}}<p>
-<p class="text-center">Type de contrat : {{sites.typeContrat}}<p>
-<p class="text-center">Type de société : {{sites.typeSociete}}<p>
-<p class="text-center">Raison sociale : {{sites.raisonSociale}}<p>
-<p class="text-center">Adresse : {{sites.adresse1}}<p>
-<p class="text-center">Code postal : {{sites.codePostal}}<p>
-<p class="text-center">Date de début : {{sites.dateDebut | date('d/m/Y')}}<p>
-<p class="text-center">Date de fin : {{sites.dateFin | date('d/m/Y')}}<p>
-<p class="text-center">Date de premier contrat : {{sites.datePremierContrat | date('d/m/Y')}}<p>
-<p class="text-center">Accès : {{sites.ctrlAcces}}</p>
+<p class="text-center">Nom du site :</p><p class="text-danger text-center">{{sites.nomDuSite}}</p>
+<p class="text-center">Ville :</p><p class="text-danger text-center">{{sites.ville}}</p>
+<p class="text-center">Type de contrat :</p><p class="text-danger text-center"> {{sites.typeContrat}}</p>
+<p class="text-center">Type de société :</p><p class="text-danger text-center"> {{sites.typeSociete}}</p>
+<p class="text-center">Raison sociale :</p><p class="text-danger text-center"> {{sites.raisonSociale}}</p>
+<p class="text-center">Adresse :</p><p class="text-danger text-center"> {{sites.adresse1}}</p>
+<p class="text-center">Code postal :</p><p class="text-danger text-center"> {{sites.codePostal}}</p>
+<p class="text-center">Date de début :</p><p class="text-danger text-center"> {{sites.dateDebut | date('d/m/Y')}}</p>
+<p class="text-center">Date de fin :</p><p class="text-danger text-center"> {{sites.dateFin | date('d/m/Y')}}</p>
+<p class="text-center">Date de premier contrat :</p> <p class="text-danger text-center">{{sites.datePremierContrat | date('d/m/Y')}}</p>
+<p class="text-center">Accès :</p><p class="text-danger text-center"> {{sites.ctrlAcces}}</p>
 </div>
 
 
-<div class="row row-cols-1 row-cols-md-3 g-4 w-75 mx-auto">
-    <div class="col">
-        <p><a class="btn btn-danger text-white" href="{{ path('newCartesCadeaux', {id: sites.id})}}">Cartes Cadeaux</a></p>
+<hr class="w-50 mx-auto mb-5">
+<h3></h3>
+<div class="row row-cols-1 row-cols-md-4 g-4 w-75 mx-auto text-center">
+  <div class="col">
+    <div class="card p-4">
+      <i class="fas fa-gift"></i>
+      <div class="card-body">
+        <h5 class="card-title">Ajout d'une carte cadeau</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newCartesCadeaux', {id: sites.id})}}">Cartes Cadeaux</a></p>
       </div>
-    <div class="col">
-        <p><a class="btn btn-danger text-white" href="{{ path('newSatisfaction', {id: sites.id})}}">Satisfaction</a></p>
     </div>
-    <div class="col">
-        <p><a class="btn btn-danger text-white" href="{{ path('newRig', {id: sites.id})}}">Rig/Fréquentation</a></p> 
+  </div>
+  <div class="col">
+    <div class="card p-4">
+      <i class="far fa-laugh"></i>
+      <div class="card-body">
+        <h5 class="card-title">Ajout d'une statistique de satisfaction</h5>
+       <p><a class="btn btn-danger text-white mt-3" href="{{ path('newSatisfaction', {id: sites.id})}}">Satisfaction</a></p>
+      </div>
     </div>
-       <div class="col">
-        <p><a class="btn btn-danger text-white" href="{{ path('newPass', {id: sites.id})}}">Pass</a></p> 
+  </div>
+  <div class="col">
+    <div class="card p-4">
+   <i class="fas fa-euro-sign"></i>
+      <div class="card-body">
+        <h5 class="card-title">Ajout d'un C.A</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newRig', {id: sites.id})}}">Rig/Fréquentation</a></p> 
+      </div>
     </div>
-        </div>
-    <div class="col">
-        <p><a class="btn btn-danger text-white" href="{{ path('newPlanCommunication', {id: sites.id})}}">Plan Communication</a></p> 
+  </div>
+  <div class="col">
+    <div class="card p-4">
+      <i class="far fa-address-card"></i>
+      <div class="card-body">
+        <h5 class="card-title">Ajout d'une statistique Pass</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPass', {id: sites.id})}}">Pass</a></p> 
+      </div>
     </div>
+  </div>
 </div>
 
-{#<a href="newRig">LIEN</a>#}
-{#<a href="newPass">LIEN</a>#}
-{#<a href="newPlanCommunicatin">LIEN</a>#}
-
+<div class="text-center w-25 mx-auto mt-5">
+<div class="col">
+    <div class="card p-4">
+      <i class="fas fa-microphone-alt"></i>
+      <div class="card-body">
+        <h5 class="card-title">Ajout d'un Plan de communication</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPass', {id: sites.id})}}">Plan de communication</a></p> 
+      </div>
+    </div>
+  </div>
+  </div>
 {% endblock %}
