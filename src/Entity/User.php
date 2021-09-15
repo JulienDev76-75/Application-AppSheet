@@ -69,12 +69,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $satisfactions;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $prenom_nom;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Rig::class, mappedBy="USER")
+     */
+    private $rigs;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
         $this->cartesCadeaux = new ArrayCollection();
         $this->planCommunications = new ArrayCollection();
         $this->satisfactions = new ArrayCollection();
+        $this->rigs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -304,6 +315,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($satisfaction->getUser() === $this) {
                 $satisfaction->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPrenomNom(): ?string
+    {
+        return $this->prenom_nom;
+    }
+
+    public function setPrenomNom(string $prenom_nom): self
+    {
+        $this->prenom_nom = $prenom_nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rig[]
+     */
+    public function getRigs(): Collection
+    {
+        return $this->rigs;
+    }
+
+    public function addRig(Rig $rig): self
+    {
+        if (!$this->rigs->contains($rig)) {
+            $this->rigs[] = $rig;
+            $rig->setUSER($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRig(Rig $rig): self
+    {
+        if ($this->rigs->removeElement($rig)) {
+            // set the owning side to null (unless already changed)
+            if ($rig->getUSER() === $this) {
+                $rig->setUSER(null);
             }
         }
 

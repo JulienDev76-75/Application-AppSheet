@@ -17,11 +17,11 @@ class SearchSwotType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Vous pouvez entrer un ou plusieurs mots clés" '
+                    'placeholder' => 'Vous pouvez entrer un ou plusieurs mots clés'
                 ]
             ])
             ->add('Chercher', SubmitType::class, [
-                'attr' => ['class' => 'bg-danger text-white w-50 mt-3 mb-5'],
+                'attr' => ['class' => 'bg-danger text-white w-25 mt-3 mb-5'],
                 'row_attr' => ['class' => 'text-center']
             ]);
         ;

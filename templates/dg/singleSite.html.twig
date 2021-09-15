@@ -4,9 +4,42 @@
 
 {% block body %}
 
-<p>JE SUIS LA PAGE SINGLE SITE, DETAIL DU SITE ET POSSIBILITE AJOUTER C.C, PLAN DE COMMUNICATION ou encore COUT DE COMMUNICATION AFIN DE LES LIER EN BDD</p>
+<h3 class="text-center mt-5 mb-5 pt-5">Détail du site :</h3>
 
-<a href="{{ path('newCartesCadeaux', {id: sites.id})}}">LIEN</a>
+<div class="container my-5 bg-light border border-danger p-5"> 
+<p class="text-center">Nom du site : {{sites.nomDuSite}}<p>
+<p class="text-center">Ville : {{sites.ville}}<p>
+<p class="text-center">Type de contrat : {{sites.typeContrat}}<p>
+<p class="text-center">Type de société : {{sites.typeSociete}}<p>
+<p class="text-center">Raison sociale : {{sites.raisonSociale}}<p>
+<p class="text-center">Adresse : {{sites.adresse1}}<p>
+<p class="text-center">Code postal : {{sites.codePostal}}<p>
+<p class="text-center">Date de début : {{sites.dateDebut | date('d/m/Y')}}<p>
+<p class="text-center">Date de fin : {{sites.dateFin | date('d/m/Y')}}<p>
+<p class="text-center">Date de premier contrat : {{sites.datePremierContrat | date('d/m/Y')}}<p>
+<p class="text-center">Accès : {{sites.ctrlAcces}}</p>
+</div>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4 w-75 mx-auto">
+    <div class="col">
+        <p><a class="btn btn-danger text-white" href="{{ path('newCartesCadeaux', {id: sites.id})}}">Cartes Cadeaux</a></p>
+      </div>
+    <div class="col">
+        <p><a class="btn btn-danger text-white" href="{{ path('newSatisfaction', {id: sites.id})}}">Satisfaction</a></p>
+    </div>
+    <div class="col">
+        <p><a class="btn btn-danger text-white" href="{{ path('newRig', {id: sites.id})}}">Rig/Fréquentation</a></p> 
+    </div>
+       <div class="col">
+        <p><a class="btn btn-danger text-white" href="{{ path('newPass', {id: sites.id})}}">Pass</a></p> 
+    </div>
+        </div>
+    <div class="col">
+        <p><a class="btn btn-danger text-white" href="{{ path('newPlanCommunication', {id: sites.id})}}">Plan Communication</a></p> 
+    </div>
+</div>
+
 {#<a href="newRig">LIEN</a>#}
 {#<a href="newPass">LIEN</a>#}
 {#<a href="newPlanCommunicatin">LIEN</a>#}

@@ -95,11 +95,24 @@ class Sites
      */
     private $planCommunications;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Rig::class, mappedBy="site")
+     */
+    private $rigs;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="site")
+     */
+    private $passes;
+
+
     public function __construct()
     {
         $this->cartesCadeauxes = new ArrayCollection();
         $this->cartesCadeaux = new ArrayCollection();
         $this->planCommunications = new ArrayCollection();
+        $this->rigs = new ArrayCollection();
+        $this->passes = new ArrayCollection();
     }
 
 
@@ -322,6 +335,66 @@ class Sites
             // set the owning side to null (unless already changed)
             if ($planCommunication->getSite() === $this) {
                 $planCommunication->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rig[]
+     */
+    public function getRigs(): Collection
+    {
+        return $this->rigs;
+    }
+
+    public function addRig(Rig $rig): self
+    {
+        if (!$this->rigs->contains($rig)) {
+            $this->rigs[] = $rig;
+            $rig->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRig(Rig $rig): self
+    {
+        if ($this->rigs->removeElement($rig)) {
+            // set the owning side to null (unless already changed)
+            if ($rig->getSite() === $this) {
+                $rig->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Pass[]
+     */
+    public function getPasses(): Collection
+    {
+        return $this->passes;
+    }
+
+    public function addPass(Pass $pass): self
+    {
+        if (!$this->passes->contains($pass)) {
+            $this->passes[] = $pass;
+            $pass->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removePass(Pass $pass): self
+    {
+        if ($this->passes->removeElement($pass)) {
+            // set the owning side to null (unless already changed)
+            if ($pass->getSite() === $this) {
+                $pass->setSite(null);
             }
         }
 

@@ -62,6 +62,16 @@ class Rig
      */
     private $panier_moyen;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="rigs")
+     */
+    private $site;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="rigs")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -171,6 +181,30 @@ class Rig
     public function setPanierMoyen(?float $panier_moyen): self
     {
         $this->panier_moyen = $panier_moyen;
+
+        return $this;
+    }
+
+    public function getSite(): ?Sites
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Sites $site): self
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

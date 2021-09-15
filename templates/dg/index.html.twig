@@ -31,10 +31,79 @@
   </div>
 {% endif %}
 {% if is_granted('ROLE_DR') %}
-<p>Si vous voyez ca en plus, vous avez un rôle DR</p>
+<div class="row row-cols-3 row-cols-md-3 row-cols-lg-4 g-4 mb-5 pb-5 pt-5 mt-5 w-75 mx-auto">
+  <div class="col mb-3">
+      <a href="{{ path('frequentation') }}"><img src="{{ asset('image/cafreq.png') }}" title="frequentation" alt="frequentation logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('pass') }}"><img src="{{ asset('image/pass.png') }}" title="pass" alt="pass logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('planCommunication') }}"><img src="{{ asset('image/plancom.png') }}" title="plan de communication" alt="plan de communication logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('coutCommunication') }}"><img src="{{ asset('image/coutcom.png') }}"title="coût de communication" alt="coût de communication logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('satisfaction') }}" ><img src="{{ asset('image/satisfaction.png') }}"  title="satisfaction client" alt="satisfaction logo"/></a>
+  </div>
+    <div class="col mb-3">
+      <a href="{{ path('swot') }}"><img src="{{ asset('image/swot.png') }}" title="swot" alt="SWOT logo"/></a>
+  </div>
+    <div class="col mb-3">
+      <a href="{{ path('carteCadeau') }}"><img src="{{ asset('image/cartecadeau.png') }}" title="coût de communication" alt="coût de communication logo"></a>
+  </div>
+    <div class="col mb-3 pb-5">
+      <a class="my-auto h-auto" href="{{ path('listeDesSites') }}" ><img src="{{ asset('image/sites.png') }}"  title="liste des sites vert-marine" alt="Liste des sites Vert-Marine"></a> 
+  </div>
 {% endif %}
 {% if is_granted('ROLE_DS') %}
-<p>Si vous voyez cette phrase, vous avez un rôle DS</p>
+<div class="row row-cols-3 row-cols-md-3 row-cols-lg-4 g-4 mb-5 pb-5 pt-5 mt-5 w-75 mx-auto">
+  <div class="col mb-3">
+      <a href="{{ path('frequentation') }}"><img src="{{ asset('image/cafreq.png') }}" title="frequentation" alt="frequentation logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('pass') }}"><img src="{{ asset('image/pass.png') }}" title="pass" alt="pass logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('planCommunication') }}"><img src="{{ asset('image/plancom.png') }}" title="plan de communication" alt="plan de communication logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('coutCommunication') }}"><img src="{{ asset('image/coutcom.png') }}"title="coût de communication" alt="coût de communication logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('satisfaction') }}" ><img src="{{ asset('image/satisfaction.png') }}"  title="satisfaction client" alt="satisfaction logo"/></a>
+  </div>
+    <div class="col mb-3">
+      <a href="{{ path('carteCadeau') }}"><img src="{{ asset('image/cartecadeau.png') }}" title="coût de communication" alt="coût de communication logo"></a>
+    </div>
+{% endif %}
+{% if is_granted('ROLE_DG') %}
+<div class="row row-cols-3 row-cols-md-3 row-cols-lg-4 g-4 mb-5 pb-5 pt-5 mt-5 w-75 mx-auto">
+  <div class="col mb-3">
+      <a href="{{ path('frequentation') }}"><img src="{{ asset('image/cafreq.png') }}" title="frequentation" alt="frequentation logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('pass') }}"><img src="{{ asset('image/pass.png') }}" title="pass" alt="pass logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('planCommunication') }}"><img src="{{ asset('image/plancom.png') }}" title="plan de communication" alt="plan de communication logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('coutCommunication') }}"><img src="{{ asset('image/coutcom.png') }}"title="coût de communication" alt="coût de communication logo"></a>
+  </div>
+  <div class="col mb-3">
+      <a href="{{ path('satisfaction') }}" ><img src="{{ asset('image/satisfaction.png') }}"  title="satisfaction client" alt="satisfaction logo"/></a>
+  </div>
+    <div class="col mb-3">
+      <a href="{{ path('swot') }}"><img src="{{ asset('image/swot.png') }}" title="swot" alt="SWOT logo"/></a>
+  </div>
+    <div class="col mb-3">
+      <a href="{{ path('carteCadeau') }}"><img src="{{ asset('image/cartecadeau.png') }}" title="coût de communication" alt="coût de communication logo"></a>
+  </div>
+    <div class="col mb-3 pb-5">
+      <a class="my-auto h-auto" href="{{ path('listeDesSites') }}" ><img src="{{ asset('image/sites.png') }}"  title="liste des sites vert-marine" alt="Liste des sites Vert-Marine"></a> 
+  </div>
 {% endif %}
 </div>
 {% endblock %}

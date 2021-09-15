@@ -25,11 +25,6 @@ class Pass
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $site;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $contrat;
 
     /**
@@ -672,6 +667,11 @@ class Pass
      */
     private $notes;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="passes")
+     */
+    private $site;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -685,18 +685,6 @@ class Pass
     public function setPeriode(?string $periode): self
     {
         $this->periode = $periode;
-
-        return $this;
-    }
-
-    public function getSite(): ?string
-    {
-        return $this->site;
-    }
-
-    public function setSite(string $site): self
-    {
-        $this->site = $site;
 
         return $this;
     }
@@ -2245,6 +2233,18 @@ class Pass
     public function setNotes(?string $notes): self
     {
         $this->notes = $notes;
+
+        return $this;
+    }
+
+    public function getSite(): ?Sites
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Sites $site): self
+    {
+        $this->site = $site;
 
         return $this;
     }

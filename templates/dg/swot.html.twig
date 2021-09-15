@@ -4,49 +4,146 @@
 
 {% block body %}
 
-<h2 class="text-center mt-5 mb-5 text-danger">Liste des sites avec leurs forces et faiblesses :</h2>
+{% if is_granted('ROLE_ADMIN') %}
+<div class="w-25 mx-auto mt-5 pt-3">
+  {{ form(form)}}
+</div>
 
 <div class="w-75 mx-auto">
-<table class="table table-bordered mb-5 mt-5">
-  <thead class="bg-dark text-white">
-    <tr>
-      <th scope="col">Ville - site</th>
-      <th scope="col">Année</th>
-      <th scope="col">Forces</th>
-      <th scope="col">Faiblesses</th>
-      <th scope="col">Opportunités</th>
-      <th scope="col">Menaces</th>
-      <th scope="col">Editer</th>
-      <th scope="col">Supprimer</th>
-    </tr>
-  </thead>
-<tbody>
-    {% if swot is not empty %}
-        {% for swots in swot %}
-          <tr class="bg-light">
-            <td>{{swots.site}}</td>
-            <td>{{swots.annee}}</td>
-            <td>{{swots.forces}}</td>
-            <td>{{swots.faiblesses}}</td>
-            <td>{{swots.opportunites}}</td>
-            <td>{{swots.menaces}}</td>
-            <td><a href="{{ path('editSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-            <td><a href="{{ path('supprimerSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
-          </tr>
-        {% endfor %}
-    {% else %}
-        <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
-    {% endif %}
-</tbody> 
-</table>
+  <table class="table table-bordered mb-5 mt-5">
+    <thead class="bg-dark text-white">
+      <tr>
+        <th scope="col">Ville - site</th>
+        <th scope="col">Année</th>
+        <th scope="col">Forces</th>
+        <th scope="col">Faiblesses</th>
+        <th scope="col">Opportunités</th>
+        <th scope="col">Menaces</th>
+        <th scope="col">Editer</th>
+        <th scope="col">Supprimer</th>
+      </tr>
+    </thead>
+  <tbody>
+      {% if swot is not empty %}
+          {% for swots in swot %}
+            <tr class="bg-light">
+              <td class="py-3">{{swots.site}}</td>
+              <td>{{swots.annee}}</td>
+              <td>{{swots.forces}}</td>
+              <td>{{swots.faiblesses}}</td>
+              <td>{{swots.opportunites}}</td>
+              <td>{{swots.menaces}}</td>
+              <td><a href="{{ path('editSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+              <td><a href="{{ path('supprimerSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+            </tr>
+          {% endfor %}
+      {% else %}
+          <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
+      {% endif %}
+  </tbody> 
+  </table>
 </div>
 
-<div class="text-center text-white mb-4 mt-2">
+<div class="text-center text-white mb-5 mt-2">
  <a class="footer" href="{{ path('nouveauSwot')}}"><i class="fas fa-plus-circle color-danger"></i><br/></i></a>
 </div>
+{% endif %}
 
-<div>
-{{ form(form)}}
+{% if is_granted('ROLE_DR') %}
+<div class="w-25 mx-auto mt-5 pt-3">
+  {{ form(form)}}
 </div>
+
+<div class="w-75 mx-auto">
+  <table class="table table-bordered mb-5 mt-5">
+    <thead class="bg-dark text-white">
+      <tr>
+        <th scope="col">Ville - site</th>
+        <th scope="col">Année</th>
+        <th scope="col">Forces</th>
+        <th scope="col">Faiblesses</th>
+        <th scope="col">Opportunités</th>
+        <th scope="col">Menaces</th>
+        <th scope="col">Editer</th>
+        <th scope="col">Supprimer</th>
+      </tr>
+    </thead>
+  <tbody>
+      {% if swot is not empty %}
+          {% for swots in swot %}
+            <tr class="bg-light">
+              <td class="py-3">{{swots.site}}</td>
+              <td>{{swots.annee}}</td>
+              <td>{{swots.forces}}</td>
+              <td>{{swots.faiblesses}}</td>
+              <td>{{swots.opportunites}}</td>
+              <td>{{swots.menaces}}</td>
+              <td><a href="{{ path('editSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+              <td><a href="{{ path('supprimerSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+            </tr>
+          {% endfor %}
+      {% else %}
+          <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
+      {% endif %}
+  </tbody> 
+  </table>
+</div>
+
+<div class="text-center text-white mb-5 mt-2">
+ <a class="footer" href="{{ path('nouveauSwot')}}"><i class="fas fa-plus-circle color-danger"></i><br/></i></a>
+</div>
+{% endif %}
+
+
+
+{% if is_granted('ROLE_DG') %}
+<div class="w-25 mx-auto mt-5 pt-3">
+  {{ form(form)}}
+</div>
+
+<div class="w-75 mx-auto">
+  <table class="table table-bordered mb-5 mt-5">
+    <thead class="bg-dark text-white">
+      <tr>
+        <th scope="col">Ville - site</th>
+        <th scope="col">Année</th>
+        <th scope="col">Forces</th>
+        <th scope="col">Faiblesses</th>
+        <th scope="col">Opportunités</th>
+        <th scope="col">Menaces</th>
+        <th scope="col">Editer</th>
+        <th scope="col">Supprimer</th>
+      </tr>
+    </thead>
+  <tbody>
+      {% if swotDG is not empty %}
+         {% for userDGS in userDG %}
+         <tr class="bg-light">
+         <td>{{userDGS.prenomNom}}</td>
+         </tr>
+          {% for swotDGS in swotDG %}
+            <tr class="bg-light">
+              <td class="py-3">{{swotDGS.site}}</td>
+              <td>{{swotDGS.annee}}</td>
+              <td>{{swotDGS.forces}}</td>
+              <td>{{swotDGS.faiblesses}}</td>
+              <td>{{swotDGS.opportunites}}</td>
+              <td>{{swotDGS.menaces}}</td>
+              <td><a href="{{ path('editSwot', {id: swotDGS.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+              <td><a href="{{ path('supprimerSwot', {id: swotDGS.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+            </tr>
+          {% endfor %}
+            {% endfor %}
+      {% else %}
+          <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
+      {% endif %}
+  </tbody> 
+  </table>
+</div>
+
+<div class="text-center text-white mb-5 mt-2">
+ <a class="footer" href="{{ path('nouveauSwot')}}"><i class="fas fa-plus-circle color-danger"></i><br/></i></a>
+</div>
+{% endif %}
 
 {% endblock %}
