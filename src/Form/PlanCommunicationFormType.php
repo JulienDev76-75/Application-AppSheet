@@ -34,9 +34,8 @@ class PlanCommunicationFormType extends AbstractType
             ->add('chiffre_affaire')
             ->add('roi')
             ->add('numero_ddc')
-            ->add('photo')
             ->add('enregistrer', SubmitType::class, [
-                'attr' => ['class' => 'bg-danger text-white w-50 mt-3 mb-5'],
+                'attr' => ['class' => 'bg-danger text-white w-50 mt-5 mb-5'],
                 'row_attr' => ['class' => 'text-center']
             ]);
         ;

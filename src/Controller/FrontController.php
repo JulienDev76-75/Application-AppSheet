@@ -321,7 +321,7 @@ class FrontController extends AbstractController
     public function newPlanCommunication(Request $request, SitesRepository $sitesRepo, int $id): Response
     {
         $planCom = new PlanCommunication();
-        $form = $this->createForm(PlanComFormType::class, $planCom);
+        $form = $this->createForm(PlanCommunicationFormType::class, $planCom);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -471,6 +471,23 @@ class FrontController extends AbstractController
 
     }
 
+    /**
+     * @Route("/DGdashboard/Satisfaction/{id}/editSastisfaction", name="editSatisfaction")
+     */
+    public function editSatisfaction(Satisfaction $satisfaction, Request $request) : Response {
+        $form = $this->createForm(SatisfactionType::class, $satisfaction);
+        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($satisfaction);
+        $entityManager->flush();
+
+        return $this->render('edit/editSatisfaction.html.twig', [
+            'form' => $form->createView()
+         ]);
+
+    }
+
+
     //
     // ********************** FORMULAIRE : DELETE ELEMENTS **********************
     //
@@ -500,9 +517,53 @@ class FrontController extends AbstractController
     /** 
     * @Route("/DGdashboard//{id}/deleteSites", name="deleteSites")
     */
-    function deleteSites(Swot $swot): Response {
+    function deleteSites(Sites $sites): Response {
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager -> remove($swot);
+        $entityManager -> remove($sites);
+        $entityManager->flush();
+ 
+        return $this->redirectToRoute('listeDesSites');
+     }
+
+    /** 
+    * @Route("/DGdashboard//{id}/deleteSatisfaction", name="deleteSatisfaction")
+    */
+    function deleteSatisfaction(Satisfaction $satisfaction): Response {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager -> remove($satisfaction);
+        $entityManager->flush();
+ 
+        return $this->redirectToRoute('listeDesSites');
+     }
+
+    /** 
+    * @Route("/DGdashboard//{id}/deletePass", name="deletePass")
+    */
+    function deletePass(Pass $pass): Response {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager -> remove($pass);
+        $entityManager->flush();
+ 
+        return $this->redirectToRoute('listeDesSites');
+     }
+
+    /** 
+    * @Route("/DGdashboard//{id}/deleteRig", name="deleteRig")
+    */
+    function deleteRig(Rig $rig): Response {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager -> remove($rig);
+        $entityManager->flush();
+ 
+        return $this->redirectToRoute('listeDesSites');
+     }
+
+    /** 
+    * @Route("/DGdashboard//{id}/deletePlanCommunication", name="deletePlanCommunication")
+    */
+    function deletePlanCommunication(PlanCommunication $plancom): Response {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager -> remove($plancom);
         $entityManager->flush();
  
         return $this->redirectToRoute('listeDesSites');
