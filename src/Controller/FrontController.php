@@ -84,11 +84,34 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/satisfaction", name="satisfaction")
      */
-    public function satisfaction(): Response
+    public function satisfaction(SatisfactionRepository $satisfactionRepo): Response
     {
+    
+        // Données DR
+        $satisDR = $satisfactionRepo->findBy(
+            ['user' => $this->getUser()],
+        );
+
+        $trimestre = [];
+        $satis_proprete = [];
+        foreach($satisDR as $satisDRS) {
+            $trimestre[]= $satisDRS ->getTrimestre();
+            $satis_proprete[] = $satisDRS ->getSatisProprete();
+        }
+
+            
+        // Données DS
+        $satisDS = $satisfactionRepo->findBy(
+        ['user' => $this->getUser()],
+        );
+
+        // Données DG
+        $satisDG = $satisfactionRepo->findAll();
 
     return $this->render('dg/satisfaction.html.twig', [
-        'controller_name' => 'DgController',
+        'satisDR' => $satisDR,
+        'satisDS' => $satisDS,
+        'satisDG' => $satisDG,
     ]);
     }
 
@@ -141,7 +164,7 @@ class FrontController extends AbstractController
     {
         $sitesRepo = $this->getDoctrine()->getRepository(CartesCadeaux::class);
         $sites = $sitesRepo ->findby(
-            ['dr' => $this->getUser()],
+            ['site' => $this->getUser()],
             ['site' => 'ASC'],
         );  
         

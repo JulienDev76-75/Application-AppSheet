@@ -18,16 +18,6 @@ class Satisfaction
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $site;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $trimestre;
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      */
     private $satis_globale;
@@ -62,33 +52,25 @@ class Satisfaction
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="satisfactions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $site;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $trimestre;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $annee;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSite(): ?string
-    {
-        return $this->site;
-    }
-
-    public function setSite(string $site): self
-    {
-        $this->site = $site;
-
-        return $this;
-    }
-
-    public function getTrimestre(): ?string
-    {
-        return $this->trimestre;
-    }
-
-    public function setTrimestre(string $trimestre): self
-    {
-        $this->trimestre = $trimestre;
-
-        return $this;
     }
 
     public function getSatisGlobale(): ?float
@@ -174,4 +156,41 @@ class Satisfaction
 
         return $this;
     }
+
+    public function getSite(): ?Sites
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Sites $site): self
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    public function getTrimestre(): ?string
+    {
+        return $this->trimestre;
+    }
+
+    public function setTrimestre(string $trimestre): self
+    {
+        $this->trimestre = $trimestre;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
 }

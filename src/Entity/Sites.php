@@ -105,6 +105,11 @@ class Sites
      */
     private $passes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Satisfaction::class, mappedBy="site")
+     */
+    private $satisfactions;
+
 
     public function __construct()
     {
@@ -113,6 +118,7 @@ class Sites
         $this->planCommunications = new ArrayCollection();
         $this->rigs = new ArrayCollection();
         $this->passes = new ArrayCollection();
+        $this->satisfactions = new ArrayCollection();
     }
 
 
@@ -395,6 +401,36 @@ class Sites
             // set the owning side to null (unless already changed)
             if ($pass->getSite() === $this) {
                 $pass->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Satisfaction[]
+     */
+    public function getSatisfactions(): Collection
+    {
+        return $this->satisfactions;
+    }
+
+    public function addSatisfaction(Satisfaction $satisfaction): self
+    {
+        if (!$this->satisfactions->contains($satisfaction)) {
+            $this->satisfactions[] = $satisfaction;
+            $satisfaction->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSatisfaction(Satisfaction $satisfaction): self
+    {
+        if ($this->satisfactions->removeElement($satisfaction)) {
+            // set the owning side to null (unless already changed)
+            if ($satisfaction->getSite() === $this) {
+                $satisfaction->setSite(null);
             }
         }
 
