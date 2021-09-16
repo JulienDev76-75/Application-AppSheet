@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 {# This will be a comment #}
 {% block title %}ROLE = DIRECTEUR GENERAL, TOUTE VIEW POSSIBLE{% endblock %}
-
+      {% block stylesheets %}
+             <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+             {% endblock %}
 {% block body %}
 
 {% if is_granted('ROLE_ADMIN') %}

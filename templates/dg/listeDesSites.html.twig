@@ -2,6 +2,10 @@
 
 {% block title %}ROLE = DG{% endblock %}
 
+      {% block stylesheets %}
+             <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+             {% endblock %}
+
 {% block body %}
 
 {% if is_granted('ROLE_ADMIN') %}
@@ -16,7 +20,7 @@
     </div>
 </div>
 
-<h2 class="text-center mt-5 mb-5 text-danger">Liste des sites</h2>
+<h2 class="text-center mt-5 mb-5 text-danger" >Liste des sites</h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
         <thead class="bg-dark text-white">

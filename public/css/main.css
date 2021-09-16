@@ -1,7 +1,20 @@
+.body {
+    height : auto;
+}
+
 .fas {
-    font-size : 40px;
+    font-size : 1.6em;
 }
 
 .far {
-    font-size : 40px;
+    font-size : 1.6em;
 }
+
+.pfas {
+    font-size : 0.8em;
+}
+
+.pfar {
+    font-size : 0.8em;
+}
+
