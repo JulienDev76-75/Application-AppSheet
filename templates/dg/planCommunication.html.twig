@@ -3,6 +3,60 @@
 {% block title %}ROLE = DG{% endblock %}
 
 {% block body %}
+{% if is_granted('ROLE_DS') %}
+<div class="container">
+<canvas id="myChart" width="400" height="400"></canvas>
+</div>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    datasets: [{
+      type: 'bar',
+      label: 'Pomme',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: [5, 3, 4, 10, 8, 9, 2]
+    }, {
+      type: 'bar',
+      label: 'Poire',
+      backgroundColor:  'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: [2, 4, 1, 3, 7, 3, 6],
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Banane',
+      backgroundColor:   'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: [7, 2, 4, 5, 6, 4, 2]
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+      text: 'Chart.js Stacked Bar and Unstacked Line Combo Chart'
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+{% endif %}
+{% endblock %}
 
-<p>je suis la page plan de communciation</p>
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}

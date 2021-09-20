@@ -71,15 +71,15 @@
       </tr>
     </thead>
   <tbody>
-      {% if swot is not empty %}
-          {% for swots in swot %}
+      {% if swotDR is not empty %}
+          {% for swotDRS in swotDR %}
             <tr class="bg-light">
               <td class="py-3">{{swots.site}}</td>
-              <td>{{swots.annee}}</td>
-              <td>{{swots.forces}}</td>
-              <td>{{swots.faiblesses}}</td>
-              <td>{{swots.opportunites}}</td>
-              <td>{{swots.menaces}}</td>
+              <td>{{swotDRS.annee}}</td>
+              <td>{{swotDRS.forces}}</td>
+              <td>{{swotDRS.faiblesses}}</td>
+              <td>{{swotDRS.opportunites}}</td>
+              <td>{{swotDRS.menaces}}</td>
               <td><a href="{{ path('editSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
               <td><a href="{{ path('supprimerSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
             </tr>
@@ -145,6 +145,21 @@
 
 <div class="text-center text-white mb-5 mt-2">
  <a class="footer" href="{{ path('nouveauSwot')}}"><i class="fas fa-plus-circle color-danger"></i><br/></i></a>
+</div>
+{% endif %}
+
+{% if is_granted('ROLE_DS') %}
+<div class="w-50 mx-auto border border-dark mt-5 mb-5 bg-light border border-danger p-5 pb-5">
+    {% if swotDS is not empty %}
+<p class="text-center">Nom du site :</p><p class="text-danger text-center">{{swotDS.site}}</p>
+<p class="text-center">Année :</p><p class="text-danger text-center">{{swotDS.annee}}</p>
+<p class="text-center">Force :</p><p class="text-danger text-center"> {{swotDS.forces}}</p>
+<p class="text-center">Faiblesses :</p><p class="text-danger text-center"> {{swotDS.faiblesses}}</p>
+<p class="text-center">Opportunitées :</p><p class="text-danger text-center"> {{swotDS.opportunites}}</p>
+<p class="text-center">Menaces :</p><p class="text-danger text-center"> {{swotDS.menaces}}</p>
+    {% else %}
+      <p>c'est vide pour le DS</p>
+    {% endif %}
 </div>
 {% endif %}
 

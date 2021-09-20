@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 {# This will be a comment #}
-{% block title %}VU DS OU DR{% endblock %}
+{% block title %}Votre équipement Vert-Marine{% endblock %}
 
 {% block body %}
 
+{% if is_granted('ROLE_DR') %}
 <h3 class="text-center mt-5 mb-5 pt-5">Détail du site :</h3>
 
 <div class="container my-5 bg-light border border-danger p-5"> 
@@ -73,4 +74,7 @@
     </div>
   </div>
   </div>
+{% endif %}
+
+
 {% endblock %}

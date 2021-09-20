@@ -19,7 +19,7 @@ UN ROLE SPECIAL POUR PIERRE OU LE DEV POUR JUSTE AJOUTER DES CHAMPS POUR CAS SPE
     <div class="col">
         <div class="card">
         <div class="card-body">
-            <canvas id="myChart" width="100" height="100"></canvas>
+            <canvas id="myChartDR" width="100" height="100"></canvas>
         </div>
         </div>
     </div>
@@ -64,7 +64,7 @@ UN ROLE SPECIAL POUR PIERRE OU LE DEV POUR JUSTE AJOUTER DES CHAMPS POUR CAS SPE
 {% endif %}
 
 <script>
-var ctx = document.getElementById('myChart');
+var ctx = document.getElementById('myChartDR');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -115,8 +115,51 @@ var myChart = new Chart(ctx, {
 });
 </script>
 
+{% if is_granted('ROLE_DS') %}
+<div class="container">
+    <div class="row row-cols-1 row-cols-md- row-cols-mlg-2 g-4 mt-5 mb-5 w-75 mx-auto">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="myChartDS" width="100" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+<script>
+var ctx = document.getElementById('myChartDS');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [ "janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+        datasets: [{
+            label: 'Nombre de cartes vendues par mois',
+            data: {{ cartesvendues|raw }},
+            backgroundColor: [
+                'rgb(30,144,255)',
+            ],
+            borderColor: [
+                'rgb(30,144,255)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true   
+            }
+        }
+    }
+});
+</script>
+{% endif %}
 {% endblock %}
+
 
 {% block javascripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
+
+{# {{ dates|raw }} #}

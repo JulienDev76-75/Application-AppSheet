@@ -139,6 +139,23 @@
  <a class="footer" href="{{ path('nouveauSite')}}"><i class="fas fa-plus-circle color-danger"></i><br/></i></a>
 </div>
 {% endif %}
+
+{% if is_granted('ROLE_DS') %}
+<div class="w-50 mx-auto border border-dark mt-5 mb-5 bg-light border border-danger p-5 pb-5">
+<p class="text-center">Nom du site :</p><p class="text-danger text-center">{{sitesDS.nomDuSite}}</p>
+<p class="text-center">Ville :</p><p class="text-danger text-center">{{sitesDS.ville}}</p>
+<p class="text-center">Type de contrat :</p><p class="text-danger text-center"> {{sitesDS.typeContrat}}</p>
+<p class="text-center">Type de société :</p><p class="text-danger text-center"> {{sitesDS.typeSociete}}</p>
+<p class="text-center">Raison sociale :</p><p class="text-danger text-center"> {{sitesDS.raisonSociale}}</p>
+<p class="text-center">Adresse :</p><p class="text-danger text-center"> {{sitesDS.adresse1}}</p>
+<p class="text-center">Code postal :</p><p class="text-danger text-center"> {{sitesDS.codePostal}}</p>
+<p class="text-center">Date de début :</p><p class="text-danger text-center"> {{sitesDS.dateDebut | date('d/m/Y')}}</p>
+<p class="text-center">Date de fin :</p><p class="text-danger text-center"> {{sitesDS.dateFin | date('d/m/Y')}}</p>
+<p class="text-center">Date de premier contrat :</p> <p class="text-danger text-center">{{sitesDS.datePremierContrat | date('d/m/Y')}}</p>
+<p class="text-center">Accès :</p><p class="text-danger text-center"> {{sitesDS.ctrlAcces}}</p>
+</div>
+
+{% endif %}
 {% endblock %}
 
 

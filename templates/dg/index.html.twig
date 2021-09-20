@@ -77,6 +77,12 @@
     <div class="col mb-3">
       <a href="{{ path('carteCadeau') }}"><img src="{{ asset('image/cartecadeau.png') }}" title="coût de communication" alt="coût de communication logo"></a>
     </div>
+    <div class="col mb-3 pb-5">
+      <a class="my-auto h-auto" href="{{ path('listeDesSites') }}" ><img src="{{ asset('image/sites.png') }}"  title="liste des sites vert-marine" alt="Liste des sites Vert-Marine"></a> 
+  </div>
+    <div class="col mb-3">
+      <a href="{{ path('swot') }}"><img src="{{ asset('image/swot.png') }}" title="swot" alt="SWOT logo"/></a>
+  </div>
 {% endif %}
 {% if is_granted('ROLE_DG') %}
 <div class="row row-cols-3 row-cols-md-3 row-cols-lg-4 g-4 mb-5 pb-5 pt-5 mt-5 w-75 mx-auto">

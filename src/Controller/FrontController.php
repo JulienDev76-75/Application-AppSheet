@@ -67,17 +67,24 @@ class FrontController extends AbstractController
             ['user' => $this->getUser()],
         ); 
 
+        //Données DR
         $swotRepo = $this->getDoctrine()->getRepository(Swot::class);
-        $swotDG = $swotRepo -> findAll();
-        $userRepo = $this->getDoctrine()->getRepository(User::class);
-        $userDG = $userRepo -> findAll();
- 
+        $swotDR = $swotRepo -> findBy(
+            ['site' => $this->getUser()],
+        );
+
+        //Données DS
+        $swotRepo = $this->getDoctrine()->getRepository(Swot::class);
+        $swotDS = $swotRepo -> findOneBy(
+            ['user' => $this->getUser()],
+        ); 
+
     return $this->render('dg/swot.html.twig', [
         'swot' => $swot,
         'form' => $form->createView(),
         'swotList' => $swotList,
-        'swotDG' => $swotDG,
-        'userDG' => $userDG,
+        'swotDR' => $swotDR,
+        'swotDS' => $swotDS,
     ]);
     }
 
@@ -219,6 +226,12 @@ class FrontController extends AbstractController
             ['prenom_nom' => $this->getUser()],
         );  
 
+        //ROLE_DS
+        $sitesRepo = $this->getDoctrine()->getRepository(Sites::class);
+        $sitesDS = $sitesRepo -> findOneBy(
+            ['user' => $this->getUser()]);
+
+
         // (console.log) sur $filters à faire
         $filters = $request->get("sites");
         // On vérifie si on a une requête AJAX
@@ -234,6 +247,7 @@ class FrontController extends AbstractController
     return $this->render('dg/listeDesSites.html.twig', [
         'sites' => $sites,
         'sitesDG' => $sitesDG,
+        'sitesDS' => $sitesDS,
     ]);
     }
 
