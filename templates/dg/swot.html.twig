@@ -74,14 +74,14 @@
       {% if swotDR is not empty %}
           {% for swotDRS in swotDR %}
             <tr class="bg-light">
-              <td class="py-3">{{swots.site}}</td>
+              <td class="py-3">{{swotDRS.site}}</td>
               <td>{{swotDRS.annee}}</td>
               <td>{{swotDRS.forces}}</td>
               <td>{{swotDRS.faiblesses}}</td>
               <td>{{swotDRS.opportunites}}</td>
               <td>{{swotDRS.menaces}}</td>
-              <td><a href="{{ path('editSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-              <td><a href="{{ path('supprimerSwot', {id: swots.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+              <td><a href="{{ path('editSwot', {id: swotDRS.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+              <td><a href="{{ path('supprimerSwot', {id: swotDRS.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
             </tr>
           {% endfor %}
       {% else %}

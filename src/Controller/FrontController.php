@@ -70,7 +70,7 @@ class FrontController extends AbstractController
         //Données DR
         $swotRepo = $this->getDoctrine()->getRepository(Swot::class);
         $swotDR = $swotRepo -> findBy(
-            ['site' => $this->getUser()],
+            ['user' => $this->getUser()],
         );
 
         //Données DS
@@ -140,17 +140,21 @@ class FrontController extends AbstractController
             $cartesvendues[] = $cartecadeau ->getNombreCartesVendues();
         }
 
-        //données de la bdd pour le tableau - RAPPEL - tri par site et par dates des cartes cadeaux et par date
+        //données de la bdd pour le tableau - RAPPEL - tri par site et par dates des cartes cadeaux
+        $sitesTableau = $siteRepo -> findBy (
+            ['user' => $this->getUser()],
+        );
         $cartesCadeauxTableau = $cartesRepo->findBy(
-            ['user' => $this->getUser(),
+            ['site' => $this->getSite(),
             ],
             ['date' => 'ASC']
         );  
-
+        
     return $this->render('dg/carteCadeau.html.twig', [
         'dates' => json_encode($dates),
         'cartesvendues' => json_encode($cartesvendues),
         'cartesCadeauxTableau' => $cartesCadeauxTableau,
+        'sitesTableau' => $sitesTableau,
     ]);
     }
 

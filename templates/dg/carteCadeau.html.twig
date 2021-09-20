@@ -14,7 +14,7 @@ UN ROLE SPECIAL POUR PIERRE OU LE DEV POUR JUSTE AJOUTER DES CHAMPS POUR CAS SPE
 {% block title %}ROLE = DG{% endblock %}
 
 {% block body %}
-{% if is_granted('ROLE_ADMIN') %}
+{% if is_granted('ROLE_DS') %}
 <div class="row row-cols-1 row-cols-md-2 row-cols-mlg-6 g-4 mt-3 mb-5 ms-2 me-2">
     <div class="col">
         <div class="card">
@@ -38,25 +38,25 @@ UN ROLE SPECIAL POUR PIERRE OU LE DEV POUR JUSTE AJOUTER DES CHAMPS POUR CAS SPE
                 </tr>
             </thead>
             <tbody>
-                {% if cartesCadeauxTableau is not empty %}
-                    {% for carteCadeauTableau in cartesCadeauxTableau %}
-                        <tr class="bg-light">
-                            <td> {{carteCadeauTableau.site}}</td>
-                        </tr>
-                            {% for carteCadeauTableau in cartesCadeauxTableau %}
-                                <tr>
-                                    <td> {{carteCadeauTableau.date | date('d/m/Y')}}</td>
-                                    <td> {{carteCadeauTableau.nombreCartesVendues}}</td>
-                                    <td> {{carteCadeauTableau.valorisationVentes}}</td>
-                                    <td> {{carteCadeauTableau.nombreCarteUtilisees}}</td>
-                                    <td> {{carteCadeauTableau.valorisationUtilisation}}</td>
-                                    <td> {{carteCadeauTableau.solde}}</td>
-                                </tr>
-                            {% endfor %}
-                {% else %}
-                    <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter une carte cadeau à votre site</h2>
-                    {% endfor %}
-                {% endif %}
+            {% if sitesTableau is not empty %}
+                {% for sitesTableaux in sitesTableau %}
+                            <tr class="bg-light">
+                                <td> {{sitesTableaux.nomDuSite}}</td>
+                            </tr>
+                                {% for carteCadeauTableau in cartesCadeauxTableau %}
+                                    <tr>
+                                        <td> {{carteCadeauTableau.date | date('d/m/Y')}}</td>
+                                        <td> {{carteCadeauTableau.nombreCartesVendues}}</td>
+                                        <td> {{carteCadeauTableau.valorisationVentes}}</td>
+                                        <td> {{carteCadeauTableau.nombreCarteUtilisees}}</td>
+                                        <td> {{carteCadeauTableau.valorisationUtilisation}}</td>
+                                        <td> {{carteCadeauTableau.solde}}</td>
+                                    </tr>
+                                {% endfor %}  
+                    {% else %}
+                        <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter une carte cadeau à votre site</h2>
+                {% endfor %}
+            {% endif %}
             </tbody>
         </table>  
     </div>
@@ -115,7 +115,7 @@ var myChart = new Chart(ctx, {
 });
 </script>
 
-{% if is_granted('ROLE_DS') %}
+{% if is_granted('ROLE_DR') %}
 <div class="container">
     <div class="row row-cols-1 row-cols-md- row-cols-mlg-2 g-4 mt-5 mb-5 w-75 mx-auto">
         <div class="col">

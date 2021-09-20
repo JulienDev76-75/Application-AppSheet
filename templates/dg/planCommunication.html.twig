@@ -12,20 +12,20 @@ var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
     datasets: [{
       type: 'bar',
       label: 'Pomme',
       borderColor: 'rgb(30,144,255)',
       borderWidth: 2,
       fill: false,
-      data: [5, 3, 4, 10, 8, 9, 2]
+      data: [5, 3, 4, 10, 8, 9, 2, 8, 2, 10, 15, 4]
     }, {
       type: 'bar',
       label: 'Poire',
       backgroundColor:  'rgb(30,100,200)',
       stack: 'Stack 1',
-      data: [2, 4, 1, 3, 7, 3, 6],
+      data: [2, 4, 1, 3, 7, 3, 6, 5, 7, 20, 10, 12],
       borderColor: 'white',
       borderWidth: 2
     }, {
@@ -33,7 +33,7 @@ var myChart = new Chart(ctx, {
       label: 'Banane',
       backgroundColor:   'rgb(10,14,30)',
       stack: 'Stack 0',
-      data: [7, 2, 4, 5, 6, 4, 2]
+      data: [7, 2, 4, 5, 6, 4, 2, 9, 15, 10, 11, 26]
     }]
   },
   options: {

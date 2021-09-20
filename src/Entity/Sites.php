@@ -86,7 +86,7 @@ class Sites
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=CartesCadeaux::class, mappedBy="site", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=CartesCadeaux::class, mappedBy="site")
      */
     private $cartesCadeaux;
 
