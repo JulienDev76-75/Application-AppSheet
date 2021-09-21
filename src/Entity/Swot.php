@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SwotRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SwotRepository::class)
@@ -19,27 +20,34 @@ class Swot
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Type("integer",
+     *     message = "Vous devez rentrer un chiffre, c'est une date :)."
+     * )
      */
     private $annee;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank
      */
     private $forces;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank
      */
     private $faiblesses;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank
      */
     private $opportunites;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank
      */
     private $menaces;
 
@@ -51,6 +59,10 @@ class Swot
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Type("string",
+     * message ="Vous devez rentrer un nom de site correct, essayez le format Ville - Nom du site de préférence :)."
+     * )
+     * @Assert\NotBlank  
      */
     private $site;
 

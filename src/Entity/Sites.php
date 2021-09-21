@@ -86,7 +86,7 @@ class Sites
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=CartesCadeaux::class, mappedBy="site")
+     * @ORM\ManyToMany(targetEntity=CartesCadeaux::class, inversedBy="site")
      */
     private $cartesCadeaux;
 

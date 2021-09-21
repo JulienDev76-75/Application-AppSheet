@@ -140,12 +140,16 @@ class FrontController extends AbstractController
             $cartesvendues[] = $cartecadeau ->getNombreCartesVendues();
         }
 
+        $cartesCadeauxDS2020 = $cartesRepo->findBy(
+            ['user' => $this->getUser()],   
+        );
+
         //données de la bdd pour le tableau - RAPPEL - tri par site et par dates des cartes cadeaux
         $sitesTableau = $siteRepo -> findBy (
             ['user' => $this->getUser()],
         );
         $cartesCadeauxTableau = $cartesRepo->findBy(
-            ['site' => $this->getSite(),
+            ['site' => $this->getUser(),
             ],
             ['date' => 'ASC']
         );  
@@ -307,18 +311,23 @@ class FrontController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $swot->setUser($this->getUser());
             $swot->setActive(1);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($swot);
-            $entityManager->flush();
-
-             $this->addFlash(
-                 "success",
-                "Votre carte cadeau a bien été créée, vous n'avez plus qu'à rentrer les valeurs ! :)"
-            );
-
-            return $this->redirectToRoute('swot');
+            try {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($swot);
+                $entityManager->flush();
+                $this->addFlash(
+                    "success",
+                    "Le SWOT de votre site a bien été créée, vous n'avez plus qu'à rentrer les forces et faiblesses de ce dernier ! :)"
+                );
+                return $this->redirectToRoute('swot');
+                }
+            catch (\Exception $e) {
+                $this->addFlash(
+                    'danger',
+                    "Une erreur est survenue, votre Swot n'a pas été enregistré"
+                  );
+            }
         }
-
         return $this->render('registration/newSwot.html.twig', [
             'form' => $form->createView()
          ]);
@@ -541,7 +550,7 @@ class FrontController extends AbstractController
        $entityManager -> remove($swot);
         $entityManager->flush();
 
-        return $this->redirectToRoute('DGdashboard');
+        return $this->redirectToRoute('swot');
     }
 
     /** 

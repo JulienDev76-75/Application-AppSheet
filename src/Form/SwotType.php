@@ -7,14 +7,24 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class SwotType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('site')
-            ->add('annee')
+            ->add('site', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'Rentrez de préférence le format Ville - Nom du site'
+                ]
+            ])
+            ->add('annee', NumberType::class, [
+                'attr' => [
+                    'placeholder' => "Rentrez l'année de création de l'équipement"
+                ]
+            ])
             ->add('forces')
             ->add('faiblesses')
             ->add('opportunites')
