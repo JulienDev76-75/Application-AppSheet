@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ROLE = DG{% endblock %}
+{% block title %}Présensation des ou du site{% endblock %}
 
       {% block stylesheets %}
              <link rel="stylesheet" href="{{ asset('css/main.css') }}">
@@ -106,6 +106,8 @@
                 <th scope="col">Date de premier contrat</th>
                 <th scope="col">Ctrl Accès</th>
                 <th scope="col">Détail du site</th>
+                <th scope="col">Modifier le site</th>
+                <th scope="col">Supprimer le site</th>
             </tr>
         </thead>
         <tbody>
@@ -125,7 +127,8 @@
                     <td> {{site.datePremierContrat | date('d/m/Y')}}</td>
                     <td> {{site.ctrlAcces}}</td>
                     <td> <a href="{{ path('singleSite', {id: site.id})}}">Détails</a></td>
-                  
+                    <td> <a href="{{ path('editSites', {id: site.id})}}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                    <td> <a href="{{ path('deleteSites', {id: site.id})}}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
                 </tr>
             {% endfor %}
             {% else %}
@@ -134,9 +137,8 @@
         </tbody>
     </table>
 </div>
-
 <div class="text-center text-white mb-4 mt-2">
- <a class="footer" href="{{ path('nouveauSite')}}"><i class="fas fa-plus-circle color-danger"></i><br/></i></a>
+ <a class="footer" href="{{ path('nouveauSite')}}"><i class="btnadd fas fa-plus-circle color-danger"></i><br/></i></a>
 </div>
 {% endif %}
 
@@ -154,10 +156,8 @@
 <p class="text-center">Date de premier contrat :</p> <p class="text-danger text-center">{{sitesDS.datePremierContrat | date('d/m/Y')}}</p>
 <p class="text-center">Accès :</p><p class="text-danger text-center"> {{sitesDS.ctrlAcces}}</p>
 </div>
-
 {% endif %}
 {% endblock %}
-
 
 {% block javascripts %}
 <script src="{{ asset('js/main.js')}}"></script>

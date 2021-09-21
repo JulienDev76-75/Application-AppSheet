@@ -7,31 +7,36 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 
 class SiteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('ville', null, [
-                'label' => "Ville :"
+            ->add('ville', TextType::class, [
+                'attr' => ['class' => '',
+                'placeholder' => "Rentrez une ville"],
+                'label' => " Ville : "
             ])
-            ->add('type_contrat', null, [
+            ->add('type_contrat', TextType::class, [
                 'label' => "Type de contrat (Affermage, Marché Service, Régie Interne) :"
             ])
-            ->add('type_societe', null, [
+            ->add('type_societe', TextType::class, [
                 'label' => "Type de société (FILL ou OPA) :"
             ])
-            ->add('raison_sociale', null, [
+            ->add('raison_sociale', TextType::class, [
                 'label' => "Raison sociale :"
             ])
-            ->add('nom_du_site', null, [
+            ->add('nom_du_site', TextType::class, [
                 'label' => "Nom du site :"
             ])
-            ->add('adresse1', null, [
+            ->add('adresse1', TextType::class, [
                 'label' => "Adresse principale :"
             ])
             ->add('adresse2', null, [
+                'required' => false,
                 'label' => "Adresse complémentaire :"
             ])
             ->add('code_postal', null, [

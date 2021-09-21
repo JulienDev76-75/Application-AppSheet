@@ -291,7 +291,7 @@ class FrontController extends AbstractController
                 "success",
                 "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
             );
-            return $this->redirectToRoute('DGdashboard');
+            return $this->redirectToRoute('nouveauSite');
         }
 
         return $this->render('registration/newSite.html.twig', [
@@ -319,9 +319,9 @@ class FrontController extends AbstractController
                     "success",
                     "Le SWOT de votre site a bien été créée, vous n'avez plus qu'à rentrer les forces et faiblesses de ce dernier ! :)"
                 );
-                return $this->redirectToRoute('swot');
+                return $this->redirectToRoute('nouveauSwot');
                 }
-            catch (\Exception $e) {
+            catch (\Exception $php_errormsg) {
                 $this->addFlash(
                     'danger',
                     "Une erreur est survenue, votre Swot n'a pas été enregistré"
@@ -336,7 +336,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/listeDesSites/{id}/newCartesCadeaux", name="newCartesCadeaux", requirements={"id"="\d+"})
      */
-    public function newcartescadeaux(Request $request, SitesRepository $sitesRepo, int $id): Response
+    public function newCartesCadeaux(Request $request, SitesRepository $sitesRepo, int $id): Response
     {
         $cadeaux = new CartesCadeaux();
         $form = $this->createForm(CartesCadeauxFormType::class, $cadeaux);
@@ -351,13 +351,12 @@ class FrontController extends AbstractController
             $entityManager->persist($cadeaux);
             $entityManager->flush();
 
-
             $this->addFlash(
                 "success",
-                "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
+                "Vos chiffres concernant vos Cartes Cadeaux ont été bien enregistrés sur le site correspondant :)"
             );
 
-            return $this->redirectToRoute('listeDesSites');
+            return $this->redirectToRoute('newCartesCadeaux', ['id' => $cadeaux->getSite()->getId()]);
         }
 
         return $this->render('registration/newCartesCadeaux.html.twig', [
@@ -414,10 +413,10 @@ class FrontController extends AbstractController
 
             $this->addFlash(
                 "success",
-                "Votre projet a bien été ajoutée votre site, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
+                "Votre enquête de satisfaction pour le mois a bien été ajoutée votre site, félicitations ! :)"
             );
 
-            return $this->redirectToRoute('Satisfaction');
+            return $this->redirectToRoute('newSatisfaction', ['id' => $satisfaction->getSite()->getId()]);
         }
 
         return $this->render('registration/newSatisfaction.html.twig', [
@@ -536,7 +535,6 @@ class FrontController extends AbstractController
          ]);
 
     }
-
 
     //
     // ********************** FORMULAIRE : DELETE ELEMENTS **********************

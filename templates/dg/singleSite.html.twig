@@ -5,7 +5,7 @@
 {% block body %}
 
 {% if is_granted('ROLE_DR') %}
-<h3 class="text-center mt-5 mb-5 pt-5">Détail du site :</h3>
+<h3 class="text-center mt-1 mb-5 pt-5">Détail du site :</h3>
 
 <div class="container my-5 bg-light border border-danger p-5"> 
 <p class="text-center">Nom du site :</p><p class="text-danger text-center">{{sites.nomDuSite}}</p>
@@ -22,15 +22,15 @@
 </div>
 
 
-<hr class="w-50 mx-auto mb-5">
-<h3></h3>
-<div class="row row-cols-1 row-cols-md-4 g-4 w-75 mx-auto text-center">
+<hr class="w-50 mx-auto mb-4"></hr>
+
+<div class="row row-cols-1 row-cols-md-5 g-12 w-75 mx-auto mb-5 pb-5 text-center">
   <div class="col">
     <div class="card p-4">
       <i class="fas fa-gift"></i>
       <div class="card-body">
-        <h5 class="card-title">Ajout d'une carte cadeau</h5>
-        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newCartesCadeaux', {id: sites.id})}}">Cartes Cadeaux</a></p>
+        <h5 class="card-title">Cartes Cadeaux</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newCartesCadeaux', {id: sites.id})}}">Ajouter</a></p>
       </div>
     </div>
   </div>
@@ -38,8 +38,8 @@
     <div class="card p-4">
       <i class="far fa-laugh"></i>
       <div class="card-body">
-        <h5 class="card-title">Ajout d'une statistique de satisfaction</h5>
-       <p><a class="btn btn-danger text-white mt-3" href="{{ path('newSatisfaction', {id: sites.id})}}">Satisfaction</a></p>
+        <h5 class="card-title">Satisfaction</h5>
+       <p><a class="btn btn-danger text-white mt-3" href="{{ path('newSatisfaction', {id: sites.id})}}">Ajouter</a></p>
       </div>
     </div>
   </div>
@@ -47,8 +47,8 @@
     <div class="card p-4">
    <i class="fas fa-euro-sign"></i>
       <div class="card-body">
-        <h5 class="card-title">Ajout d'un C.A</h5>
-        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newRig', {id: sites.id})}}">Rig/Fréquentation</a></p> 
+        <h5 class="card-title">Fréquentation/C.A</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newRig', {id: sites.id})}}">Ajouter</a></p> 
       </div>
     </div>
   </div>
@@ -56,24 +56,22 @@
     <div class="card p-4">
       <i class="far fa-address-card"></i>
       <div class="card-body">
-        <h5 class="card-title">Ajout d'une statistique Pass</h5>
-        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPass', {id: sites.id})}}">Pass</a></p> 
+        <h5 class="card-title">Pass</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPass', {id: sites.id})}}">Ajouter</a></p> 
       </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card p-4">
+      <i class="fas fa-microphone-alt"></i>
+        <div class="card-body">
+          <h5 class="card-title">Plan de communication</h5>
+          <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPass', {id: sites.id})}}">Ajouter</a></p> 
+        </div>
     </div>
   </div>
 </div>
 
-<div class="text-center w-25 mx-auto mt-5">
-<div class="col">
-    <div class="card p-4">
-      <i class="fas fa-microphone-alt"></i>
-      <div class="card-body">
-        <h5 class="card-title">Ajout d'un Plan de communication</h5>
-        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPass', {id: sites.id})}}">Plan de communication</a></p> 
-      </div>
-    </div>
-  </div>
-  </div>
 {% endif %}
 
 

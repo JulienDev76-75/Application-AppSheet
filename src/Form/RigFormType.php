@@ -13,10 +13,7 @@ class RigFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('ville')
             ->add('activite')
-            ->add('type_societe')
-            ->add('type_contrat')
             ->add('periode')
             ->add('date')
             ->add('chiffre_affaire')

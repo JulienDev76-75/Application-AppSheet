@@ -4,12 +4,15 @@ namespace App\Entity;
 
 use App\Repository\RigRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=RigRepository::class)
  */
 class Rig
 {
+
+    const Trimestre = ["T1", "T2", "T3", "T4"];
+    const Activite = ["PISC", "PAT", "TL"];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -19,46 +22,33 @@ class Rig
 
     /**
      * @ORM\Column(type="string", length=255)
-     */
-    private $ville;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Rig::Activite, message="Veuillez choisir entre ces 3 activités.")
      */
     private $activite;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $type_societe;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $type_contrat;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Choice(choices=Rig::Trimestre, message="Veuillez choisir entre ces 4 trimestres.")
      */
     private $periode;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date", nullable=false)
      */
     private $date;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=false)
      */
     private $chiffre_affaire;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=false)
      */
     private $frequentation;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="float", nullable=false)
      */
     private $panier_moyen;
 
@@ -97,30 +87,6 @@ class Rig
     public function setActivite(string $activite): self
     {
         $this->activite = $activite;
-
-        return $this;
-    }
-
-    public function getTypeSociete(): ?string
-    {
-        return $this->type_societe;
-    }
-
-    public function setTypeSociete(string $type_societe): self
-    {
-        $this->type_societe = $type_societe;
-
-        return $this;
-    }
-
-    public function getTypeContrat(): ?string
-    {
-        return $this->type_contrat;
-    }
-
-    public function setTypeContrat(string $type_contrat): self
-    {
-        $this->type_contrat = $type_contrat;
 
         return $this;
     }

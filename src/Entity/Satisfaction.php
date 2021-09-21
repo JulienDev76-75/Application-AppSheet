@@ -4,12 +4,14 @@ namespace App\Entity;
 
 use App\Repository\SatisfactionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SatisfactionRepository::class)
  */
 class Satisfaction
 {
+    const Trimestre = ["T1", "T2", "T3", "T4"];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -60,6 +62,7 @@ class Satisfaction
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Satisfaction::Trimestre, message="Veuillez choisir entre ces 4 trimestres.")
      */
     private $trimestre;
 

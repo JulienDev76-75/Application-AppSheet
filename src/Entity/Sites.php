@@ -6,12 +6,16 @@ use App\Repository\SitesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SitesRepository::class)
  */
 class Sites
 {
+
+    const TypeContrat = ['Affermage', 'Marché Service', 'Régie Interne'];
+    const TypeSociete = ['OPA', 'FILL'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -26,11 +30,13 @@ class Sites
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Sites::TypeContrat, message="Veuillez choisir entre ces 3 contrats.")
      */
     private $type_contrat;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Sites::TypeSociete, message="Veuillez choisir entre ces 2 types de société.")
      */
     private $type_societe;
 

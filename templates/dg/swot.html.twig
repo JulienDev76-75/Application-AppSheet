@@ -92,7 +92,7 @@
 </div>
 
 <div class="text-center text-white mb-5 mt-2">
- <a class="footer" href="{{ path('nouveauSwot')}}"><i class="fas fa-plus-circle color-danger"></i><br/></i></a>
+ <a class="footer" href="{{ path('nouveauSwot')}}"><i class="btnadd fas fa-plus-circle color-danger"></i><br/></i></a>
 </div>
 {% endif %}
 
@@ -157,6 +157,9 @@
 <p class="text-center">Faiblesses :</p><p class="text-danger text-center"> {{swotDS.faiblesses}}</p>
 <p class="text-center">Opportunitées :</p><p class="text-danger text-center"> {{swotDS.opportunites}}</p>
 <p class="text-center">Menaces :</p><p class="text-danger text-center"> {{swotDS.menaces}}</p>
+<div class="text-center text-white mb-5 mt-2">
+ <a class="footer" href="{{ path('nouveauSwot')}}"><i class="btnadd fas fa-plus-circle color-danger"></i><br/></i></a>
+</div>
     {% else %}
       <p>c'est vide pour le DS</p>
     {% endif %}
