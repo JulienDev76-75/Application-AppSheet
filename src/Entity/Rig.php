@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Rig
 {
 
-    const Trimestre = ["T1", "T2", "T3", "T4"];
+    const Mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
     const Activite = ["PISC", "PAT", "TL"];
     /**
      * @ORM\Id
@@ -28,14 +28,9 @@ class Rig
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Choice(choices=Rig::Trimestre, message="Veuillez choisir entre ces 4 trimestres.")
+     * @Assert\Choice(choices=Rig::Mois, message="Veuillez choisir un mois valide et en minuscule, par exemple : 'janvier'.")
      */
-    private $periode;
-
-    /**
-     * @ORM\Column(type="date", nullable=false)
-     */
-    private $date;
+    private $mois;
 
     /**
      * @ORM\Column(type="float", nullable=false)
@@ -62,21 +57,14 @@ class Rig
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $annee;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getVille(): ?string
-    {
-        return $this->ville;
-    }
-
-    public function setVille(string $ville): self
-    {
-        $this->ville = $ville;
-
-        return $this;
     }
 
     public function getActivite(): ?string
@@ -91,26 +79,14 @@ class Rig
         return $this;
     }
 
-    public function getPeriode(): ?string
+    public function getMois(): ?string
     {
-        return $this->periode;
+        return $this->mois;
     }
 
-    public function setPeriode(?string $periode): self
+    public function setMois(?string $mois): self
     {
-        $this->periode = $periode;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(?\DateTimeInterface $date): self
-    {
-        $this->date = $date;
+        $this->mois = $mois;
 
         return $this;
     }
@@ -171,6 +147,18 @@ class Rig
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
 
         return $this;
     }

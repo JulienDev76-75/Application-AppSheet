@@ -383,10 +383,10 @@ class FrontController extends AbstractController
 
             $this->addFlash(
                 "success",
-                "Votre projet a bien été ouvert, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
+                "Votre Plan de communication a bien été associé à votre site ! :)"
             );
 
-            return $this->redirectToRoute('planCommunication');
+            return $this->redirectToRoute('newPlanCommunication', ['id' => $planCom->getSite()->getId()]);
         }
 
         return $this->render('registration/newPlanCommunication.html.twig', [
@@ -427,15 +427,15 @@ class FrontController extends AbstractController
     /**
     * @Route("/DGdashboard/listeDesSites/{id}/newRig", name="newRig", requirements={"id"="\d+"})
     */
-    public function newRig(Request $request, RigRepository $rigRepo, int $id): Response
+    public function newRig(Request $request, SitesRepository $sitesRepo, int $id): Response
     {
         $rig = new Rig();
         $form = $this->createForm(RigFormType::class, $rig);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $rig = $rigRepo->find($id);
-            $rig->setSite($rig);
+            $sites = $sitesRepo->find($id);
+            $rig->setSite($sites);
             $rig->setUser($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($rig);
@@ -443,10 +443,10 @@ class FrontController extends AbstractController
 
             $this->addFlash(
                 "success",
-                "Votre projet a bien été ajoutée votre site, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
+                "Votre C.A/Fréquentation a bien été enregistrée pour votre site ! :)"
             );
 
-            return $this->redirectToRoute('Rig');
+            return $this->redirectToRoute('newRig', ['id' => $rig->getSite()->getId()]);
         }
 
         return $this->render('registration/newSatisfaction.html.twig', [
@@ -533,8 +533,68 @@ class FrontController extends AbstractController
         return $this->render('edit/editSatisfaction.html.twig', [
             'form' => $form->createView()
          ]);
-
     }
+
+    /**
+     * @Route("/DGdashboard/CartesCadeaux/{id}/editCartesCadeaux", name="editCartesCadeaux")
+     */
+    public function editCartesCadeaux(CartesCadeaux $cartes, Request $request) : Response {
+        $form = $this->createForm(CartesCadeauxFormType::class, $cartes);
+        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($cartes);
+        $entityManager->flush();
+
+        return $this->render('edit/editCartesCadeaux.html.twig', [
+            'form' => $form->createView()
+         ]);
+    }
+
+    /**
+     * @Route("/DGdashboard/Pass/{id}/editPass", name="editPass")
+     */
+    public function editPlanCommunication(PlanCommunication $plancom, Request $request) : Response {
+        $form = $this->createForm(PlanCommunicationFormType::class, $plancom);
+        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($plancom);
+        $entityManager->flush();
+
+        return $this->render('edit/editPlanCommunication.html.twig', [
+            'form' => $form->createView()
+         ]);
+    }
+
+        /**
+     * @Route("/DGdashboard/Pass/{id}/editPass", name="editPass")
+     */
+    public function editPass(Pass $pass, Request $request) : Response {
+        $form = $this->createForm(PlanCommunicationFormType::class, $pass);
+        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($pass);
+        $entityManager->flush();
+
+        return $this->render('edit/editPlanCommunication.html.twig', [
+            'form' => $form->createView()
+         ]);
+    }
+
+    /**
+     * @Route("/DGdashboard/Rig/{id}/editRig", name="editRig")
+     */
+    public function editRig(Rig $rig, Request $request) : Response {
+        $form = $this->createForm(RigFormType::class, $rig);
+        $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($rig);
+        $entityManager->flush();
+
+        return $this->render('edit/editRig.html.twig', [
+            'form' => $form->createView()
+         ]);
+    }
+
 
     //
     // ********************** FORMULAIRE : DELETE ELEMENTS **********************

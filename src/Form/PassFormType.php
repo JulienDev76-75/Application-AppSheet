@@ -14,7 +14,7 @@ class PassFormType extends AbstractType
     {
         $builder
             ->add('periode')
-            ->add('date')
+            ->add('annee')
             ->add('abo_fitness')
             ->add('desabo_fitness')
             ->add('inst_fitness')

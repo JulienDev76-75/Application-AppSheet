@@ -13,9 +13,17 @@ class RigFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('activite')
-            ->add('periode')
-            ->add('date')
+            ->add('activite', null, [
+                'attr' => ['class' => '',
+                'placeholder' => "Veuillez choisir entre PISC, PAT ou encore TL"],
+                'label' => " Activité du site : "
+            ])
+            ->add('mois', null, [
+                'label' => " Mois : "
+            ])
+            ->add('annee',null, [
+                'label' => " Année : "
+            ])
             ->add('chiffre_affaire')
             ->add('frequentation')
             ->add('panier_moyen')

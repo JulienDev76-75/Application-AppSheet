@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PassRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PassRepository::class)
@@ -26,11 +27,6 @@ class Pass
      * @ORM\Column(type="string", length=255)
      */
     private $contrat;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $date;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -672,6 +668,11 @@ class Pass
      */
     private $site;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $annee;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -697,18 +698,6 @@ class Pass
     public function setContrat(string $contrat): self
     {
         $this->contrat = $contrat;
-
-        return $this;
-    }
-
-    public function getDate(): ?string
-    {
-        return $this->date;
-    }
-
-    public function setDate(?string $date): self
-    {
-        $this->date = $date;
 
         return $this;
     }
@@ -1402,7 +1391,7 @@ class Pass
         return $this->desabo_hc;
     }
 
-    public function setDesaboHc(?float $desabo_hc): self
+    public function setDesaboHc(?float $desabo_hc): self    
     {
         $this->desabo_hc = $desabo_hc;
 
@@ -1663,12 +1652,12 @@ class Pass
 
     public function getInstLiberteHc(): ?float
     {
-        return $this->inst_desabo_hc;
+        return $this->inst_liberte_hc;
     }
 
-    public function setInstLiberteHc(?float $inst_desabo_hc): self
+    public function setInstLiberteHc(?float $inst_liberte_hc): self
     {
-        $this->inst_desabo_hc = $inst_desabo_hc;
+        $this->inst_liberte_hc = $inst_liberte_hc;
 
         return $this;
     }
@@ -2245,6 +2234,18 @@ class Pass
     public function setSite(?Sites $site): self
     {
         $this->site = $site;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
 
         return $this;
     }
