@@ -15,55 +15,81 @@ UN ROLE SPECIAL POUR PIERRE OU LE DEV POUR JUSTE AJOUTER DES CHAMPS POUR CAS SPE
 
 {% block body %}
 {% if is_granted('ROLE_DS') %}
-
 <div class="container">
-<div class="row row-cols-1 row-cols-md-1 row-cols-mlg-1 mt-3 mb-5 mx-auto">
-    <div class="col">
-        <div class="card">
-          <div class="card-body">
-              <canvas id="myChartDS" width="10" height="10"></canvas>
+  <div class="row row-cols-1 row-cols-md-1 row-cols-mlg-1 mt-3 mb-5 mx-auto">
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartCartesVendues" width="10" height="10"></canvas>
+            </div>
           </div>
-        </div>
-    </div>
+      </div>
+       <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartCartesUtilisées" width="10" height="10"></canvas>
+            </div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartValorisationVentes" width="10" height="10"></canvas>
+            </div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartValorisationUtilisation" width="10" height="10"></canvas>
+            </div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartSolde" width="10" height="10"></canvas>
+            </div>
+          </div>
+      </div>  
+  </div>
 </div>
-</div>
-
-{% endif %}
+   {% endif %}  
 
 <script>
-var ctx = document.getElementById('myChartDS').getContext('2d');
+var ctx = document.getElementById('myChartDSCartesVendues').getContext('2d');
 var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
     datasets: [{
       type: 'bar',
-      label: 'Nombre de cartes vendues / mois 2019',
+      label: 'Nombre de cartes vendues / mois 2020',
       borderColor: 'rgb(30,144,255)',
       borderWidth: 2,
       fill: false,
-      data: [5, 3, 4, 10, 8, 9, 2, 8, 2, 10, 15, 4]
+      data: {{ cartesvendues2020|raw }},
     }, {
       type: 'bar',
-      label: 'Nombre de cartes vendues / mois 2020',
+      label: 'Nombre de cartes vendues / mois 2021',
       backgroundColor:  'rgb(30,100,200)',
       stack: 'Stack 1',
-      data: [2, 4, 1, 3, 7, 3, 6, 5, 7, 20, 10, 12],
+      data: {{ cartesvendues2021|raw }},
       borderColor: 'white',
       borderWidth: 2
     }, {
       type: 'bar',
-      label: 'Nombre de cartes vendues / mois 2021',
+      label: 'Nombre de cartes vendues / mois 2022',
       backgroundColor:   'rgb(10,14,30)',
       stack: 'Stack 0',
-      data: [7, 2, 4, 5, 6, 4, 2, 9, 15, 10, 11, 26]
+      data: {{ cartesvendues2017|raw }},
     }]
   },
   options: {
     responsive: true,
     title: {
       display: true,
-      text: 'Chart.js Stacked Bar and Unstacked Line Combo Chart'
+      text: 'Je ne sais absolument pas où doit aparaître ce texte'
     },
     tooltips: {
       mode: 'index',
@@ -78,45 +104,6 @@ var myChart = new Chart(ctx, {
 });
 </script>
 {% endblock %}
-
-{% if is_granted('ROLE_DS') %}
- <div class="col">
-    <h3>
-        <table class="table table-bordered mx-auto">
-            <thead class="bg-dark text-white my-5">
-                <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Nombre de cartes vendues</th>
-                    <th scope="col">Valorisation des ventes</th>
-                    <th scope="col">Nombre de cartes utilisées</th>
-                    <th scope="col">Valorisation des utilisations</th>
-                    <th scope="col">Solde</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% if sitesTableau is not empty %}
-                {% for sitesTableaux in sitesTableau %}
-                            <tr class="bg-light">
-                                <td> {{sitesTableaux.nomDuSite}}</td>
-                            </tr>
-                                {% for carteCadeauTableau in cartesCadeauxTableau %}
-                                    <tr>
-                                        <td> {{carteCadeauTableau.date | date('d/m/Y')}}</td>
-                                        <td> {{carteCadeauTableau.nombreCartesVendues}}</td>
-                                        <td> {{carteCadeauTableau.valorisationVentes}}</td>
-                                        <td> {{carteCadeauTableau.nombreCarteUtilisees}}</td>
-                                        <td> {{carteCadeauTableau.valorisationUtilisation}}</td>
-                                        <td> {{carteCadeauTableau.solde}}</td>
-                                    </tr>
-                                {% endfor %}  
-                    {% else %}
-                        <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter une carte cadeau à votre site</h2>
-                {% endfor %}
-            {% endif %}
-            </tbody>
-        </table>  
-    </div>
-{% endif %}
 
 
 {% block javascripts %}

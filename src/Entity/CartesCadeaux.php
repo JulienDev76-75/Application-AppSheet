@@ -20,11 +20,6 @@ class CartesCadeaux
     private $id;
 
     /**
-     * @ORM\Column(type="date")
-     */
-    private $date;
-
-    /**
      * @ORM\Column(type="float")
      */
     private $nombre_cartes_vendues;
@@ -60,21 +55,19 @@ class CartesCadeaux
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $annee;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $mois;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
     }
 
     public function getNombreCartesVendues(): ?float
@@ -157,6 +150,30 @@ class CartesCadeaux
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    public function getMois(): ?string
+    {
+        return $this->mois;
+    }
+
+    public function setMois(string $mois): self
+    {
+        $this->mois = $mois;
 
         return $this;
     }

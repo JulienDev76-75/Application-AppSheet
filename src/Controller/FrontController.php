@@ -119,6 +119,8 @@ class FrontController extends AbstractController
         'satisDR' => $satisDR,
         'satisDS' => $satisDS,
         'satisDG' => $satisDG,
+        'trimestre' => json_encode($trimestre),
+        'satis_proprete' => json_encode($satis_proprete),
     ]);
     }
 
@@ -127,22 +129,96 @@ class FrontController extends AbstractController
      */
     public function carteCadeau(CartesCadeauxRepository $cartesRepo, SitesRepository $siteRepo): Response
     {
-        // Données de la bdd pour la graphique
+        // ************************* DS VIEW *******************************$
+        // Données de la bdd pour la graphique 
         $cartescadeaux = $cartesRepo->findBy(
             ['user' => $this->getUser()],
+            ['annee' => 'ASC'],
+            12,
+            0
         );
 
-        $dates = [];
+        $cartescadeauxvendues2017 = $cartesRepo->findByAnnee("2017");
+        $cartescadeauxvendues2020 = $cartesRepo->findByAnnee("2020");
+        $cartescadeauxvendues2021 = $cartesRepo->findByAnnee("2021");
+        $cartescadeauxutilisées2017 = $cartesRepo->findByAnnee("2017");
+        $cartescadeauxutilisées2020 = $cartesRepo->findByAnnee("2020");
+        $cartescadeauxutilisées2021 = $cartesRepo->findByAnnee("2021");
+        $cartescadeauxvalorisationvente2017 = $cartesRepo->findByAnnee("2017");
+        $cartescadeauxvalorisationvente2020 = $cartesRepo->findByAnnee("2020");
+        $cartescadeauxvalorisationvente2021 = $cartesRepo->findByAnnee("2021");
+        $cartescadeauxvalorisationutilisation2017 = $cartesRepo->findByAnnee("2017");
+        $cartescadeauxvalorisationutilisation2020 = $cartesRepo->findByAnnee("2020");
+        $cartescadeauxvalorisationutilisation2021 = $cartesRepo->findByAnnee("2021");
+
+
+        $mois = [];
         $cartesvendues = [];
 
-        foreach($cartescadeaux as $cartecadeau) {
-            $dates[]= $cartecadeau ->getDate();
-            $cartesvendues[] = $cartecadeau ->getNombreCartesVendues();
+        // FIELD nombre_cartes_vendues
+        foreach($cartescadeauxvendues2020 as $cartecadeauvendues2020) {
+            $mois[]= $cartecadeauvendues2020 ->getMois();
+            $cartesvendues2020[] = $cartecadeauvendues2020 ->getNombreCartesVendues();
         }
 
-        $cartesCadeauxDS2020 = $cartesRepo->findBy(
-            ['user' => $this->getUser()],   
-        );
+        foreach($cartescadeauxvendues2017 as $cartecadeauvendues2017) {
+            $mois[]= $cartecadeauvendues2017 ->getMois();
+            $cartesvendues2017[] = $cartecadeauvendues2017 ->getNombreCartesVendues();
+        }
+
+        foreach($cartescadeauxvendues2021 as $cartecadeauvendues2021) {
+            $mois[]= $cartecadeauvendues2021 ->getMois();
+            $cartesvendues2021[] = $cartecadeauvendues2021 ->getNombreCartesVendues();
+        }
+
+        // FIELD nombre_cartes_utilisées
+        foreach($cartescadeauxutilisées2020 as $cartecadeauutilisées2020) {
+            $mois[]= $cartecadeauutilisées2020 ->getMois();
+            $cartesvendues2020[] = $cartecadeauutilisées2020 ->getNombreCartesVendues();
+        }
+
+        foreach($cartescadeauxutilisées2017 as $cartecadeauutilisées2017) {
+            $mois[]= $cartecadeauutilisées2017 ->getMois();
+            $cartesvendues2017[] = $cartecadeauutilisées2017 ->getNombreCartesVendues();
+        }
+
+        foreach($cartescadeauxutilisées2021 as $cartecadeauutilisées2021) {
+            $mois[]= $cartecadeauutilisées2021 ->getMois();
+            $cartesvendues2021[] = $cartecadeauutilisées2021 ->getNombreCartesVendues();
+        }
+
+        // FIELD valorisation_vente
+        foreach($cartescadeauxvalorisationvente2017 as $cartecadeauvalorisationvente2017) {
+            $mois[]= $cartecadeauvalorisationvente2017 ->getMois();
+            $cartesvendues2020[] = $cartecadeauvalorisationvente2017 ->getNombreCartesVendues();
+        }
+
+        foreach($cartescadeauxvalorisationvente2020 as $cartecadeauvalorisationvente2020) {
+            $mois[]= $cartecadeauvalorisationvente2020 ->getMois();
+            $cartesvendues2017[] = $cartecadeauvalorisationvente2020 ->getNombreCartesVendues();
+        }
+
+        foreach($cartescadeauxvalorisationvente2021 as $cartecadeauvalorisationvente2021) {
+            $mois[]= $cartecadeauvalorisationvente2021 ->getMois();
+            $cartesvendues2021[] = $cartecadeauvalorisationvente2021 ->getNombreCartesVendues();
+        }
+
+        // FIELD valorisation_utilisation
+        foreach($cartescadeauxvalorisationutilisation2017 as $cartecadeauvalorisationutilisation2017) {
+            $mois[]= $cartecadeauvalorisationutilisation2017 ->getMois();
+            $cartes2020[] = $cartecadeauvalorisationutilisation2017 ->getNombreCartesVendues();
+        }
+
+        foreach($cartescadeauxvalorisationutilisation2020 as $cartecadeauvalorisationutilisation2020) {
+            $mois[]= $cartecadeauvalorisationutilisation2020 ->getMois();
+            $cartesvendues2017[] = $cartecadeauvalorisationutilisation2020 ->getNombreCartesVendues();
+        }
+
+        foreach($cartescadeauxvalorisationutilisation2021 as $cartecadeauvalorisationutilisation2021) {
+            $mois[]= $cartecadeauvalorisationutilisation2021 ->getMois();
+            $cartesvendues2021[] = $cartecadeauvalorisationutilisation2021 ->getNombreCartesVendues();
+        }
+        
 
         //données de la bdd pour le tableau - RAPPEL - tri par site et par dates des cartes cadeaux
         $sitesTableau = $siteRepo -> findBy (
@@ -151,14 +227,21 @@ class FrontController extends AbstractController
         $cartesCadeauxTableau = $cartesRepo->findBy(
             ['site' => $this->getUser(),
             ],
-            ['date' => 'ASC']
+            ['mois' => 'ASC']
         );  
         
     return $this->render('dg/carteCadeau.html.twig', [
-        'dates' => json_encode($dates),
+        'mois' => json_encode($mois),
         'cartesvendues' => json_encode($cartesvendues),
+        'cartesvendues2020' => json_encode($cartesvendues2020),
+        'cartesvendues2021' => json_encode($cartesvendues2021),
+        'cartesvendues2017' => json_encode($cartesvendues2017),
+        'cartesvendues2017' => json_encode($cartesvendues2017),
+        'cartesvendues2017' => json_encode($cartesvendues2017),
+        'cartesvendues2017' => json_encode($cartesvendues2017),
         'cartesCadeauxTableau' => $cartesCadeauxTableau,
         'sitesTableau' => $sitesTableau,
+
     ]);
     }
 
