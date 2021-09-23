@@ -1,22 +1,13 @@
 {% extends 'base.html.twig' %}
-{# CARTE CADEAU ORGANISATION :
-DS OU DR : GRAHIQUE QUE DE LEUR SITE ou LEURS SITES, graphique par site ou par date 
-DG : GRAPHIQUE NATONALE, graphique donnée nationale par site ou date
 
-DONC ROUTE DIFFERENTE, CONTROLLER DIFFERENT ET FIND DIFFERENT
-DR OU DS -> données par  DATE
-DG : DONNEE PAR SITE ET PAR ANNEE
-
-UN ROLE SPECIAL POUR PIERRE OU LE DEV POUR JUSTE AJOUTER DES CHAMPS POUR CAS SPECIFIQUE DONC IS GRANTED et bim
-#}
-
-
-{% block title %}ROLE = DG{% endblock %}
+{% block title %}Cartes Cadeaux{% endblock %}
 
 {% block body %}
+
+{################# DS CHARTS ####################}
 {% if is_granted('ROLE_DS') %}
-<div class="container">
-  <div class="row row-cols-1 row-cols-md-1 row-cols-mlg-1 mt-3 mb-5 mx-auto">
+<h2 class="text-center mb-2 mt-5 text-dark">Voici les détails de votre site</h2>
+<div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
       <div class="col">
           <div class="card">
             <div class="card-body">
@@ -24,72 +15,260 @@ UN ROLE SPECIAL POUR PIERRE OU LE DEV POUR JUSTE AJOUTER DES CHAMPS POUR CAS SPE
             </div>
           </div>
       </div>
-       <div class="col">
+      <div class="col">
           <div class="card">
             <div class="card-body">
-                <canvas id="myChartCartesUtilisées" width="10" height="10"></canvas>
+                <canvas id="myChartCartesUtilisees" width="10" height="10"></canvas>
             </div>
           </div>
       </div>
       <div class="col">
           <div class="card">
             <div class="card-body">
-                <canvas id="myChartValorisationVentes" width="10" height="10"></canvas>
+                <canvas id="myChartCartesValoVente" width="10" height="10"></canvas>
             </div>
           </div>
       </div>
       <div class="col">
           <div class="card">
             <div class="card-body">
-                <canvas id="myChartValorisationUtilisation" width="10" height="10"></canvas>
+                <canvas id="myChartCartesValoUtilisation" width="10" height="10"></canvas>
             </div>
           </div>
       </div>
       <div class="col">
           <div class="card">
             <div class="card-body">
-                <canvas id="myChartSolde" width="10" height="10"></canvas>
+                <canvas id="myChartCartesSolde" width="10" height="10"></canvas>
             </div>
           </div>
-      </div>  
-  </div>
+      </div>
 </div>
-   {% endif %}  
+{% endif %} 
 
+{# Cartes vendues #}
 <script>
-var ctx = document.getElementById('myChartDSCartesVendues').getContext('2d');
+var ctx = document.getElementById('myChartCartesVendues').getContext('2d');
 var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
     datasets: [{
       type: 'bar',
-      label: 'Nombre de cartes vendues / mois 2020',
+      label: 'Nombre de cartes vendues / mois 2017',
       borderColor: 'rgb(30,144,255)',
       borderWidth: 2,
       fill: false,
-      data: {{ cartesvendues2020|raw }},
+      data: {{ cartesvendues2017|raw }},
     }, {
       type: 'bar',
-      label: 'Nombre de cartes vendues / mois 2021',
+      label: 'Nombre de cartes vendues / mois 2020',
       backgroundColor:  'rgb(30,100,200)',
       stack: 'Stack 1',
-      data: {{ cartesvendues2021|raw }},
+      data: {{ cartesvendues2020|raw }},
       borderColor: 'white',
       borderWidth: 2
     }, {
       type: 'bar',
-      label: 'Nombre de cartes vendues / mois 2022',
+      label: 'Nombre de cartes vendues / mois 2021',
       backgroundColor:   'rgb(10,14,30)',
       stack: 'Stack 0',
-      data: {{ cartesvendues2017|raw }},
+      data: {{ cartesvendues2021|raw }},
     }]
   },
   options: {
     responsive: true,
     title: {
       display: true,
-      text: 'Je ne sais absolument pas où doit aparaître ce texte'
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+{# Cartes utilisées #}
+<script>
+var ctx = document.getElementById('myChartCartesUtilisees').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Nombre de cartes utilisées / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ cartesutilisees2017|raw }},
+    }, {
+      type: 'bar',
+      label: 'Nombre de cartes utilisées / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ cartesutilisees2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Nombre de cartes utilisées / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ cartesutilisees2021|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+{# valorisation ventes #}
+<script>
+var ctx = document.getElementById('myChartCartesValoVente').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Valorisation des ventes / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ cartesvalovente2017|raw }},
+    }, {
+      type: 'bar',
+      label: 'Valorisation des ventes / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ cartesvalovente2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Valorisation des ventes / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ cartesvalovente2021|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+{# valorisation utilisation#}
+<script>
+var ctx = document.getElementById('myChartCartesValoUtilisation').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ cartesvaloutilisation2017|raw }},
+    }, {
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ cartesvaloutilisation2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ cartesvaloutilisation2021|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+
+{# Solde #}
+<script>
+var ctx = document.getElementById('myChartCartesSolde').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Solde total / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ cartessolde2017|raw }},
+    }, {
+      type: 'bar',
+      label: 'Solde total / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ cartessolde2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Solde total / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ cartessolde2021|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
     },
     tooltips: {
       mode: 'index',
@@ -106,8 +285,9 @@ var myChart = new Chart(ctx, {
 {% endblock %}
 
 
+{################# DR CHARTS ####################}
+{################# DG CHARTS ####################}
 {% block javascripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
 
-{# {{ dates|raw }} #}

@@ -19,16 +19,6 @@ class PlanCommunication
     private $id;
 
     /**
-     * @ORM\Column(type="date")
-     */
-    private $date_debut;
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $date_de_fin;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $type_operation;
@@ -98,6 +88,11 @@ class PlanCommunication
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $annee;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -111,18 +106,6 @@ class PlanCommunication
     public function setTypeActivite(string $type_activite): self
     {
         $this->type_activite = $type_activite;
-
-        return $this;
-    }
-
-    public function getTypeContrat(): ?string
-    {
-        return $this->type_contrat;
-    }
-
-    public function setTypeContrat(string $type_contrat): self
-    {
-        $this->type_contrat = $type_contrat;
 
         return $this;
     }
@@ -315,6 +298,18 @@ class PlanCommunication
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
 
         return $this;
     }

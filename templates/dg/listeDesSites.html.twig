@@ -143,7 +143,8 @@
 {% endif %}
 
 {% if is_granted('ROLE_DS') %}
-<div class="w-50 mx-auto border border-dark mt-5 mb-5 bg-light border border-danger p-5 pb-5">
+
+<div class="w-50 mx-auto border border-dark my-5 bg-light border border-danger">
 <p class="text-center">Nom du site :</p><p class="text-danger text-center">{{sitesDS.nomDuSite}}</p>
 <p class="text-center">Ville :</p><p class="text-danger text-center">{{sitesDS.ville}}</p>
 <p class="text-center">Type de contrat :</p><p class="text-danger text-center"> {{sitesDS.typeContrat}}</p>
@@ -156,6 +157,7 @@
 <p class="text-center">Date de premier contrat :</p> <p class="text-danger text-center">{{sitesDS.datePremierContrat | date('d/m/Y')}}</p>
 <p class="text-center">Accès :</p><p class="text-danger text-center"> {{sitesDS.ctrlAcces}}</p>
 </div>
+
 {% endif %}
 {% endblock %}
 

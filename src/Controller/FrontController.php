@@ -30,6 +30,7 @@ use App\Entity\CartesCadeaux;
 use App\Form\CartesCadeauxFormType;
 use App\Repository\CartesCadeauxRepository;
 use App\Form\SearchSwotType;
+use Doctrine\ORM\Query\AST\Functions\AvgFunction;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -93,7 +94,105 @@ class FrontController extends AbstractController
      */
     public function satisfaction(SatisfactionRepository $satisfactionRepo): Response
     {
+        // Données DS
+        $trimestre = [];
+        $satisglobale2019 = $satisfactionRepo->findByAnnee("2019");
+        $satisglobale2020 = $satisfactionRepo->findByAnnee("2020");
+        $satisglobale2021 = $satisfactionRepo->findByAnnee("2021");
+        $satisproprete2019 = $satisfactionRepo->findByAnnee("2019");
+        $satisproprete2020 = $satisfactionRepo->findByAnnee("2020");
+        $satisproprete2021 = $satisfactionRepo->findByAnnee("2021");
+        $competencepersonnel2019 = $satisfactionRepo->findByAnnee("2019");
+        $competencepersonnel2020 = $satisfactionRepo->findByAnnee("2020");
+        $competencepersonnel2021 = $satisfactionRepo->findByAnnee("2021");
+        $satishoraire2019 = $satisfactionRepo->findByAnnee("2019");
+        $satishoraire2020 = $satisfactionRepo->findByAnnee("2020");
+        $satishoraire2021 = $satisfactionRepo->findByAnnee("2021");
+        $satistemperature2019 = $satisfactionRepo->findByAnnee("2019");
+        $satistemperature2020 = $satisfactionRepo->findByAnnee("2020");
+        $satistemperature2021 = $satisfactionRepo->findByAnnee("2021");
+
+            // FIELD satis_globale
+            foreach($satisglobale2019 as $globale2019) {
+                $trimestre[]= $globale2019 ->getTrimestre();
+                $rendusatisglobale2019[] = $globale2019 ->getSatisGlobale();
+            }
     
+            foreach($satisglobale2020 as $globale2020) {
+                $trimestre[]= $globale2020 ->getTrimestre();
+                $rendusatisglobale2020[] = $globale2020 ->getSatisGlobale();
+            }
+    
+            foreach($satisglobale2021 as $globale2021) {
+                $trimestre[]= $globale2020 ->getTrimestre();
+                $rendusatisglobale2021[] = $globale2020 ->getSatisGlobale();
+            }
+
+            // FIELD satis_proprete
+            foreach($satisproprete2019 as $globale2019) {
+                $trimestre[]= $globale2019 ->getTrimestre();
+                $rendusatisproprete2019[] = $globale2019 ->getSatisProprete();
+            }
+            
+            foreach($satisproprete2020 as $globale2020) {
+                $trimestre[]= $globale2020 ->getTrimestre();
+                $rendusatisproprete2020[] = $globale2020 ->getSatisProprete();
+            }
+            
+            foreach($satisproprete2021 as $globale2021) {
+                $trimestre[]= $globale2021 ->getTrimestre();
+                $rendusatisproprete2021[] = $globale2021 ->getSatisProprete();
+                }
+
+            // FIELD satis_competence_du_personnel
+            foreach($competencepersonnel2019 as $comppersonnel2019) {
+                $trimestre[]= $comppersonnel2019 ->getTrimestre();
+                $renducompetencepersonnel2019[] = $comppersonnel2019 ->getCompetenceDuPersonnel();
+                }
+                        
+            foreach($competencepersonnel2020 as $comppersonnel2020) {
+                $trimestre[]= $comppersonnel2020 ->getTrimestre();
+                $renducompetencepersonnel2020[] = $comppersonnel2020 ->getCompetenceDuPersonnel();
+                }
+                        
+            foreach($competencepersonnel2021 as $comppersonnel2021) {
+                $trimestre[]= $comppersonnel2021 ->getTrimestre();
+                $renducompetencepersonnel2021[] = $comppersonnel2021 ->getCompetenceDuPersonnel();
+                }
+            
+            // FIELD satis_horaire
+            foreach($satishoraire2019 as $horaire2019) {
+                $trimestre[]= $horaire2019 ->getTrimestre();
+                $rendusatishoraire2019[] = $horaire2019 ->getSatisHoraires();
+                }
+                        
+            foreach($satishoraire2020 as $horaire2020) {
+                $trimestre[]= $horaire2020 ->getTrimestre();
+                $rendusatishoraire2020[] = $horaire2020 ->getSatisHoraires();
+                }
+                        
+            foreach($satishoraire2021 as $horaire2021) {
+                $trimestre[]= $horaire2021 ->getTrimestre();
+                $rendusatishoraire2021[] = $horaire2021 ->getSatisHoraires();
+                }
+            
+            // FIELD satis_temperature
+            foreach($satistemperature2019 as $temperature2019) {
+                $trimestre[]= $temperature2019 ->getTrimestre();
+                $rendusatistemperature2019[] = $temperature2019 ->getTemperatureDouche();
+                }
+                                                
+            foreach($satistemperature2020 as $temperature2020) {
+                $trimestre[]= $temperature2020 ->getTrimestre();
+                $rendusatistemperature2020[] = $temperature2020 ->getTemperatureDouche();
+                }
+                                                
+            foreach($satistemperature2021 as $temperature2021) {
+                $trimestre[]= $temperature2021 ->getTrimestre();
+                $rendusatistemperature2021[] = $temperature2021 ->getTemperatureDouche();
+                }
+
+
         // Données DR
         $satisDR = $satisfactionRepo->findBy(
             ['user' => $this->getUser()],
@@ -120,7 +219,21 @@ class FrontController extends AbstractController
         'satisDS' => $satisDS,
         'satisDG' => $satisDG,
         'trimestre' => json_encode($trimestre),
-        'satis_proprete' => json_encode($satis_proprete),
+        'rendusatisglobale2019' => json_encode($rendusatisglobale2019),
+        'rendusatisglobale2020' => json_encode($rendusatisglobale2020),
+        'rendusatisglobale2021' => json_encode($rendusatisglobale2021),
+        'rendusatisproprete2019' => json_encode($rendusatisglobale2019),
+        'rendusatisproprete2020' => json_encode($rendusatisglobale2020),
+        'rendusatisproprete2021' => json_encode($rendusatisglobale2021),
+        'renducompetencepersonnel2019' => json_encode($renducompetencepersonnel2019),
+        'renducompetencepersonnel2020' => json_encode($renducompetencepersonnel2020),
+        'renducompetencepersonnel2021' => json_encode($renducompetencepersonnel2021),
+        'rendusatishoraire2019' => json_encode($rendusatishoraire2019),
+        'rendusatishoraire2020' => json_encode($rendusatishoraire2020),
+        'rendusatishoraire2021' => json_encode($rendusatishoraire2020),
+        'rendusatistemperature2019' => json_encode($rendusatistemperature2019),
+        'rendusatistemperature2020' => json_encode($rendusatistemperature2020),
+        'rendusatistemperature2021' => json_encode($rendusatistemperature2021),
     ]);
     }
 
@@ -129,14 +242,8 @@ class FrontController extends AbstractController
      */
     public function carteCadeau(CartesCadeauxRepository $cartesRepo, SitesRepository $siteRepo): Response
     {
-        // ************************* DS VIEW *******************************$
+        // ************************* DS VIEW *******************************
         // Données de la bdd pour la graphique 
-        $cartescadeaux = $cartesRepo->findBy(
-            ['user' => $this->getUser()],
-            ['annee' => 'ASC'],
-            12,
-            0
-        );
 
         $cartescadeauxvendues2017 = $cartesRepo->findByAnnee("2017");
         $cartescadeauxvendues2020 = $cartesRepo->findByAnnee("2020");
@@ -150,8 +257,9 @@ class FrontController extends AbstractController
         $cartescadeauxvalorisationutilisation2017 = $cartesRepo->findByAnnee("2017");
         $cartescadeauxvalorisationutilisation2020 = $cartesRepo->findByAnnee("2020");
         $cartescadeauxvalorisationutilisation2021 = $cartesRepo->findByAnnee("2021");
-
-
+        $cartescadeauxsolde2017 = $cartesRepo->findByAnnee("2017");
+        $cartescadeauxsolde2020 = $cartesRepo->findByAnnee("2020");
+        $cartescadeauxsolde2021 = $cartesRepo->findByAnnee("2021");
         $mois = [];
         $cartesvendues = [];
 
@@ -172,51 +280,68 @@ class FrontController extends AbstractController
         }
 
         // FIELD nombre_cartes_utilisées
-        foreach($cartescadeauxutilisées2020 as $cartecadeauutilisées2020) {
-            $mois[]= $cartecadeauutilisées2020 ->getMois();
-            $cartesvendues2020[] = $cartecadeauutilisées2020 ->getNombreCartesVendues();
+        foreach($cartescadeauxutilisées2020 as $cartecadeauutilisees2020) {
+            $mois[]= $cartecadeauutilisees2020 ->getMois();
+            $cartesutilisees2020[] = $cartecadeauutilisees2020 ->getNombreCarteUtilisees();
         }
 
-        foreach($cartescadeauxutilisées2017 as $cartecadeauutilisées2017) {
-            $mois[]= $cartecadeauutilisées2017 ->getMois();
-            $cartesvendues2017[] = $cartecadeauutilisées2017 ->getNombreCartesVendues();
+        foreach($cartescadeauxutilisées2017 as $cartecadeauutilisees2017) {
+            $mois[]= $cartecadeauutilisees2017 ->getMois();
+            $cartesutilisees2017[] = $cartecadeauutilisees2017 ->getNombreCarteUtilisees();
         }
 
-        foreach($cartescadeauxutilisées2021 as $cartecadeauutilisées2021) {
-            $mois[]= $cartecadeauutilisées2021 ->getMois();
-            $cartesvendues2021[] = $cartecadeauutilisées2021 ->getNombreCartesVendues();
+        foreach($cartescadeauxutilisées2021 as $cartecadeauutilisees2021) {
+            $mois[]= $cartecadeauutilisees2021 ->getMois();
+            $cartesutilisees2021[] = $cartecadeauutilisees2021 ->getNombreCarteUtilisees();
         }
 
         // FIELD valorisation_vente
         foreach($cartescadeauxvalorisationvente2017 as $cartecadeauvalorisationvente2017) {
             $mois[]= $cartecadeauvalorisationvente2017 ->getMois();
-            $cartesvendues2020[] = $cartecadeauvalorisationvente2017 ->getNombreCartesVendues();
+            $cartesvalovente2017[] = $cartecadeauvalorisationvente2017 ->getValorisationVentes();
         }
 
         foreach($cartescadeauxvalorisationvente2020 as $cartecadeauvalorisationvente2020) {
             $mois[]= $cartecadeauvalorisationvente2020 ->getMois();
-            $cartesvendues2017[] = $cartecadeauvalorisationvente2020 ->getNombreCartesVendues();
+            $cartesvalovente2020[] = $cartecadeauvalorisationvente2020 ->getValorisationVentes();
         }
 
         foreach($cartescadeauxvalorisationvente2021 as $cartecadeauvalorisationvente2021) {
             $mois[]= $cartecadeauvalorisationvente2021 ->getMois();
-            $cartesvendues2021[] = $cartecadeauvalorisationvente2021 ->getNombreCartesVendues();
+            $cartesvalovente2021[] = $cartecadeauvalorisationvente2021 ->getValorisationVentes();
         }
 
         // FIELD valorisation_utilisation
         foreach($cartescadeauxvalorisationutilisation2017 as $cartecadeauvalorisationutilisation2017) {
             $mois[]= $cartecadeauvalorisationutilisation2017 ->getMois();
-            $cartes2020[] = $cartecadeauvalorisationutilisation2017 ->getNombreCartesVendues();
+            $cartesvaloutilisation2017[] = $cartecadeauvalorisationutilisation2017 ->getValorisationUtilisation();
         }
 
         foreach($cartescadeauxvalorisationutilisation2020 as $cartecadeauvalorisationutilisation2020) {
             $mois[]= $cartecadeauvalorisationutilisation2020 ->getMois();
-            $cartesvendues2017[] = $cartecadeauvalorisationutilisation2020 ->getNombreCartesVendues();
+            $cartesvaloutilisation2020[] = $cartecadeauvalorisationutilisation2020 ->getValorisationUtilisation();
         }
 
         foreach($cartescadeauxvalorisationutilisation2021 as $cartecadeauvalorisationutilisation2021) {
             $mois[]= $cartecadeauvalorisationutilisation2021 ->getMois();
-            $cartesvendues2021[] = $cartecadeauvalorisationutilisation2021 ->getNombreCartesVendues();
+            $cartesvaloutilisation2021[] = $cartecadeauvalorisationutilisation2021 ->getValorisationUtilisation();
+        }
+
+
+        // FIELD Solde
+        foreach($cartescadeauxsolde2017 as $cartecadeausolde2017) {
+            $mois[]= $cartecadeausolde2017 ->getMois();
+            $cartessolde2017[] = $cartecadeausolde2017 ->getSolde();
+        }
+
+        foreach($cartescadeauxsolde2020 as $cartecadeausolde2020) {
+            $mois[]= $cartecadeausolde2020 ->getMois();
+            $cartessolde2020[] = $cartecadeausolde2020 ->getSolde();
+        }
+
+        foreach($cartescadeauxsolde2021 as $cartecadeausolde2021) {
+            $mois[]= $cartecadeausolde2021 ->getMois();
+            $cartessolde2021[] = $cartecadeausolde2021 ->getSolde();
         }
         
 
@@ -236,12 +361,20 @@ class FrontController extends AbstractController
         'cartesvendues2020' => json_encode($cartesvendues2020),
         'cartesvendues2021' => json_encode($cartesvendues2021),
         'cartesvendues2017' => json_encode($cartesvendues2017),
-        'cartesvendues2017' => json_encode($cartesvendues2017),
-        'cartesvendues2017' => json_encode($cartesvendues2017),
-        'cartesvendues2017' => json_encode($cartesvendues2017),
+        'cartesutilisees2017' => json_encode($cartesutilisees2017),
+        'cartesutilisees2020' => json_encode($cartesutilisees2020),
+        'cartesutilisees2021' => json_encode($cartesutilisees2021),
+        'cartesvalovente2017' => json_encode($cartesvalovente2017),
+        'cartesvalovente2020' => json_encode($cartesvalovente2020),
+        'cartesvalovente2021' => json_encode($cartesvalovente2021),
+        'cartesvaloutilisation2017' => json_encode($cartesvaloutilisation2017),
+        'cartesvaloutilisation2020' => json_encode($cartesvaloutilisation2020),
+        'cartesvaloutilisation2021' => json_encode($cartesvaloutilisation2021),
+        'cartessolde2017' => json_encode($cartessolde2017),
+        'cartessolde2020' => json_encode($cartessolde2020),
+        'cartessolde2021' => json_encode($cartessolde2021),
         'cartesCadeauxTableau' => $cartesCadeauxTableau,
         'sitesTableau' => $sitesTableau,
-
     ]);
     }
 
@@ -302,7 +435,7 @@ class FrontController extends AbstractController
 
         //ROLE_DR
         $sitesRepo = $this->getDoctrine()->getRepository(Sites::class);
-        $sites = $sitesRepo -> findby(
+        $sitesDR = $sitesRepo -> findby(
             ['user' => $this->getUser()],
             ['ville' => 'ASC'],
         );  
@@ -336,7 +469,7 @@ class FrontController extends AbstractController
             }
 
     return $this->render('dg/listeDesSites.html.twig', [
-        'sites' => $sites,
+        'sitesDR' => $sitesDR,
         'sitesDG' => $sitesDG,
         'sitesDS' => $sitesDS,
     ]);
@@ -345,12 +478,70 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/coutCommunication", name="coutCommunication")
      */
-    public function coutCommunication(): Response
+    public function coutCommunication(PlanCommunicationRepository $planRepo): Response
     {
+
+    // ************************* DS VIEW *******************************
+    $typeobjectif2019 = $planRepo->findByAnnee("2019");
+    $typeobjectif2020 = $planRepo->findByAnnee("2020");
+    $typeobjectif2021 = $planRepo->findByAnnee("2021");
+    $typeoperation2019 = $planRepo->findByAnnee("2019");
+    $typeoperation2020 = $planRepo->findByAnnee("2020");
+    $typeoperation2021 = $planRepo->findByAnnee("2021");
+    $couttotal2019 = $planRepo->findByAnnee("2019");
+    $couttotal2020 = $planRepo->findByAnnee("2019");
+    $couttotal2021 = $planRepo->findByAnnee("2019");
+
+    // Type objectif par année : récapitulatif / répartition
+    foreach($typeobjectif2019 as $objectif2019) {
+            $typeobjectif2019[] = count($objectif2019 ->getObjectif());
+            }
+
+    foreach($typeobjectif2020 as $objectif2020) {
+            $typeobjectif2020[] = count($objectif2020 ->getObjectif());
+            }
+
+    foreach($typeobjectif2020 as $objectif2021) {
+            $typeobjectif2021[] = count($objectif2021 ->getObjectif());
+            }
+    
+    // Type objectif par année : récapitulatif / répartition
+    foreach($typeoperation2019 as $operation2019) {
+        $cartesvendues2020[] = count($operation2019 ->getTypeOperation());
+        }
+
+    foreach($typeoperation2020 as $operation2020) {
+        $cartesvendues2017[] = count($operation2020 ->getTypeOperation());
+        }
+
+    foreach($typeoperation2021 as $operation2021) {
+        $typeobjectif2021[] = count($operation2021 ->getTypeOperation());
+        }
+    
+    // Type cout total par année : récapitulatif / répartition
+    foreach($couttotal2019 as $cout2019) {
+        $cartesvendues2020[] = array_sum($cout2019 ->getObjectif());
+        }
+
+    foreach($couttotal2020 as $cout2020) {
+        $cartesvendues2017[] = array_sum($cout2020 ->getObjectif());
+        }
+
+    foreach($couttotal2021 as $cout2021) {
+        $typeobjectif2021[] = array_sum($cout2021 ->getObjectif());
+        }
+
+    // ************************* DR VIEW *******************************
+    // ************************* DG VIEW *******************************
+
     return $this->render('dg/coutCommunication.html.twig', [
-        'controller_name' => 'DgController',
+        'typeobjectif2019' => json_encode($typeobjectif2019),
+        'typeobjectif2020' => json_encode($typeobjectif2020),
+        'typeobjectif2021' => json_encode($typeobjectif2021),
     ]);
     }
+
+
 
     //
     // ********************** FORMULAIRE : ADD ELEMENTS **********************
