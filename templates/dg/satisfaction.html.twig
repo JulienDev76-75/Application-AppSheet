@@ -4,7 +4,9 @@
 
 {% block body %}
 {% if is_granted('ROLE_DS') %}
-<h2 class="text-center mb-2 mt-5 text-dark">Taux de satisfaction / année</h2>
+
+<h2 class="text-center mb-2 mt-5 text-dark">Taux de satisfaction / Trimestre et année</h2>
+<h3 class="text-center mt-4 mb-4 text-dark">{{ siteduDS.nomDuSite }}</h3>
 <div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
       <div class="col">
           <div class="card">
@@ -47,28 +49,47 @@
 <script>
 var ctx = document.getElementById('myChartSatisGlobale').getContext('2d');
 var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ["T1", "T2", "T3", "T4"],
-        datasets: [{
-            label: 'Satisfaction globale / trimestre',
-            data:  {{ rendusatisglobale2019 | raw }},
-            backgroundColor: 
-                'rgba(255, 99, 132, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-            ],
-            borderWidth: 1
-        }]
+  type: 'bar',
+  data: {
+    labels: ["T1", "T2", "T3", "T4"],
+    datasets: [{
+      type: 'bar',
+      label: 'Satisfaction total / mois en % 2019',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ rendusatisglobale2019 | raw }},
+    }, {
+      type: 'bar',
+      label: 'Satisfaction total / mois en % 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ rendusatisglobale2020 | raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Satisfaction total / mois en % 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ rendusatisglobale2021 | raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
     },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
     }
+  }
 });
 </script>
 
@@ -81,25 +102,25 @@ var myChart = new Chart(ctx, {
     labels: ["T1", "T2", "T3", "T4"],
     datasets: [{
       type: 'bar',
-      label: 'Solde total / mois 2017',
+      label: 'Satisfaction propreté / mois en % 2019',
       borderColor: 'rgb(30,144,255)',
       borderWidth: 2,
       fill: false,
-      data: {{ rendusatisglobale2019 | raw }},
+      data: {{ rendusatisproprete2019 | raw }},
     }, {
       type: 'bar',
-      label: 'Solde total / mois 2020',
+      label: 'Satisfaction propreté / mois en % 2020',
       backgroundColor: 'rgb(30,100,200)',
       stack: 'Stack 1',
-      data: {{ rendusatisglobale2019 | raw }},
+      data: {{ rendusatisproprete2020 | raw }},
       borderColor: 'white',
       borderWidth: 2
     }, {
       type: 'bar',
-      label: 'Solde total / mois 2021',
+      label: 'Satisfaction propreté / mois en % 2021',
       backgroundColor: 'rgb(10,14,30)',
       stack: 'Stack 0',
-      data: {{ rendusatisglobale2019 | raw }},
+      data: {{ rendusatisproprete2021 | raw }},
     }]
   },
   options: {
@@ -129,25 +150,25 @@ var myChart = new Chart(ctx, {
     labels: ["T1", "T2", "T3", "T4"],
     datasets: [{
       type: 'bar',
-      label: 'Solde total / mois 2017',
+      label: 'Compétence du personnel / mois en % 2019',
       borderColor: 'rgb(30,144,255)',
       borderWidth: 2,
       fill: false,
-      data: {{ rendusatisglobale2019 | raw }},
+      data: {{ renducompetencepersonnel2019 | raw }},
     }, {
       type: 'bar',
-      label: 'Solde total / mois 2020',
+      label: 'Compétence du personnel / mois en % 2020',
       backgroundColor: 'rgb(30,100,200)',
       stack: 'Stack 1',
-      data: {{ rendusatisglobale2019 | raw }},
+      data: {{ renducompetencepersonnel2020 | raw }},
       borderColor: 'white',
       borderWidth: 2
     }, {
       type: 'bar',
-      label: 'Solde total / mois 2021',
+      label: 'Compétence du personnel / mois en % 2021',
       backgroundColor: 'rgb(10,14,30)',
       stack: 'Stack 0',
-      data: {{ rendusatisglobale2019 | raw }},
+      data: {{ renducompetencepersonnel2021 | raw }},
     }]
   },
   options: {
@@ -170,73 +191,32 @@ var myChart = new Chart(ctx, {
 
 {# satisfaction horaire #}
 <script>
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ["T1", "T2", "T3", "T4"],
-        datasets: [{
-            label: '# of Votes',
-            data: {{ rendusatisglobale2019 | raw }},
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
-</script>
- 
-</script>
-
-{# satisfaction temperature #}
-<script>
-var ctx = document.getElementById('myChartCartesSolde').getContext('2d');
+var ctx = document.getElementById('myChartSatisHoraire').getContext('2d');
 var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: ["T1", "T2", "T3", "T4"],
     datasets: [{
       type: 'bar',
-      label: 'Solde total / année 2017',
+      label: 'Satisfaction horaire / mois en % 2019',
       borderColor: 'rgb(30,144,255)',
       borderWidth: 2,
       fill: false,
-      data: {{ rendusatisglobale2019 | raw }},
+      data: {{ rendusatishoraire2019 | raw }},
     }, {
       type: 'bar',
-      label: 'Solde total / année 2020',
+      label: 'Satisfaction horaire / mois en % 2020',
       backgroundColor: 'rgb(30,100,200)',
       stack: 'Stack 1',
-      data: {{ rendusatisglobale2019 | raw }},
+      data: {{ rendusatishoraire2020 | raw }},
       borderColor: 'white',
       borderWidth: 2
     }, {
       type: 'bar',
-      label: 'Solde total / année 2021',
+      label: 'Satisfaction horaire / mois en % 2021',
       backgroundColor: 'rgb(10,14,30)',
       stack: 'Stack 0',
-      data: {{ rendusatisglobale2019 | raw }},
+      data: {{ rendusatishoraire2021 | raw }},
     }]
   },
   options: {
@@ -257,7 +237,60 @@ var myChart = new Chart(ctx, {
 });
 </script>
 
+{# satisfaction temperature #}
+<script>
+var ctx = document.getElementById('myChartSatisTemperature').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["T1", "T2", "T3", "T4"],
+    datasets: [{
+      type: 'bar',
+      label: 'Satisfaction température / mois en % 2019',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: true,
+      data: {{ rendusatistemperature2019 | raw }},
+    }, {
+      type: 'bar',
+      label: 'Satisfaction température / mois en % 2020',
+      backgroundColor: 'rgb(10,200,153)',
+      stack: 'Stack 0',
+      data: {{ rendusatistemperature2020 | raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Satisfaction température / mois en % 2021',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ rendusatistemperature2021 | raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    },
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
 {% endif %}
+
+
+
 {% endblock %}
 
 {% block javascripts %}

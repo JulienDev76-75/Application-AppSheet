@@ -8,7 +8,7 @@
 
 {% block body %}
 
-{% if is_granted('ROLE_ADMIN') %}
+{% if is_granted('ROLE_DG') %}
 <div class="container">
     <div class="col-3">
         <p>Filter</p>
@@ -44,26 +44,31 @@
         </thead>
         <tbody>
         {% if sites is not empty %}
-            {% for site in sites %}
-                <tr class="bg-light">
-                    <td> {{site.nomDuSite}}</td>
-                    <td> {{site.ville}}</td>
-                    <td> {{site.typeContrat}}</td>
-                    <td> {{site.typeSociete}}</td>
-                    <td> {{site.raisonSociale}}</td>
-                    <td> {{site.adresse1}}</td>
-                    <td> {{site.adresse2}}</td>
-                    <td> {{site.codePostal}}</td>
-                    <td> {{site.dateDebut | date('d/m/Y')}}</td>
-                    <td> {{site.dateFin | date('d/m/Y')}}</td>
-                    <td> {{site.datePremierContrat | date('d/m/Y')}}</td>
-                    <td> {{site.ctrlAcces}}</td>
-                    <td> <a href="{{ path('singleSite', {id: site.id})}}">Détails</a></td>
-                    <td> <a href="{{ path('editSites', {id: site.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-                    <td> <a href="{{ path('deleteSites', {id: site.id}) }}" class="card-link btn btn-danger text-white my-5">Supprimer</a></td>
-                </tr>
-            {% endfor %}
-            {% else %}
+            {% for userDGS in userDG %}
+            <tr class="bg-light">
+            <td> {{userDGS.prenomNom}}</td>
+            </tr>
+        {% for site in sites %}
+            <tr class="bg-light">
+                <td> {{site.nomDuSite}}</td>
+                <td> {{site.ville}}</td>
+                <td> {{site.typeContrat}}</td>
+                <td> {{site.typeSociete}}</td>
+                <td> {{site.raisonSociale}}</td>
+                <td> {{site.adresse1}}</td>
+                <td> {{site.adresse2}}</td>
+                <td> {{site.codePostal}}</td>
+                <td> {{site.dateDebut | date('d/m/Y')}}</td>
+                <td> {{site.dateFin | date('d/m/Y')}}</td>
+                <td> {{site.datePremierContrat | date('d/m/Y')}}</td>
+                <td> {{site.ctrlAcces}}</td>
+                <td> <a href="{{ path('singleSite', {id: site.id})}}">Détails</a></td>
+                <td> <a href="{{ path('editSites', {id: site.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                <td> <a href="{{ path('deleteSites', {id: site.id}) }}" class="card-link btn btn-danger text-white my-5">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+        {% endfor %}
+        {% else %}
             <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site</h2>
         {% endif %}
         </tbody>

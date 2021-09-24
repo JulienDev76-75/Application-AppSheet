@@ -18,7 +18,7 @@ class SwotRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Swot::class);
     }
-
+    
 
     /**
     * Recherche les mots clés sur la page Swot
@@ -35,23 +35,6 @@ class SwotRepository extends ServiceEntityRepository
     return $query->getQuery()->getResult();
     }
 
-    // /**
-    //  * @return Swot[] Returns an array of Swot objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')    
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
     /*
     public function findOneBySomeField($value): ?Swot
     {
@@ -61,6 +44,12 @@ class SwotRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function test() {
+          $query = $this->_em->createQuery('SELECT * FROM swot);
+        $resultats = $query->getResult();
+            return $resultats;
     }
     */
 }

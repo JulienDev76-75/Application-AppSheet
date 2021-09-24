@@ -62,14 +62,12 @@ class FrontController extends AbstractController
 
         // Recherche des annonces correspondant aux mots clés
         $swot = $swotRepo->search($search->get('mots')->getData());
-        
         $swotRepo = $this->getDoctrine()->getRepository(Swot::class);
         $swotList = $swotRepo -> findBy(
             ['user' => $this->getUser()],
         ); 
 
         //Données DR
-        $swotRepo = $this->getDoctrine()->getRepository(Swot::class);
         $swotDR = $swotRepo -> findBy(
             ['user' => $this->getUser()],
         );
@@ -80,20 +78,30 @@ class FrontController extends AbstractController
             ['user' => $this->getUser()],
         ); 
 
+        //Données DG
+        $swotDG = $swotRepo ->findAll();
+        $userDG = $userRepo ->findAll();
+
     return $this->render('dg/swot.html.twig', [
         'swot' => $swot,
         'form' => $form->createView(),
         'swotList' => $swotList,
         'swotDR' => $swotDR,
         'swotDS' => $swotDS,
+        'swotDG' => $swotDG,
+        'userDG' => $userDG,
     ]);
     }
 
     /**
      * @Route("/DGdashboard/satisfaction", name="satisfaction")
      */
-    public function satisfaction(SatisfactionRepository $satisfactionRepo): Response
+    public function satisfaction(SatisfactionRepository $satisfactionRepo, SitesRepository $siteRepo): Response
     {
+        $siteduDS = $siteRepo -> findOneBy (
+            ['user' => $this->getUser()],
+        );
+
         // Données DS
         $trimestre = [];
         $satisglobale2019 = $satisfactionRepo->findByAnnee("2019");
@@ -111,6 +119,7 @@ class FrontController extends AbstractController
         $satistemperature2019 = $satisfactionRepo->findByAnnee("2019");
         $satistemperature2020 = $satisfactionRepo->findByAnnee("2020");
         $satistemperature2021 = $satisfactionRepo->findByAnnee("2021");
+        $satistemperature2022 = $satisfactionRepo->findByAnnee("2022");
 
             // FIELD satis_globale
             foreach($satisglobale2019 as $globale2019) {
@@ -124,8 +133,8 @@ class FrontController extends AbstractController
             }
     
             foreach($satisglobale2021 as $globale2021) {
-                $trimestre[]= $globale2020 ->getTrimestre();
-                $rendusatisglobale2021[] = $globale2020 ->getSatisGlobale();
+                $trimestre[]= $globale2021 ->getTrimestre();
+                $rendusatisglobale2021[] = $globale2021 ->getSatisGlobale();
             }
 
             // FIELD satis_proprete
@@ -192,31 +201,23 @@ class FrontController extends AbstractController
                 $rendusatistemperature2021[] = $temperature2021 ->getTemperatureDouche();
                 }
 
+            foreach($satistemperature2022 as $temperature2022) {
+                $trimestre[]= $temperature2022 ->getTrimestre();
+                $rendusatistemperature2022[] = $temperature2022 ->getTemperatureDouche();
+                }
 
         // Données DR
         $satisDR = $satisfactionRepo->findBy(
             ['user' => $this->getUser()],
         );
-
-        $trimestre = [];
-        $satis_proprete = [];
-        foreach($satisDR as $satisDRS) {
-            $trimestre[]= $satisDRS ->getTrimestre();
-            $satis_proprete[] = $satisDRS ->getSatisProprete();
-        }
-
-            
-        // Données DS
-        $satisDS = $satisfactionRepo->findBy(
-        ['user' => $this->getUser()],
+        $sitesDR = $siteRepo->findBy(
+            ['user' => $this->getUser()],
         );
-
         // Données DG
         $satisDG = $satisfactionRepo->findAll();
 
     return $this->render('dg/satisfaction.html.twig', [
         'satisDR' => $satisDR,
-        'satisDS' => $satisDS,
         'satisDG' => $satisDG,
         'trimestre' => json_encode($trimestre),
         'rendusatisglobale2019' => json_encode($rendusatisglobale2019),
@@ -234,6 +235,9 @@ class FrontController extends AbstractController
         'rendusatistemperature2019' => json_encode($rendusatistemperature2019),
         'rendusatistemperature2020' => json_encode($rendusatistemperature2020),
         'rendusatistemperature2021' => json_encode($rendusatistemperature2021),
+        'rendusatistemperature2022' => json_encode($rendusatistemperature2022),
+        'siteduDS' => $siteduDS,
+        'sitesDR' => $sitesDR
     ]);
     }
 
@@ -381,7 +385,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/planCommunication", name="planCommunication")
      */
-    public function planCommunication(): Response
+    public function planCommunication(PlanCommunication $plancom): Response
     {
     return $this->render('dg/planCommunication.html.twig', [
         'controller_name' => 'DgController',
@@ -391,7 +395,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/pass", name="pass")
      */
-    public function pass(): Response
+    public function pass(Pass $pass): Response
     {
         $sitesRepo = $this->getDoctrine()->getRepository(CartesCadeaux::class);
         $sites = $sitesRepo ->findby(
@@ -407,7 +411,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/frequentation&CA", name="frequentation")
      */
-    public function freq(): Response
+    public function freq(Rig $rig): Response
     {
     return $this->render('dg/frequentation.html.twig', [
         'controller_name' => 'DgController',
@@ -441,17 +445,13 @@ class FrontController extends AbstractController
         );  
 
         //ROLE_DG
-        $sitesRepo = $this->getDoctrine()->getRepository(Sites::class);
         $sites = $sitesRepo -> findby(
-            ['user' => $this->getUser()],
+            ['user' => "10"],
         );  
-        $userRepo = $this->getDoctrine()->getRepository(User::class);
-        $sitesDG = $userRepo -> findby(
-            ['prenom_nom' => $this->getUser()],
-        );  
+        dd($sites);
+        $userDG = $userRepo -> findAll();
 
         //ROLE_DS
-        $sitesRepo = $this->getDoctrine()->getRepository(Sites::class);
         $sitesDS = $sitesRepo -> findOneBy(
             ['user' => $this->getUser()]);
 
@@ -470,8 +470,9 @@ class FrontController extends AbstractController
 
     return $this->render('dg/listeDesSites.html.twig', [
         'sitesDR' => $sitesDR,
-        'sitesDG' => $sitesDG,
+        'userDG' => $userDG,
         'sitesDS' => $sitesDS,
+        'sites' => $sites,
     ]);
     }
 
@@ -540,8 +541,6 @@ class FrontController extends AbstractController
         'typeobjectif2021' => json_encode($typeobjectif2021),
     ]);
     }
-
-
 
     //
     // ********************** FORMULAIRE : ADD ELEMENTS **********************
