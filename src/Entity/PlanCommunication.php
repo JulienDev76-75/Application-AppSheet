@@ -93,6 +93,11 @@ class PlanCommunication
      */
     private $annee;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $mois;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -310,6 +315,18 @@ class PlanCommunication
     public function setAnnee(int $annee): self
     {
         $this->annee = $annee;
+
+        return $this;
+    }
+
+    public function getMois(): ?string
+    {
+        return $this->mois;
+    }
+
+    public function setMois(string $mois): self
+    {
+        $this->mois = $mois;
 
         return $this;
     }

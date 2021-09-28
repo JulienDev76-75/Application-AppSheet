@@ -35,6 +35,16 @@ class SwotRepository extends ServiceEntityRepository
     return $query->getQuery()->getResult();
     }
 
+    public function sitesAndSwot()
+    {
+        return $this->createQueryBuilder('s')
+        ->leftJoin('s.user','u')
+        ->addSelect('u')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
     /*
     public function findOneBySomeField($value): ?Swot
     {

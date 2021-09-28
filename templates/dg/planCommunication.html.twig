@@ -4,56 +4,64 @@
 
 {% block body %}
 {% if is_granted('ROLE_DS') %}
-<div class="container">
-<canvas id="myChart" width="400" height="400"></canvas>
-</div>
-<script>
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
-    datasets: [{
-      type: 'bar',
-      label: 'Nombre de cartes vendues / mois 2019',
-      borderColor: 'rgb(30,144,255)',
-      borderWidth: 2,
-      fill: false,
-      data: [5, 3, 4, 10, 8, 9, 2, 8, 2, 10, 15, 4]
-    }, {
-      type: 'bar',
-      label: 'Nombre de cartes vendues / mois 2020',
-      backgroundColor:  'rgb(30,100,200)',
-      stack: 'Stack 1',
-      data: [2, 4, 1, 3, 7, 3, 6, 5, 7, 20, 10, 12],
-      borderColor: 'white',
-      borderWidth: 2
-    }, {
-      type: 'bar',
-      label: 'Nombre de cartes vendues / mois 2021',
-      backgroundColor:   'rgb(10,14,30)',
-      stack: 'Stack 0',
-      data: [7, 2, 4, 5, 6, 4, 2, 9, 15, 10, 11, 26]
-    }]
-  },
-  options: {
-    responsive: true,
-    title: {
-      display: true,
-      text: 'Chart.js Stacked Bar and Unstacked Line Combo Chart'
-    },
-    tooltips: {
-      mode: 'index',
-      intersect: true
-    },
-    scales: {
-      xAxes: [{
-        stacked: true,
-      }]
-    }
-  }
-});
-</script>
+<h2 class="text-center mt-5 mb-5 text-danger"></h2>
+<div class="w-75 mx-auto">
+    <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th scope="col">Trimestre</th>
+                <th scope="col">Type d'opération</th>
+                <th scope="col">Cible</th>
+                <th scope="col">Objectif</th>
+                <th scope="col">Offre</th>
+                <th scope="col">Coût de communication interne</th>
+                <th scope="col">Coût de communication externe</th>
+                <th scope="col">Frais d'organisation</th>
+                <th scope="col">Participation partenaires</th>
+                <th scope="col">Coût total</th>
+                <th scope="col">Pass</th>
+                <th scope="col">Chiffre d'Affaire</th>
+                <th scope="col">ROI</th>
+                <th scope="col">detail</th>
+                <th scope="col">edit</th>
+                <th scope="col">supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% if planCom is not empty %}
+            {% for plancoms in planCom %}
+                <tr class="bg-light">
+                    <td> {{plancoms.annee}}</td>
+                </tr>
+                <tr class="bg-light">
+                    <td><p>trimestre</p></td>
+                    <td> {{plancoms.typeOperation}}</td>
+                    <td> {{plancoms.cible}}</td>
+                    <td> {{plancoms.objectif}}</td>
+                    <td> {{plancoms.offre}}</td>
+                    <td> {{plancoms.coutComInterne}}</td>
+                    <td> {{plancoms.coutComExterne}}</td>
+                    <td> {{plancoms.fraisOrganisation}}</td>
+                    <td> {{plancoms.participationPartenaire}}</td>
+                    <td> {{plancoms.coutTotal}}</td>
+                    <td> {{plancoms.pass}}</td>
+                    <td> {{plancoms.chiffreAffaire}}</td>
+                    <td> {{plancoms.roi}}</td>
+                    <td><p>modal</p></td>
+                    <td> <a href="{{ path('editPlanCom', {id: plancoms.id})}}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                    <td> <a href="{{ path('deletePlanCommunication', {id: plancoms.id})}}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un Plan de communication</h2>
+        {% endif %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if is_granted('ROLE_DR') %}
+{% endif %}
+{% if is_granted('ROLE_DG') %}
 {% endif %}
 {% endblock %}
 

@@ -4,7 +4,6 @@
 
 {% block body %}
 {% if is_granted('ROLE_DS') %}
-
 <h2 class="text-center mb-2 mt-5 text-dark">Taux de satisfaction / Trimestre et année</h2>
 <h3 class="text-center mt-4 mb-4 text-dark">{{ siteduDS.nomDuSite }}</h3>
 <div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
@@ -246,28 +245,25 @@ var myChart = new Chart(ctx, {
     labels: ["T1", "T2", "T3", "T4"],
     datasets: [{
       type: 'bar',
-      label: 'Satisfaction température / mois en % 2019',
+      label: 'Satisfaction horaire / mois en % 2019',
       borderColor: 'rgb(30,144,255)',
       borderWidth: 2,
-      fill: true,
+      fill: false,
       data: {{ rendusatistemperature2019 | raw }},
     }, {
       type: 'bar',
-      label: 'Satisfaction température / mois en % 2020',
-      backgroundColor: 'rgb(10,200,153)',
-      stack: 'Stack 0',
+      label: 'Satisfaction horaire / mois en % 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
       data: {{ rendusatistemperature2020 | raw }},
       borderColor: 'white',
       borderWidth: 2
     }, {
       type: 'bar',
-      label: 'Satisfaction température / mois en % 2021',
-      backgroundColor: 'rgb(30,100,200)',
-      stack: 'Stack 1',
+      label: 'Satisfaction horaire / mois en % 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
       data: {{ rendusatistemperature2021 | raw }},
-      borderColor: 'white',
-      borderWidth: 2
-    },
     }]
   },
   options: {
@@ -288,8 +284,6 @@ var myChart = new Chart(ctx, {
 });
 </script>
 {% endif %}
-
-
 
 {% endblock %}
 

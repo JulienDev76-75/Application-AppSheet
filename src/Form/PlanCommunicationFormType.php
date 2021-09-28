@@ -27,6 +27,8 @@ class PlanCommunicationFormType extends AbstractType
             ->add('pass')
             ->add('chiffre_affaire')
             ->add('roi')
+            ->add('mois')
+            ->add('annee')
             ->add('enregistrer', SubmitType::class, [
                 'attr' => ['class' => 'bg-danger text-white w-50 mt-5 mb-5'],
                 'row_attr' => ['class' => 'text-center']

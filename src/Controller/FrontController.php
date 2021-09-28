@@ -30,8 +30,6 @@ use App\Entity\CartesCadeaux;
 use App\Form\CartesCadeauxFormType;
 use App\Repository\CartesCadeauxRepository;
 use App\Form\SearchSwotType;
-use Doctrine\ORM\Query\AST\Functions\AvgFunction;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -79,7 +77,9 @@ class FrontController extends AbstractController
         ); 
 
         //Données DG
-        $swotDG = $swotRepo ->findAll();
+        $swotDG = $swotRepo ->findBy (     
+        ['user' => $this->getUser()],
+        ); 
         $userDG = $userRepo ->findAll();
 
     return $this->render('dg/swot.html.twig', [
@@ -101,7 +101,6 @@ class FrontController extends AbstractController
         $siteduDS = $siteRepo -> findOneBy (
             ['user' => $this->getUser()],
         );
-
         // Données DS
         $trimestre = [];
         $satisglobale2019 = $satisfactionRepo->findByAnnee("2019");
@@ -247,7 +246,6 @@ class FrontController extends AbstractController
     public function carteCadeau(CartesCadeauxRepository $cartesRepo, SitesRepository $siteRepo): Response
     {
         // ************************* DS VIEW *******************************
-        // Données de la bdd pour la graphique 
 
         $cartescadeauxvendues2017 = $cartesRepo->findByAnnee("2017");
         $cartescadeauxvendues2020 = $cartesRepo->findByAnnee("2020");
@@ -385,36 +383,54 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/planCommunication", name="planCommunication")
      */
-    public function planCommunication(PlanCommunication $plancom): Response
+    public function planCommunication(PlanCommunicationRepository $plancomRepo): Response
     {
+        //ROLE_DS
+        $plancomRepo = $this->getDoctrine()->getRepository(PlanCommunication::class);
+        $planCom= $plancomRepo ->findby(
+            ['user' => $this->getUser()],
+            ['annee' => 'ASC'],
+            6,
+        );  
+        //ROLE_DR
+        //ROLE_DG
     return $this->render('dg/planCommunication.html.twig', [
-        'controller_name' => 'DgController',
+        'planCom' => $planCom,
     ]);
     }
 
     /**
      * @Route("/DGdashboard/pass", name="pass")
      */
-    public function pass(Pass $pass): Response
+    public function pass(PassRepository $passRepo): Response
     {
-        $sitesRepo = $this->getDoctrine()->getRepository(CartesCadeaux::class);
-        $sites = $sitesRepo ->findby(
+        $passRepo = $this->getDoctrine()->getRepository(Pass::class);
+        $pass = $passRepo ->findby(
             ['site' => $this->getUser()],
             ['site' => 'ASC'],
         );  
         
     return $this->render('dg/pass.html.twig', [
-        'sites' => $sites,
+        'pass' => $pass,
     ]);
     }
 
     /**
      * @Route("/DGdashboard/frequentation&CA", name="frequentation")
      */
-    public function freq(Rig $rig): Response
+    public function freq(RigRepository $rigRepo): Response
     {
+        //ROLE_DS
+        $rigRepo = $this->getDoctrine()->getRepository(Rig::class);
+        $rig = $rigRepo ->findby(
+            ['user' => $this->getUser()],
+            ['mois' => 'ASC'],
+            6,
+        );  
+        //ROLE_DR
+        //ROLE_DG
     return $this->render('dg/frequentation.html.twig', [
-        'controller_name' => 'DgController',
+        'rig' => $rig,
     ]);
     }
 
@@ -434,22 +450,19 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/listeDesSites", name="listeDesSites")
      */
-    public function sites(Request $request, SitesRepository $sitesRepo, UserRepository $userRepo): Response
+    public function sites(SitesRepository $sitesRepo, UserRepository $userRepo): Response
     {
 
         //ROLE_DR
         $sitesRepo = $this->getDoctrine()->getRepository(Sites::class);
-        $sitesDR = $sitesRepo -> findby(
+        $sitesDR = $sitesRepo -> findBy(
             ['user' => $this->getUser()],
             ['ville' => 'ASC'],
         );  
 
         //ROLE_DG
-        $sites = $sitesRepo -> findby(
-            ['user' => "10"],
-        );  
-        dd($sites);
         $userDG = $userRepo -> findAll();
+        $sitesDG = $sitesRepo -> userAndSites();
 
         //ROLE_DS
         $sitesDS = $sitesRepo -> findOneBy(
@@ -457,22 +470,22 @@ class FrontController extends AbstractController
 
 
         // (console.log) sur $filters à faire
-        $filters = $request->get("sites");
+        //$filters = $request->get("sites");
         // On vérifie si on a une requête AJAX
-            if ($request->get('ajax')){
+        //    if ($request->get('ajax')){
         // render des données en Json
-                return new JsonResponse([
-                    $this->renderView('dg/listeDesSites.html.twig', [
-                    'sites' => $sites,
-                    ])
-                ]);
-            }
+        //        return new JsonResponse([
+        //            $this->renderView('dg/listeDesSites.html.twig', [
+        //            'sites' => $sites,
+        //            ])
+        //        ]);
+        //    }
 
     return $this->render('dg/listeDesSites.html.twig', [
         'sitesDR' => $sitesDR,
         'userDG' => $userDG,
         'sitesDS' => $sitesDS,
-        'sites' => $sites,
+        'sitesDG' => $sitesDG,
     ]);
     }
 
@@ -483,62 +496,25 @@ class FrontController extends AbstractController
     {
 
     // ************************* DS VIEW *******************************
-    $typeobjectif2019 = $planRepo->findByAnnee("2019");
-    $typeobjectif2020 = $planRepo->findByAnnee("2020");
-    $typeobjectif2021 = $planRepo->findByAnnee("2021");
-    $typeoperation2019 = $planRepo->findByAnnee("2019");
-    $typeoperation2020 = $planRepo->findByAnnee("2020");
-    $typeoperation2021 = $planRepo->findByAnnee("2021");
-    $couttotal2019 = $planRepo->findByAnnee("2019");
-    $couttotal2020 = $planRepo->findByAnnee("2019");
-    $couttotal2021 = $planRepo->findByAnnee("2019");
+    $typeobjectif = $planRepo->findby(
+        ['user' => $this->getUser()],
+        ['annee' => 'ASC']
+    );  
+    $repartitionObjectif = [];
+    $annee = [];
 
     // Type objectif par année : récapitulatif / répartition
-    foreach($typeobjectif2019 as $objectif2019) {
-            $typeobjectif2019[] = count($objectif2019 ->getObjectif());
+    foreach($typeobjectif as $repartitionTypeObjectif) {
+            $repartitionObjectif[] = ($repartitionTypeObjectif->getObjectif());//count()
+            $annee[] = $repartitionTypeObjectif->getAnnee();
             }
-
-    foreach($typeobjectif2020 as $objectif2020) {
-            $typeobjectif2020[] = count($objectif2020 ->getObjectif());
-            }
-
-    foreach($typeobjectif2020 as $objectif2021) {
-            $typeobjectif2021[] = count($objectif2021 ->getObjectif());
-            }
-    
-    // Type objectif par année : récapitulatif / répartition
-    foreach($typeoperation2019 as $operation2019) {
-        $cartesvendues2020[] = count($operation2019 ->getTypeOperation());
-        }
-
-    foreach($typeoperation2020 as $operation2020) {
-        $cartesvendues2017[] = count($operation2020 ->getTypeOperation());
-        }
-
-    foreach($typeoperation2021 as $operation2021) {
-        $typeobjectif2021[] = count($operation2021 ->getTypeOperation());
-        }
-    
-    // Type cout total par année : récapitulatif / répartition
-    foreach($couttotal2019 as $cout2019) {
-        $cartesvendues2020[] = array_sum($cout2019 ->getObjectif());
-        }
-
-    foreach($couttotal2020 as $cout2020) {
-        $cartesvendues2017[] = array_sum($cout2020 ->getObjectif());
-        }
-
-    foreach($couttotal2021 as $cout2021) {
-        $typeobjectif2021[] = array_sum($cout2021 ->getObjectif());
-        }
 
     // ************************* DR VIEW *******************************
     // ************************* DG VIEW *******************************
 
     return $this->render('dg/coutCommunication.html.twig', [
-        'typeobjectif2019' => json_encode($typeobjectif2019),
-        'typeobjectif2020' => json_encode($typeobjectif2020),
-        'typeobjectif2021' => json_encode($typeobjectif2021),
+        'repartitionObjectif' => json_encode($repartitionObjectif),
+        'annee' => json_encode($annee),
     ]);
     }
 
@@ -824,7 +800,7 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/DGdashboard/Pass/{id}/editPass", name="editPass")
+     * @Route("/DGdashboard/Pass/{id}/editPlanCom", name="editPlanCom")
      */
     public function editPlanCommunication(PlanCommunication $plancom, Request $request) : Response {
         $form = $this->createForm(PlanCommunicationFormType::class, $plancom);

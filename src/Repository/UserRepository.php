@@ -36,6 +36,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+    public function userAndSites()
+    {
+        return $this->createQueryBuilder('u')
+        ->leftJoin('s.user','u')
+        ->addSelect('u')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

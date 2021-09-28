@@ -13,13 +13,12 @@
     <div class="col-3">
         <p>Filter</p>
         <form id="filters">
-            {% for site in sites %}
-                <p><input type="checkbox" name="sites[]" id="sites{{site.id}}" value="{{site.id}}"> <label for="sites{{site.id}}">{{site.nomDuSite}}</p>
+            {% for siteDGS in sitesDG %}
+                <p><input type="checkbox" name="sites[]" id="sites{{siteDGS.id}}" value="{{siteDGS.id}}"> <label for="sites{{siteDGS.id}}">{{siteDGS.nomDuSite}}</p>
             {% endfor %}
         </form>
     </div>
 </div>
-
 <h2 class="text-center mt-5 mb-5 text-danger" >Liste des sites</h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
@@ -43,34 +42,32 @@
             </tr>
         </thead>
         <tbody>
-        {% if sites is not empty %}
             {% for userDGS in userDG %}
             <tr class="bg-light">
             <td> {{userDGS.prenomNom}}</td>
             </tr>
-        {% for site in sites %}
+            {% for siteDGS in sitesDG %}
+        {% if userDGS.id == siteDGS.user.id %}
             <tr class="bg-light">
-                <td> {{site.nomDuSite}}</td>
-                <td> {{site.ville}}</td>
-                <td> {{site.typeContrat}}</td>
-                <td> {{site.typeSociete}}</td>
-                <td> {{site.raisonSociale}}</td>
-                <td> {{site.adresse1}}</td>
-                <td> {{site.adresse2}}</td>
-                <td> {{site.codePostal}}</td>
-                <td> {{site.dateDebut | date('d/m/Y')}}</td>
-                <td> {{site.dateFin | date('d/m/Y')}}</td>
-                <td> {{site.datePremierContrat | date('d/m/Y')}}</td>
-                <td> {{site.ctrlAcces}}</td>
-                <td> <a href="{{ path('singleSite', {id: site.id})}}">Détails</a></td>
-                <td> <a href="{{ path('editSites', {id: site.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-                <td> <a href="{{ path('deleteSites', {id: site.id}) }}" class="card-link btn btn-danger text-white my-5">Supprimer</a></td>
+                <td> {{siteDGS.nomDuSite}}</td>
+                <td> {{siteDGS.ville}}</td>
+                <td> {{siteDGS.typeContrat}}</td>
+                <td> {{siteDGS.typeSociete}}</td>
+                <td> {{siteDGS.raisonSociale}}</td>
+                <td> {{siteDGS.adresse1}}</td>
+                <td> {{siteDGS.adresse2}}</td>
+                <td> {{siteDGS.codePostal}}</td>
+                <td> {{siteDGS.dateDebut | date('d/m/Y')}}</td>
+                <td> {{siteDGS.dateFin | date('d/m/Y')}}</td>
+                <td> {{siteDGS.datePremierContrat | date('d/m/Y')}}</td>
+                <td> {{siteDGS.ctrlAcces}}</td>
+                <td> <a href="{{ path('singleSite', {id: siteDGS.id})}}">Détails</a></td>
+                <td> <a href="{{ path('editSites', {id: siteDGS.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                <td> <a href="{{ path('deleteSites', {id: siteDGS.id}) }}" class="card-link btn btn-danger text-white my-5">Supprimer</a></td>
             </tr>
-        {% endfor %}
-        {% endfor %}
-        {% else %}
-            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site</h2>
         {% endif %}
+            {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
 </div>
@@ -92,7 +89,6 @@
         </form>
     </div>
 </div>
-
 <h2 class="text-center mt-5 mb-5 text-danger">Liste des sites</h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
@@ -116,24 +112,24 @@
             </tr>
         </thead>
         <tbody>
-        {% if sites is not empty %}
-            {% for site in sites %}
+        {% if sitesDG is not empty %}
+            {% for siteDGS in sitesDG %}
                 <tr class="bg-light">
-                    <td> {{site.nomDuSite}}</td>
-                    <td> {{site.ville}}</td>
-                    <td> {{site.typeContrat}}</td>
-                    <td> {{site.typeSociete}}</td>
-                    <td> {{site.raisonSociale}}</td>
-                    <td> {{site.adresse1}}</td>
-                    <td> {{site.adresse2}}</td>
-                    <td> {{site.codePostal}}</td>
-                    <td> {{site.dateDebut | date('d/m/Y')}}</td>
-                    <td> {{site.dateFin | date('d/m/Y')}}</td>
-                    <td> {{site.datePremierContrat | date('d/m/Y')}}</td>
-                    <td> {{site.ctrlAcces}}</td>
-                    <td> <a href="{{ path('singleSite', {id: site.id})}}">Détails</a></td>
-                    <td> <a href="{{ path('editSites', {id: site.id})}}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-                    <td> <a href="{{ path('deleteSites', {id: site.id})}}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                    <td> {{siteDGS.nomDuSite}}</td>
+                    <td> {{siteDGS.ville}}</td>
+                    <td> {{siteDGS.typeContrat}}</td>
+                    <td> {{siteDGS.typeSociete}}</td>
+                    <td> {{siteDGS.raisonSociale}}</td>
+                    <td> {{siteDGS.adresse1}}</td>
+                    <td> {{siteDGS.adresse2}}</td>
+                    <td> {{siteDGS.codePostal}}</td>
+                    <td> {{siteDGS.dateDebut | date('d/m/Y')}}</td>
+                    <td> {{siteDGS.dateFin | date('d/m/Y')}}</td>
+                    <td> {{siteDGS.datePremierContrat | date('d/m/Y')}}</td>
+                    <td> {{siteDGS.ctrlAcces}}</td>
+                    <td> <a href="{{ path('singleSite', {id: siteDGS.id})}}">Détails</a></td>
+                    <td> <a href="{{ path('editSites', {id: siteDGS.id})}}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                    <td> <a href="{{ path('deleteSites', {id: siteDGS.id})}}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
                 </tr>
             {% endfor %}
             {% else %}
@@ -166,6 +162,4 @@
 {% endif %}
 {% endblock %}
 
-{% block javascripts %}
-<script src="{{ asset('js/main.js')}}"></script>
-{% endblock %}
+

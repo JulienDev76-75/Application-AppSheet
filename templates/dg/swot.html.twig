@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 {# This will be a comment #}
-{% block title %}ROLE = DIRECTEUR GENERAL, TOUTE VIEW POSSIBLE{% endblock %}
+{% block title %}Page Swot{% endblock %}
       {% block stylesheets %}
              <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-             {% endblock %}
+      {% endblock %}
 {% block body %}
 
 {% if is_granted('ROLE_DG') %}
@@ -26,28 +26,27 @@
       </tr>
     </thead>
   <tbody>
-
-          {% for userDGS in userDG %}
-              <tr class="bg-light">
-                  <td> {{userDGS.prenomNom}}</td>
-              </tr>
-          {% if swotDG is not empty %}
-          {% for swotDGS in swotDG %}
-            <tr class="bg-light">
-              <td class="py-3">{{swotDGS.site}}</td>
-              <td>{{swotDGS.annee}}</td>
-              <td>{{swotDGS.forces}}</td>
-              <td>{{swotDGS.faiblesses}}</td>
-              <td>{{swotDGS.opportunites}}</td>
-              <td>{{swotDGS.menaces}}</td>
-              <td><a href="{{ path('editSwot', {id: swotDGS.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-              <td><a href="{{ path('supprimerSwot', {id: swotDGS.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
-            </tr>
-          {% endfor %}
-               {% endfor %}
-      {% else %}
-          <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
-      {% endif %}
+    {% if userDG is not empty %}
+    {% for userDGS in userDG %}
+        <tr class="bg-light">
+          <td> {{userDGS.prenomNom}}</td>
+        </tr>
+    {% for swotDGS in swotDG %}
+        <tr class="bg-light">
+          <td class="py-3">{{swotDGS.site}}</td>
+          <td>{{swotDGS.annee}}</td>
+          <td>{{swotDGS.forces}}</td>
+          <td>{{swotDGS.faiblesses}}</td>
+          <td>{{swotDGS.opportunites}}</td>
+          <td>{{swotDGS.menaces}}</td>
+          <td><a href="{{ path('editSwot', {id: swotDGS.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+          <td><a href="{{ path('supprimerSwot', {id: swotDGS.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+        </tr>
+    {% endfor %}
+    {% endfor %}
+    {% else %}
+        <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
+    {% endif %}
   </tbody> 
   </table>
 </div>
@@ -121,3 +120,4 @@
 {% endif %}
 
 {% endblock %}
+
