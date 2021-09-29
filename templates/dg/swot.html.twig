@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{# This will be a comment #}
+
 {% block title %}Page Swot{% endblock %}
       {% block stylesheets %}
              <link rel="stylesheet" href="{{ asset('css/main.css') }}">
@@ -7,9 +7,10 @@
 {% block body %}
 
 {% if is_granted('ROLE_DG') %}
-<div class="w-25 mx-auto mt-5 pt-3">
-  {{ form(form)}}
-</div>
+
+  <div class="w-25 mx-auto mt-5 pt-3">
+    {{ form(form)}}
+  </div>
 
 <div class="w-75 mx-auto">
   <table class="table table-bordered mb-5 mt-5">
@@ -26,22 +27,24 @@
       </tr>
     </thead>
   <tbody>
-    {% if userDG is not empty %}
-    {% for userDGS in userDG %}
+    {% if userDGS is not empty %}
+    {% for userDG in userDGS %}
         <tr class="bg-light">
-          <td> {{userDGS.prenomNom}}</td>
+          <td> {{userDG.prenomNom}}</td>
         </tr>
-    {% for swotDGS in swotDG %}
+    {% for swotDG in swotDGS %}
+       {% if userDG.id == swotDG.user.id %}
         <tr class="bg-light">
-          <td class="py-3">{{swotDGS.site}}</td>
-          <td>{{swotDGS.annee}}</td>
-          <td>{{swotDGS.forces}}</td>
-          <td>{{swotDGS.faiblesses}}</td>
-          <td>{{swotDGS.opportunites}}</td>
-          <td>{{swotDGS.menaces}}</td>
-          <td><a href="{{ path('editSwot', {id: swotDGS.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-          <td><a href="{{ path('supprimerSwot', {id: swotDGS.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+          <td class="py-3">{{swotDG.site}}</td>
+          <td>{{swotDG.annee}}</td>
+          <td>{{swotDG.forces}}</td>
+          <td>{{swotDG.faiblesses}}</td>
+          <td>{{swotDG.opportunites}}</td>
+          <td>{{swotDG.menaces}}</td>
+          <td><a href="{{ path('editSwot', {id: swotDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+          <td><a href="{{ path('supprimerSwot', {id: swotDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
         </tr>
+          {% endif %}
     {% endfor %}
     {% endfor %}
     {% else %}

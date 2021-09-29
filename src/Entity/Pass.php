@@ -673,6 +673,11 @@ class Pass
      */
     private $annee;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $tx_desabo;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -2246,6 +2251,18 @@ class Pass
     public function setAnnee(int $annee): self
     {
         $this->annee = $annee;
+
+        return $this;
+    }
+
+    public function getTxDesabo(): ?float
+    {
+        return $this->tx_desabo;
+    }
+
+    public function setTxDesabo(?float $tx_desabo): self
+    {
+        $this->tx_desabo = $tx_desabo;
 
         return $this;
     }

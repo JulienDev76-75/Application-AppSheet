@@ -79,6 +79,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $rigs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Total::class, mappedBy="user")
+     */
+    private $totals;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -86,6 +91,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->planCommunications = new ArrayCollection();
         $this->satisfactions = new ArrayCollection();
         $this->rigs = new ArrayCollection();
+        $this->totals = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -357,6 +363,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($rig->getUSER() === $this) {
                 $rig->setUSER(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Total[]
+     */
+    public function getTotals(): Collection
+    {
+        return $this->totals;
+    }
+
+    public function addTotal(Total $total): self
+    {
+        if (!$this->totals->contains($total)) {
+            $this->totals[] = $total;
+            $total->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTotal(Total $total): self
+    {
+        if ($this->totals->removeElement($total)) {
+            // set the owning side to null (unless already changed)
+            if ($total->getUser() === $this) {
+                $total->setUser(null);
             }
         }
 

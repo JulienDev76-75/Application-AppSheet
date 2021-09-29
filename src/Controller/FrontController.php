@@ -30,8 +30,8 @@ use App\Entity\CartesCadeaux;
 use App\Form\CartesCadeauxFormType;
 use App\Repository\CartesCadeauxRepository;
 use App\Form\SearchSwotType;
+use App\Repository\TotalRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class FrontController extends AbstractController
 {
@@ -43,7 +43,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard", name="DGdashboard")
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
         return $this->render('dg/index.html.twig', [
             'controller_name' => 'DgController',
@@ -77,10 +77,8 @@ class FrontController extends AbstractController
         ); 
 
         //Données DG
-        $swotDG = $swotRepo ->findBy (     
-        ['user' => $this->getUser()],
-        ); 
-        $userDG = $userRepo ->findAll();
+        $swotDGS = $swotRepo ->userAndSwot();
+        $userDGS = $userRepo ->findAll();
 
     return $this->render('dg/swot.html.twig', [
         'swot' => $swot,
@@ -88,15 +86,15 @@ class FrontController extends AbstractController
         'swotList' => $swotList,
         'swotDR' => $swotDR,
         'swotDS' => $swotDS,
-        'swotDG' => $swotDG,
-        'userDG' => $userDG,
+        'swotDGS' => $swotDGS,
+        'userDGS' => $userDGS,
     ]);
     }
 
     /**
      * @Route("/DGdashboard/satisfaction", name="satisfaction")
      */
-    public function satisfaction(SatisfactionRepository $satisfactionRepo, SitesRepository $siteRepo): Response
+    public function satisfaction(SatisfactionRepository $satisfactionRepo, SitesRepository $siteRepo, UserRepository $userRepo, TotalRepository $total): Response
     {
         $siteduDS = $siteRepo -> findOneBy (
             ['user' => $this->getUser()],
@@ -118,7 +116,6 @@ class FrontController extends AbstractController
         $satistemperature2019 = $satisfactionRepo->findByAnnee("2019");
         $satistemperature2020 = $satisfactionRepo->findByAnnee("2020");
         $satistemperature2021 = $satisfactionRepo->findByAnnee("2021");
-        $satistemperature2022 = $satisfactionRepo->findByAnnee("2022");
 
             // FIELD satis_globale
             foreach($satisglobale2019 as $globale2019) {
@@ -200,10 +197,6 @@ class FrontController extends AbstractController
                 $rendusatistemperature2021[] = $temperature2021 ->getTemperatureDouche();
                 }
 
-            foreach($satistemperature2022 as $temperature2022) {
-                $trimestre[]= $temperature2022 ->getTrimestre();
-                $rendusatistemperature2022[] = $temperature2022 ->getTemperatureDouche();
-                }
 
         // Données DR
         $satisDR = $satisfactionRepo->findBy(
@@ -213,11 +206,45 @@ class FrontController extends AbstractController
             ['user' => $this->getUser()],
         );
         // Données DG
-        $satisDG = $satisfactionRepo->findAll();
+        $userDGS = $userRepo->findAll();
+        $sitesDGS = $siteRepo->userAndSites();
+        $satisDGS = $satisfactionRepo->sitesAndSatis();
+
+        $annee = [];
+        $satisglobaleDG = $total->findAll();
+        foreach($satisglobaleDG as $satisglobale) {
+            $annee[]= $satisglobale ->getAnnee();
+            $globaleDG[] = $satisglobale ->getSatisGlobale();
+            }
+        
+        $satistemperatureDG = $total->findAll();
+        foreach($satistemperatureDG as $satistemperature) {
+            $annee[]= $satistemperature ->getAnnee();
+            $temperatureDG[] = $satistemperature ->getTemperatureDouche();
+            }
+
+        $satiscomppersoDG = $total->findAll();
+        foreach($satiscomppersoDG as $compperso) {
+            $annee[]= $compperso ->getAnnee();
+            $compDG[] = $compperso ->getCompetencePersonnel();
+            }
+        
+        $satispropreteDG = $total->findAll();
+        foreach($satispropreteDG as $proprete) {
+            $annee[]= $proprete ->getAnnee();
+            $propreteDG[] = $proprete ->getSatisProprete();
+            }
+
+        $satishoraireDG = $total->findAll();
+        foreach($satishoraireDG as $horaire) {
+            $annee[]= $horaire ->getAnnee();
+            $horaireDG[] = $horaire ->getSatisProprete();
+            }
+            
 
     return $this->render('dg/satisfaction.html.twig', [
         'satisDR' => $satisDR,
-        'satisDG' => $satisDG,
+        'sitesDR' => $sitesDR,
         'trimestre' => json_encode($trimestre),
         'rendusatisglobale2019' => json_encode($rendusatisglobale2019),
         'rendusatisglobale2020' => json_encode($rendusatisglobale2020),
@@ -234,9 +261,16 @@ class FrontController extends AbstractController
         'rendusatistemperature2019' => json_encode($rendusatistemperature2019),
         'rendusatistemperature2020' => json_encode($rendusatistemperature2020),
         'rendusatistemperature2021' => json_encode($rendusatistemperature2021),
-        'rendusatistemperature2022' => json_encode($rendusatistemperature2022),
         'siteduDS' => $siteduDS,
-        'sitesDR' => $sitesDR
+        'userDGS' => $userDGS,
+        'sitesDGS' => $sitesDGS,
+        'satisDGS' => $satisDGS,
+        'globaleDG' => json_encode($globaleDG),
+        'propreteDG' => json_encode($propreteDG),
+        'compDG' => json_encode($compDG),
+        'temperatureDG' => json_encode($temperatureDG),
+        'horaireDG' => json_encode($horaireDG),
+        'annee' => json_encode($annee),
     ]);
     }
 
@@ -265,97 +299,91 @@ class FrontController extends AbstractController
         $mois = [];
         $cartesvendues = [];
 
-        // FIELD nombre_cartes_vendues
-        foreach($cartescadeauxvendues2020 as $cartecadeauvendues2020) {
-            $mois[]= $cartecadeauvendues2020 ->getMois();
-            $cartesvendues2020[] = $cartecadeauvendues2020 ->getNombreCartesVendues();
-        }
+            // FIELD nombre_cartes_vendues
+            foreach($cartescadeauxvendues2020 as $cartecadeauvendues2020) {
+                $mois[]= $cartecadeauvendues2020 ->getMois();
+                $cartesvendues2020[] = $cartecadeauvendues2020 ->getNombreCartesVendues();
+            }
 
-        foreach($cartescadeauxvendues2017 as $cartecadeauvendues2017) {
-            $mois[]= $cartecadeauvendues2017 ->getMois();
-            $cartesvendues2017[] = $cartecadeauvendues2017 ->getNombreCartesVendues();
-        }
+            foreach($cartescadeauxvendues2017 as $cartecadeauvendues2017) {
+                $mois[]= $cartecadeauvendues2017 ->getMois();
+                $cartesvendues2017[] = $cartecadeauvendues2017 ->getNombreCartesVendues();
+            }
 
-        foreach($cartescadeauxvendues2021 as $cartecadeauvendues2021) {
-            $mois[]= $cartecadeauvendues2021 ->getMois();
-            $cartesvendues2021[] = $cartecadeauvendues2021 ->getNombreCartesVendues();
-        }
+            foreach($cartescadeauxvendues2021 as $cartecadeauvendues2021) {
+                $mois[]= $cartecadeauvendues2021 ->getMois();
+                $cartesvendues2021[] = $cartecadeauvendues2021 ->getNombreCartesVendues();
+            }
 
-        // FIELD nombre_cartes_utilisées
-        foreach($cartescadeauxutilisées2020 as $cartecadeauutilisees2020) {
-            $mois[]= $cartecadeauutilisees2020 ->getMois();
-            $cartesutilisees2020[] = $cartecadeauutilisees2020 ->getNombreCarteUtilisees();
-        }
+            // FIELD nombre_cartes_utilisées
+            foreach($cartescadeauxutilisées2020 as $cartecadeauutilisees2020) {
+                $mois[]= $cartecadeauutilisees2020 ->getMois();
+                $cartesutilisees2020[] = $cartecadeauutilisees2020 ->getNombreCarteUtilisees();
+            }
 
-        foreach($cartescadeauxutilisées2017 as $cartecadeauutilisees2017) {
-            $mois[]= $cartecadeauutilisees2017 ->getMois();
-            $cartesutilisees2017[] = $cartecadeauutilisees2017 ->getNombreCarteUtilisees();
-        }
+            foreach($cartescadeauxutilisées2017 as $cartecadeauutilisees2017) {
+                $mois[]= $cartecadeauutilisees2017 ->getMois();
+                $cartesutilisees2017[] = $cartecadeauutilisees2017 ->getNombreCarteUtilisees();
+            }
 
-        foreach($cartescadeauxutilisées2021 as $cartecadeauutilisees2021) {
-            $mois[]= $cartecadeauutilisees2021 ->getMois();
-            $cartesutilisees2021[] = $cartecadeauutilisees2021 ->getNombreCarteUtilisees();
-        }
+            foreach($cartescadeauxutilisées2021 as $cartecadeauutilisees2021) {
+                $mois[]= $cartecadeauutilisees2021 ->getMois();
+                $cartesutilisees2021[] = $cartecadeauutilisees2021 ->getNombreCarteUtilisees();
+            }
 
-        // FIELD valorisation_vente
-        foreach($cartescadeauxvalorisationvente2017 as $cartecadeauvalorisationvente2017) {
-            $mois[]= $cartecadeauvalorisationvente2017 ->getMois();
-            $cartesvalovente2017[] = $cartecadeauvalorisationvente2017 ->getValorisationVentes();
-        }
+            // FIELD valorisation_vente
+            foreach($cartescadeauxvalorisationvente2017 as $cartecadeauvalorisationvente2017) {
+                $mois[]= $cartecadeauvalorisationvente2017 ->getMois();
+                $cartesvalovente2017[] = $cartecadeauvalorisationvente2017 ->getValorisationVentes();
+            }
 
-        foreach($cartescadeauxvalorisationvente2020 as $cartecadeauvalorisationvente2020) {
-            $mois[]= $cartecadeauvalorisationvente2020 ->getMois();
-            $cartesvalovente2020[] = $cartecadeauvalorisationvente2020 ->getValorisationVentes();
-        }
+            foreach($cartescadeauxvalorisationvente2020 as $cartecadeauvalorisationvente2020) {
+                $mois[]= $cartecadeauvalorisationvente2020 ->getMois();
+                $cartesvalovente2020[] = $cartecadeauvalorisationvente2020 ->getValorisationVentes();
+            }
 
-        foreach($cartescadeauxvalorisationvente2021 as $cartecadeauvalorisationvente2021) {
-            $mois[]= $cartecadeauvalorisationvente2021 ->getMois();
-            $cartesvalovente2021[] = $cartecadeauvalorisationvente2021 ->getValorisationVentes();
-        }
+            foreach($cartescadeauxvalorisationvente2021 as $cartecadeauvalorisationvente2021) {
+                $mois[]= $cartecadeauvalorisationvente2021 ->getMois();
+                $cartesvalovente2021[] = $cartecadeauvalorisationvente2021 ->getValorisationVentes();
+            }
 
-        // FIELD valorisation_utilisation
-        foreach($cartescadeauxvalorisationutilisation2017 as $cartecadeauvalorisationutilisation2017) {
-            $mois[]= $cartecadeauvalorisationutilisation2017 ->getMois();
-            $cartesvaloutilisation2017[] = $cartecadeauvalorisationutilisation2017 ->getValorisationUtilisation();
-        }
+            // FIELD valorisation_utilisation
+            foreach($cartescadeauxvalorisationutilisation2017 as $cartecadeauvalorisationutilisation2017) {
+                $mois[]= $cartecadeauvalorisationutilisation2017 ->getMois();
+                $cartesvaloutilisation2017[] = $cartecadeauvalorisationutilisation2017 ->getValorisationUtilisation();
+            }
 
-        foreach($cartescadeauxvalorisationutilisation2020 as $cartecadeauvalorisationutilisation2020) {
-            $mois[]= $cartecadeauvalorisationutilisation2020 ->getMois();
-            $cartesvaloutilisation2020[] = $cartecadeauvalorisationutilisation2020 ->getValorisationUtilisation();
-        }
+            foreach($cartescadeauxvalorisationutilisation2020 as $cartecadeauvalorisationutilisation2020) {
+                $mois[]= $cartecadeauvalorisationutilisation2020 ->getMois();
+                $cartesvaloutilisation2020[] = $cartecadeauvalorisationutilisation2020 ->getValorisationUtilisation();
+            }
 
-        foreach($cartescadeauxvalorisationutilisation2021 as $cartecadeauvalorisationutilisation2021) {
-            $mois[]= $cartecadeauvalorisationutilisation2021 ->getMois();
-            $cartesvaloutilisation2021[] = $cartecadeauvalorisationutilisation2021 ->getValorisationUtilisation();
-        }
+            foreach($cartescadeauxvalorisationutilisation2021 as $cartecadeauvalorisationutilisation2021) {
+                $mois[]= $cartecadeauvalorisationutilisation2021 ->getMois();
+                $cartesvaloutilisation2021[] = $cartecadeauvalorisationutilisation2021 ->getValorisationUtilisation();
+            }
 
 
-        // FIELD Solde
-        foreach($cartescadeauxsolde2017 as $cartecadeausolde2017) {
-            $mois[]= $cartecadeausolde2017 ->getMois();
-            $cartessolde2017[] = $cartecadeausolde2017 ->getSolde();
-        }
+            // FIELD Solde
+            foreach($cartescadeauxsolde2017 as $cartecadeausolde2017) {
+                $mois[]= $cartecadeausolde2017 ->getMois();
+                $cartessolde2017[] = $cartecadeausolde2017 ->getSolde();
+            }
 
-        foreach($cartescadeauxsolde2020 as $cartecadeausolde2020) {
-            $mois[]= $cartecadeausolde2020 ->getMois();
-            $cartessolde2020[] = $cartecadeausolde2020 ->getSolde();
-        }
+            foreach($cartescadeauxsolde2020 as $cartecadeausolde2020) {
+                $mois[]= $cartecadeausolde2020 ->getMois();
+                $cartessolde2020[] = $cartecadeausolde2020 ->getSolde();
+            }
 
-        foreach($cartescadeauxsolde2021 as $cartecadeausolde2021) {
-            $mois[]= $cartecadeausolde2021 ->getMois();
-            $cartessolde2021[] = $cartecadeausolde2021 ->getSolde();
-        }
+            foreach($cartescadeauxsolde2021 as $cartecadeausolde2021) {
+                $mois[]= $cartecadeausolde2021 ->getMois();
+                $cartessolde2021[] = $cartecadeausolde2021 ->getSolde();
+            }
         
+        // ************************* DG VIEW *******************************
+        $cartesDGS = $cartesRepo ->SitesAndCartesCadeaux();
+        $sitesDGS = $siteRepo ->findAll();
 
-        //données de la bdd pour le tableau - RAPPEL - tri par site et par dates des cartes cadeaux
-        $sitesTableau = $siteRepo -> findBy (
-            ['user' => $this->getUser()],
-        );
-        $cartesCadeauxTableau = $cartesRepo->findBy(
-            ['site' => $this->getUser(),
-            ],
-            ['mois' => 'ASC']
-        );  
         
     return $this->render('dg/carteCadeau.html.twig', [
         'mois' => json_encode($mois),
@@ -375,8 +403,8 @@ class FrontController extends AbstractController
         'cartessolde2017' => json_encode($cartessolde2017),
         'cartessolde2020' => json_encode($cartessolde2020),
         'cartessolde2021' => json_encode($cartessolde2021),
-        'cartesCadeauxTableau' => $cartesCadeauxTableau,
-        'sitesTableau' => $sitesTableau,
+        'cartesDGS' => $cartesDGS,
+        'sitesDGS' => $sitesDGS,
     ]);
     }
 
@@ -402,7 +430,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/pass", name="pass")
      */
-    public function pass(PassRepository $passRepo): Response
+    public function pass(PassRepository $passRepo, UserRepository $userRepo, SitesRepository $sitesRepo): Response
     {
         $passRepo = $this->getDoctrine()->getRepository(Pass::class);
         $pass = $passRepo ->findby(
@@ -410,15 +438,23 @@ class FrontController extends AbstractController
             ['site' => 'ASC'],
         );  
         
+        //ROLE_DG
+        $userDGS = $userRepo ->findAll();
+        $sitesDGS = $sitesRepo ->userAndSites();
+        $passDGS = $passRepo ->sitesAndPass();
+
     return $this->render('dg/pass.html.twig', [
         'pass' => $pass,
+        'userDGS' => $userDGS,
+        'sitesDGS' => $sitesDGS,
+        'passDGS' => $passDGS,
     ]);
     }
 
     /**
      * @Route("/DGdashboard/frequentation&CA", name="frequentation")
      */
-    public function freq(RigRepository $rigRepo): Response
+    public function freq(RigRepository $rigRepo, SitesRepository $sitesRepo): Response
     {
         //ROLE_DS
         $rigRepo = $this->getDoctrine()->getRepository(Rig::class);
@@ -429,8 +465,13 @@ class FrontController extends AbstractController
         );  
         //ROLE_DR
         //ROLE_DG
+        $freqDGS = $rigRepo ->sitesAndRig();
+        $sitesDGS = $sitesRepo ->findAll();
+
     return $this->render('dg/frequentation.html.twig', [
         'rig' => $rig,
+        'freqDGS' => $freqDGS,
+        'sitesDGS' => $sitesDGS,
     ]);
     }
 
@@ -492,7 +533,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/coutCommunication", name="coutCommunication")
      */
-    public function coutCommunication(PlanCommunicationRepository $planRepo): Response
+    public function coutCommunication(PlanCommunicationRepository $planRepo, UserRepository $userRepo, SitesRepository $sitesRepo): Response
     {
 
     // ************************* DS VIEW *******************************
@@ -503,7 +544,7 @@ class FrontController extends AbstractController
     $repartitionObjectif = [];
     $annee = [];
 
-    // Type objectif par année : récapitulatif / répartition
+        // Type objectif par année : récapitulatif / répartition
     foreach($typeobjectif as $repartitionTypeObjectif) {
             $repartitionObjectif[] = ($repartitionTypeObjectif->getObjectif());//count()
             $annee[] = $repartitionTypeObjectif->getAnnee();
@@ -511,10 +552,17 @@ class FrontController extends AbstractController
 
     // ************************* DR VIEW *******************************
     // ************************* DG VIEW *******************************
+    $userDGS = $userRepo->findAll();
+    $sitesDGS = $sitesRepo -> userAndSites();
+    $coutcomDGS = $planRepo -> sitesAndCoutCom();
+
 
     return $this->render('dg/coutCommunication.html.twig', [
         'repartitionObjectif' => json_encode($repartitionObjectif),
         'annee' => json_encode($annee),
+        'userDGS' => $userDGS,
+        'sitesDGS' => $sitesDGS,
+        'coutcomDGS' => $coutcomDGS
     ]);
     }
 
@@ -861,7 +909,7 @@ class FrontController extends AbstractController
     }
 
     /** 
-    * @Route("/DGdashboard//{id}/supprimerCarteCadeau", name="supprimerCarteCadeau")
+    * @Route("/DGdashboard//{id}/supprimerCarteCadeau", name="deleteCarteCadeau")
     */
     function deleteCartesCadeaux(Swot $swot): Response {
         $entityManager = $this->getDoctrine()->getManager();

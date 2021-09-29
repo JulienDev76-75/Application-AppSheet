@@ -19,6 +19,16 @@ class PlanCommunicationRepository extends ServiceEntityRepository
         parent::__construct($registry, PlanCommunication::class);
     }
 
+    public function sitesAndCoutCom()
+    {
+        return $this->createQueryBuilder('p')
+        ->leftJoin('p.site','s')
+        ->addSelect('s')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+    
     // /**
     //  * @return PlanCommunication[] Returns an array of PlanCommunication objects
     //  */

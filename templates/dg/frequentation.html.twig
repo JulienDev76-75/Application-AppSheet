@@ -44,6 +44,51 @@
 
 {% if is_granted('ROLE_DR') %}
 {% endif %}
+
 {% if is_granted('ROLE_DG') %}
+<div class="container">
+    <div class="w-75 mx-auto">
+    <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+        <tr>
+            <th scope="col">Mois</th>
+            <th scope="col">Année</th>
+            <th scope="col">Activité</th>
+            <th scope="col">Fréquentation</th>
+            <th scope="col">Chiffre d'Affaire</th>
+            <th scope="col">Panier Moyen</th>
+            <th scope="col">Editer</th>
+            <th scope="col">Supprimer</th>
+        </tr>
+        </thead>
+    <tbody>
+        {% if sitesDGS is not empty %}
+        {% for sitesDG in sitesDGS %}
+            <tr class="bg-light">
+            <td> {{sitesDG.nomDuSite}}</td>
+            </tr>
+        {% for freqDG in freqDGS %}
+        {% if sitesDG.id == freqDG.site.id %}
+            <tr class="bg-light">
+            <td class="py-3">{{freqDG.mois}}</td>
+            <td>{{freqDG.annee}}</td>
+            <td>{{freqDG.activite}}</td>
+            <td>{{freqDG.frequentation}}</td>
+            <td>{{freqDG.chiffreAffaire}}</td>
+            <td>{{freqDG.panierMoyen}}</td>
+            <td><a href="{{ path('editRig', {id: freqDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+            <td><a href="{{ path('deleteRig', {id: freqDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
+        {% endif %}
+    </tbody> 
+    </table>
+    </div>
+</div>
+
 {% endif %}
 {% endblock %}

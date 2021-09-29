@@ -3,33 +3,74 @@
 {% block title %}Cout de communication{% endblock %}
 
 {% block body %}
-<div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
-      <div class="col">
-          <div class="card">
-            <div class="card-body">
-                <canvas id="myChartRépartitionObjectif" width="100" height="100"></canvas>
-            </div>
-          </div>
-      </div>
-</div>
 
-<script>
-var ctx = document.getElementById('myChartRépartitionObjectif').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels:  {{ annee | raw }},
-        datasets: [{
-            label: 'Répartition des types opérations',
-            data: {{ repartitionObjectif | raw }},
-            backgroundColor: [
-                'rgba(255, 99, 138, 0.2)',
-                'rgba(135, 60, 220, 0.2)',
-            ],
-            borderWidth: 1
-        }]
-    },
-});
+{% if is_granted('ROLE_DG') %}
+<div class="container">
+    <div class="container">
+    <div class="w-75 mx-auto">
+        <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+            <th scope="col">Mois - Année</th>
+            <th scope="col">Type d'opération</th>
+            <th scope="col">Cible</th>
+            <th scope="col">Objectif</th>
+            <th scope="col">Offre</th>
+            <th scope="col">Cout de communication interne</th>
+            <th scope="col">Cout de communication externe</th>
+            <th scope="col">Frais d'organisation</th>
+            <th scope="col">Participation des partenaires</th>
+            <th scope="col">Chiffre d'Affaire</th>
+            <th scope="col">ROI</th>
+            <th scope="col">Pass</th>
+            <th scope="col">Editer</th>
+            <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if userDGS is not empty %}
+        {% for userDG in userDGS %}
+            <tr class="text-white bg-dark">
+                <td> {{userDG.prenomNom}}</td>
+            </tr>
+            {% for sitesDG in sitesDGS %}
+                {% if userDG.id == sitesDG.user.id %}
+                <tr class="bg-light">
+                <td> {{sitesDG.nomDuSite}}</td>
+                </tr>
+                {% for coutcomDG in coutcomDGS %}
+                {% if sitesDG.id == coutcomDG.site.id %}
+                    <tr class="bg-light">
+                    <td class="py-3">{{coutcomDG.mois}} . {{coutcomDG.annee}}</td>
+                    <td>{{coutcomDG.typeOperation}}</td>
+                    <td>{{coutcomDG.cible}}</td>
+                    <td>{{coutcomDG.objectif}}</td>
+                    <td>{{coutcomDG.offre}}</td>
+                    <td>{{coutcomDG.coutComInterne}}</td>
+                    <td>{{coutcomDG.coutComExterne}}</td>
+                    <td>{{coutcomDG.fraisOrganisation}}</td>
+                    <td>{{coutcomDG.participationPartenaire}}</td>
+                    <td>{{coutcomDG.chiffreAffaire}}</td>
+                    <td>{{coutcomDG.roi}}</td>
+                    <td>{{coutcomDG.pass}}</td>
+                    <td><a href="{{ path('editPlanCom', {id: coutcomDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                    <td><a href="{{ path('deletePlanCommunication', {id: coutcomDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                    </tr>
+                {% endif %}
+        {% endfor %}
+                {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter rajouter des coûts de communication, pour cela aller rajouter les chiffres correspondant à votre site sur l'onglet "BDD SITE".</h2>
+        {% endif %}
+        </tbody> 
+        </table>
+    </div>
+    </div>  
+</div>  
+    {% endif %}
+
 </script>
 {% endblock %}
 

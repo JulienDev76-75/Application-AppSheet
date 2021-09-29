@@ -282,12 +282,57 @@ var myChart = new Chart(ctx, {
   }
 });
 </script>
-{% endblock %}
-
 
 {################# DR CHARTS ####################}
 {################# DG CHARTS ####################}
+{% if is_granted('ROLE_DG') %}
+<div class="w-75 mx-auto">
+  <table class="table table-bordered mb-5 mt-5">
+    <thead class="bg-dark text-white">
+      <tr>
+        <th scope="col">Mois</th>
+        <th scope="col">Année</th>
+        <th scope="col">Nombre de cartes vendues</th>
+        <th scope="col">Valorisation des ventes de cartes cadeaux</th>
+        <th scope="col">Nombre de cartes utilisées</th>
+        <th scope="col">Valorisation des utilisations de cartes cadeaux</th>
+        <th scope="col">Solde</th>
+        <th scope="col">Editer</th>
+        <th scope="col">Supprimer</th>
+      </tr>
+    </thead>
+  <tbody>
+    {% if sitesDGS is not empty %}
+    {% for sitesDG in sitesDGS %}
+        <tr class="bg-light">
+          <td> {{sitesDG.nomDuSite}}</td>
+        </tr>
+    {% for cartesDG in cartesDGS %}
+       {% if sitesDG.id == cartesDG.site.id %}
+        <tr class="bg-light">
+          <td class="py-3">{{cartesDG.mois}}</td>
+          <td>{{cartesDG.annee}}</td>
+          <td>{{cartesDG.nombreCartesVendues}}</td>
+          <td>{{cartesDG.valorisationVentes}}</td>
+          <td>{{cartesDG.nombreCarteUtilisees}}</td>
+          <td>{{cartesDG.valorisationUtilisation}}</td>
+          <td>{{cartesDG.solde}}</td>
+          <td><a href="{{ path('editCartesCadeaux', {id: cartesDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+          <td><a href="{{ path('deleteCarteCadeau', {id: cartesDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+        </tr>
+          {% endif %}
+    {% endfor %}
+    {% endfor %}
+    {% else %}
+        <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
+    {% endif %}
+  </tbody> 
+  </table>
+</div>
+{% endif %} 
+
+
 {% block javascripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
-
+{% endblock %}

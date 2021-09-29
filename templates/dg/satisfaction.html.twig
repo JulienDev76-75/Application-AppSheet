@@ -3,6 +3,7 @@
 {% block title %}Statisitiques Satisfaction{% endblock %}
 
 {% block body %}
+
 {% if is_granted('ROLE_DS') %}
 <h2 class="text-center mb-2 mt-5 text-dark">Taux de satisfaction / Trimestre et année</h2>
 <h3 class="text-center mt-4 mb-4 text-dark">{{ siteduDS.nomDuSite }}</h3>
@@ -285,6 +286,277 @@ var myChart = new Chart(ctx, {
 </script>
 {% endif %}
 
+{% if is_granted('ROLE_DR') %}
+{% endif %}
+
+{% if is_granted('ROLE_DG') %}
+<div class="container row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto h-atuo">
+    <div class="col">
+            <div class="card">
+              <div class="card-body">
+                  <canvas id="myChartglobaleDG" width="10" height="10"></canvas>
+              </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+              <div class="card-body">
+                  <canvas id="myChartpropreteDG" width="10" height="10"></canvas>
+              </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+              <div class="card-body">
+                  <canvas id="compDG" width="10" height="10"></canvas>
+              </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+              <div class="card-body">
+                  <canvas id="myCharttemperatureDG" width="10" height="10"></canvas>
+              </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+              <div class="card-body">
+                  <canvas id="myCharthoraireDG" width="10" height="10"></canvas>
+              </div>
+            </div>
+        </div>
+    <div>
+    <table class="table table-bordered mb-5 mt-5">
+      <thead class="bg-dark text-white">
+        <tr>
+          <th scope="col">Trimestre - Année</th>
+          <th scope="col">Satisfaction globale</th>
+          <th scope="col">Satisfaction propreté</th>
+          <th scope="col">Compétence du personnel</th>
+          <th scope="col">Satisfaction température</th>
+          <th scope="col">Nombre de répondants</th>
+          <th scope="col">Editer</th>
+          <th scope="col">Supprimer</th>
+        </tr>
+      </thead>
+    <tbody>
+      {% if userDGS is not empty %}
+      {% for userDG in userDGS %}
+          <tr class="text-white bg-dark">
+            <td> {{userDG.prenomNom}}</td>
+          </tr>
+          {% for sitesDG in sitesDGS %}
+            {% if userDG.id == sitesDG.user.id %}
+            <tr class="bg-light">
+              <td> {{sitesDG.nomDuSite}}</td>
+            </tr>
+            {% for satisDG in satisDGS %}
+              {% if sitesDG.id == satisDG.site.id %}
+                <tr class="bg-light">
+                  <td class="py-3">{{satisDG.trimestre}} . {{satisDG.annee}}</td>
+                  <td>{{satisDG.satisGlobale}}</td>
+                  <td>{{satisDG.satisProprete}}</td>
+                  <td>{{satisDG.competenceDuPersonnel}}</td>
+                  <td>{{satisDG.temperatureDouche}}</td>
+                  <td>{{satisDG.repondant}}</td>
+                  <td><a href="{{ path('editSatisfaction', {id: satisDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                  <td><a href="{{ path('deleteSatisfaction', {id: satisDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                </tr>
+              {% endif %}
+      {% endfor %}
+            {% endif %}
+      {% endfor %}
+      {% endfor %}
+      {% else %}
+          <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
+      {% endif %}
+    </tbody> 
+    </table>
+    </div>
+</div>  
+<script>
+var ctx = document.getElementById('myChartglobaleDG').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ annee | raw }},
+        datasets: [{
+            label: 'Satisfaction globale en %',
+            data:  {{ globaleDG | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var ctx = document.getElementById('myChartpropreteDG').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ annee | raw }},
+        datasets: [{
+            label: 'Satisfaction globale en %',
+            data:  {{ propreteDG | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var ctx = document.getElementById('compDG').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ annee | raw }},
+        datasets: [{
+            label: 'Satisfaction globale en %',
+            data:  {{ compDG | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var ctx = document.getElementById('myCharttemperatureDG').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ annee | raw }},
+        datasets: [{
+            label: 'Satisfaction globale en %',
+            data:  {{ temperatureDG | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var ctx = document.getElementById('myCharthoraireDG').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ annee | raw }},
+        datasets: [{
+            label: 'Satisfaction globale en %',
+            data:  {{ horaireDG | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endif %}
 {% endblock %}
 
 {% block javascripts %}

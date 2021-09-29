@@ -1,14 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ROLE = DG{% endblock %}
+{% block title %}Pass{% endblock %}
 
 {% block body %}
 
-<div>
-
-   {% for site in sites %}
-   <p>{{site.site}}</p>
-    {% endfor %}
-
-</div>
+{% if is_granted('ROLE_DG') %}
+<div class="container">
+    <div class="container">
+    <div class="w-75 mx-auto">
+        <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+            <th scope="col">Mois - Année</th>
+            <th scope="col">Total abonnement</th>
+            <th scope="col">Total désabonnement</th>
+            <th scope="col">Inst Total</th>
+            <th scope="col">Taux de désabonnement</th>
+            <th scope="col">Editer</th>
+            <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if userDGS is not empty %}
+        {% for userDG in userDGS %}
+            <tr class="text-white bg-dark">
+                <td> {{userDG.prenomNom}}</td>
+            </tr>
+            {% for sitesDG in sitesDGS %}
+                {% if userDG.id == sitesDG.user.id %}
+                <tr class="bg-light">
+                <td> {{sitesDG.nomDuSite}}</td>
+                </tr>
+                {% for passDG in passDGS %}
+                {% if sitesDG.id == passDG.site.id %}
+                    <tr class="bg-light">
+                    <td class="py-3">{{passDG.perdiode}} . {{passDG.annee}}</td>
+                    <td>{{passDG.totalAbo}}</td>
+                    <td>{{passDG.totalDesabo}}</td>
+                    <td>{{passDG.instTotal}}</td>
+                    <td>{{passDG.txDesabo}}</td>
+                    <td><a href="{{ path('editPass', {id: passDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                    <td><a href="{{ path('deletePass', {id: passDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                    </tr>
+                {% endif %}
+        {% endfor %}
+                {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter rajouter des coûts de communication, pour cela aller rajouter les chiffres correspondant à votre site sur l'onglet "BDD SITE".</h2>
+        {% endif %}
+        </tbody> 
+        </table>
+    </div>
+    </div>  
+</div>  
+    {% endif %}
 {% endblock %}

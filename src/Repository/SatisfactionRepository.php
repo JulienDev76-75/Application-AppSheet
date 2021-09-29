@@ -19,6 +19,16 @@ class SatisfactionRepository extends ServiceEntityRepository
         parent::__construct($registry, Satisfaction::class);
     }
 
+    public function sitesAndSatis()
+    {
+        return $this->createQueryBuilder('s')
+        ->leftJoin('s.site','ss')
+        ->addSelect('ss')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Satisfaction[] Returns an array of Satisfaction objects
     //  */
