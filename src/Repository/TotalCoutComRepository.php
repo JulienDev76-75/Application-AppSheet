@@ -2,33 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Total;
+use App\Entity\TotalCoutCom;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Total|null find($id, $lockMode = null, $lockVersion = null)
- * @method Total|null findOneBy(array $criteria, array $orderBy = null)
- * @method Total[]    findAll()
- * @method Total[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method TotalCoutCom|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TotalCoutCom|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TotalCoutCom[]    findAll()
+ * @method TotalCoutCom[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TotalRepository extends ServiceEntityRepository
+class TotalCoutComRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Total::class);
+        parent::__construct($registry, TotalCoutCom::class);
     }
 
-    public function trimestreASC()
-    {
-        return $this->createQueryBuilder('t')
-        ->orderBy("t.trimestre", "ASC")
-        ->getQuery()
-        ->getResult()
-        ;
-    }
+
+
     // /**
-    //  * @return Total[] Returns an array of Total objects
+    //  * @return TotalCoutCom[] Returns an array of TotalCoutCom objects
     //  */
     /*
     public function findByExampleField($value)
@@ -45,7 +39,7 @@ class TotalRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Total
+    public function findOneBySomeField($value): ?TotalCoutCom
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')

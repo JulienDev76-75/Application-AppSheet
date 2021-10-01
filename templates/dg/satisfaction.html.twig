@@ -290,7 +290,7 @@ var myChart = new Chart(ctx, {
 {% endif %}
 
 {% if is_granted('ROLE_DG') %}
-<div class="container row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto h-atuo">
+<div class="container">
     <div class="col">
             <div class="card">
               <div class="card-body">
@@ -354,7 +354,7 @@ var myChart = new Chart(ctx, {
             {% for satisDG in satisDGS %}
               {% if sitesDG.id == satisDG.site.id %}
                 <tr class="bg-light">
-                  <td class="py-3">{{satisDG.trimestre}} . {{satisDG.annee}}</td>
+                  <td class="py-3">{{satisDG.trimestre}}</td>
                   <td>{{satisDG.satisGlobale}}</td>
                   <td>{{satisDG.satisProprete}}</td>
                   <td>{{satisDG.competenceDuPersonnel}}</td>
@@ -369,7 +369,7 @@ var myChart = new Chart(ctx, {
       {% endfor %}
       {% endfor %}
       {% else %}
-          <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
+          <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter une SATISFACTION.</h2>
       {% endif %}
     </tbody> 
     </table>
@@ -380,17 +380,12 @@ var ctx = document.getElementById('myChartglobaleDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ annee | raw }},
+        labels: {{ trimestre | raw }},
         datasets: [{
             label: 'Satisfaction globale en %',
             data:  {{ globaleDG | raw }},
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
             ],
             borderColor: [
                 'rgba(255, 99, 132, 1)',
@@ -416,9 +411,9 @@ var ctx = document.getElementById('myChartpropreteDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ annee | raw }},
+        labels: {{ trimestre | raw }},
         datasets: [{
-            label: 'Satisfaction globale en %',
+            label: 'Satisfaction propreté en %',
             data:  {{ propreteDG | raw }},
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -452,9 +447,9 @@ var ctx = document.getElementById('compDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ annee | raw }},
+        labels: {{ trimestre | raw }},
         datasets: [{
-            label: 'Satisfaction globale en %',
+            label: 'Satisfaction compétence du personnel en %',
             data:  {{ compDG | raw }},
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -488,9 +483,9 @@ var ctx = document.getElementById('myCharttemperatureDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ annee | raw }},
+        labels: {{ trimestre | raw }},
         datasets: [{
-            label: 'Satisfaction globale en %',
+            label: 'Satisfaction température des douches en %',
             data:  {{ temperatureDG | raw }},
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -502,11 +497,6 @@ var myChart = new Chart(ctx, {
             ],
             borderColor: [
                 'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
             ],
             borderWidth: 1
         }]
@@ -524,9 +514,9 @@ var ctx = document.getElementById('myCharthoraireDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ annee | raw }},
+        labels: {{ trimestre | raw }},
         datasets: [{
-            label: 'Satisfaction globale en %',
+            label: 'Satisfaction des horaires en %',
             data:  {{ horaireDG | raw }},
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',

@@ -28,18 +28,72 @@ class PlanCommunicationRepository extends ServiceEntityRepository
         ->getResult()
         ;
     }
+
+    public function coutParObjectif()
+    {
+        return $this->createQueryBuilder('p')
+        ->addSelect('s')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
+    public function testObjectif2017()
+    {
+        return $this->createQueryBuilder('p')
+        ->select('COUNT(p.objectif) as objectif')
+        ->Where('p.annee = 2018')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
+    public function ObjectifFidelisation($fidelisation)
+    {
+        
+        return $this->createQueryBuilder('p')
+        ->select('type_operation as type_operation')
+        ->andWhere('p.type_operation = :Animation')
+        ->setParameter('Animation', $fidelisation)
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
+    public function ObjectifConquete($conquete)
+    {
+        
+        return $this->createQueryBuilder('p')
+        ->select('p.cout_total as cout_total')
+        ->andWhere('p.objectif = :Conquete')
+        ->setParameter('Conquete', $conquete)
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
+    public function ObjectifFideConq($fideconquete)
+    {
+        
+        return $this->createQueryBuilder('p')
+        ->select('p.cout_total as cout_total')
+        ->andWhere('p.objectif = :Fidelisation-Conquete')
+        ->setParameter('Fidelisation-Conquete', $fideconquete)
+        ->getQuery()
+        ->getResult()
+        ;
+    }
     
     // /**
     //  * @return PlanCommunication[] Returns an array of PlanCommunication objects
     //  */
     /*
-    public function findByExampleField($value)
+    public function findByExampleField($animation)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('p.type_operation = :Animation')
+            ->setParameter('Animation', $animation)
+            ->orderBy('annee', 'ASC')
             ->getQuery()
             ->getResult()
         ;

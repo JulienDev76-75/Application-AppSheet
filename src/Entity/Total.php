@@ -18,16 +18,6 @@ class Total
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $mois;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $annee;
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      */
     private $satis_globale;
@@ -52,34 +42,20 @@ class Total
      */
     private $competence_personnel;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $trimestre;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $mois;
+
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getMois(): ?string
-    {
-        return $this->mois;
-    }
-
-    public function setMois(string $mois): self
-    {
-        $this->mois = $mois;
-
-        return $this;
-    }
-
-    public function getAnnee(): ?int
-    {
-        return $this->annee;
-    }
-
-    public function setAnnee(int $annee): self
-    {
-        $this->annee = $annee;
-
-        return $this;
     }
 
     public function getSatisGlobale(): ?float
@@ -138,6 +114,30 @@ class Total
     public function setCompetencePersonnel(float $competence_personnel): self
     {
         $this->competence_personnel = $competence_personnel;
+
+        return $this;
+    }
+
+    public function getTrimestre(): ?string
+    {
+        return $this->trimestre;
+    }
+
+    public function setTrimestre(string $trimestre): self
+    {
+        $this->trimestre = $trimestre;
+
+        return $this;
+    }
+
+    public function getMois(): ?string
+    {
+        return $this->mois;
+    }
+
+    public function setMois(string $mois): self
+    {
+        $this->mois = $mois;
 
         return $this;
     }

@@ -66,11 +66,6 @@ class Satisfaction
      */
     private $trimestre;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $annee;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -180,18 +175,6 @@ class Satisfaction
     public function setTrimestre(string $trimestre): self
     {
         $this->trimestre = $trimestre;
-
-        return $this;
-    }
-
-    public function getAnnee(): ?int
-    {
-        return $this->annee;
-    }
-
-    public function setAnnee(int $annee): self
-    {
-        $this->annee = $annee;
 
         return $this;
     }

@@ -69,9 +69,137 @@
     </div>
     </div>  
 </div>  
-    {% endif %}
 
+<div class="container pb-5 mb-5 mt-5">
+<canvas id="myChartCoutTotalParAnnee" width="200" height="200"></canvas>
+</div>
+<div class="container pb-5 mb-5 mt-5">
+<canvas id="myChartCoutTotalParObjectif" width="200" height="200"></canvas>
+</div>
+<div class="container pb-5 mb-5 mt-5">
+<canvas id="myChartRépartitionobjectif2018" width="200" height="200"></canvas>
+</div>
+
+<script>
+var ctx = document.getElementById('myChartCoutTotalParAnnee').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ anneeCoutTotaux | raw }},
+        datasets: [{
+            label: 'Evolution Cout Total / Année - TOUS SITES',
+            data: {{ evolution_cout_com | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var ctx = document.getElementById('myChartCoutTotalParObjectif').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: [22,12,50,12],
+    }, {
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: [22,12,50,12],
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: [22,12,50,12],
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+
+var ctx = document.getElementById('myChartRépartitionobjectif2018');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ annee| raw }},
+        datasets: [{
+            label: "Cout total TOUT SITE par Objectif et par année",
+            data: {{ conquete | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
 </script>
+{% endif %}
+
 {% endblock %}
 
 {% block javascripts %}

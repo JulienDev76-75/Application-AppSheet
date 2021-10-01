@@ -27,10 +27,13 @@ use App\Entity\Swot;
 use App\Form\SwotType;
 use App\Repository\SwotRepository;
 use App\Entity\CartesCadeaux;
+use App\Entity\TotalCoutCom;
 use App\Form\CartesCadeauxFormType;
 use App\Repository\CartesCadeauxRepository;
 use App\Form\SearchSwotType;
+use App\Repository\TotalCoutComRepository;
 use App\Repository\TotalRepository;
+use App\Repository\TotalRigRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 
 class FrontController extends AbstractController
@@ -96,108 +99,19 @@ class FrontController extends AbstractController
      */
     public function satisfaction(SatisfactionRepository $satisfactionRepo, SitesRepository $siteRepo, UserRepository $userRepo, TotalRepository $total): Response
     {
+
+        // Données DS
+        $trimestre = [];
         $siteduDS = $siteRepo -> findOneBy (
             ['user' => $this->getUser()],
         );
-        // Données DS
-        $trimestre = [];
-        $satisglobale2019 = $satisfactionRepo->findByAnnee("2019");
-        $satisglobale2020 = $satisfactionRepo->findByAnnee("2020");
-        $satisglobale2021 = $satisfactionRepo->findByAnnee("2021");
-        $satisproprete2019 = $satisfactionRepo->findByAnnee("2019");
-        $satisproprete2020 = $satisfactionRepo->findByAnnee("2020");
-        $satisproprete2021 = $satisfactionRepo->findByAnnee("2021");
-        $competencepersonnel2019 = $satisfactionRepo->findByAnnee("2019");
-        $competencepersonnel2020 = $satisfactionRepo->findByAnnee("2020");
-        $competencepersonnel2021 = $satisfactionRepo->findByAnnee("2021");
-        $satishoraire2019 = $satisfactionRepo->findByAnnee("2019");
-        $satishoraire2020 = $satisfactionRepo->findByAnnee("2020");
-        $satishoraire2021 = $satisfactionRepo->findByAnnee("2021");
-        $satistemperature2019 = $satisfactionRepo->findByAnnee("2019");
-        $satistemperature2020 = $satisfactionRepo->findByAnnee("2020");
-        $satistemperature2021 = $satisfactionRepo->findByAnnee("2021");
 
             // FIELD satis_globale
-            foreach($satisglobale2019 as $globale2019) {
-                $trimestre[]= $globale2019 ->getTrimestre();
-                $rendusatisglobale2019[] = $globale2019 ->getSatisGlobale();
-            }
+            //foreach($satisglobale2019 as $globale2019) {
+            //    $trimestre[]= $globale2019 ->getTrimestre();
+            //    $rendusatisglobale2019[] = $globale2019 ->getSatisGlobale();
+            //}
     
-            foreach($satisglobale2020 as $globale2020) {
-                $trimestre[]= $globale2020 ->getTrimestre();
-                $rendusatisglobale2020[] = $globale2020 ->getSatisGlobale();
-            }
-    
-            foreach($satisglobale2021 as $globale2021) {
-                $trimestre[]= $globale2021 ->getTrimestre();
-                $rendusatisglobale2021[] = $globale2021 ->getSatisGlobale();
-            }
-
-            // FIELD satis_proprete
-            foreach($satisproprete2019 as $globale2019) {
-                $trimestre[]= $globale2019 ->getTrimestre();
-                $rendusatisproprete2019[] = $globale2019 ->getSatisProprete();
-            }
-            
-            foreach($satisproprete2020 as $globale2020) {
-                $trimestre[]= $globale2020 ->getTrimestre();
-                $rendusatisproprete2020[] = $globale2020 ->getSatisProprete();
-            }
-            
-            foreach($satisproprete2021 as $globale2021) {
-                $trimestre[]= $globale2021 ->getTrimestre();
-                $rendusatisproprete2021[] = $globale2021 ->getSatisProprete();
-                }
-
-            // FIELD satis_competence_du_personnel
-            foreach($competencepersonnel2019 as $comppersonnel2019) {
-                $trimestre[]= $comppersonnel2019 ->getTrimestre();
-                $renducompetencepersonnel2019[] = $comppersonnel2019 ->getCompetenceDuPersonnel();
-                }
-                        
-            foreach($competencepersonnel2020 as $comppersonnel2020) {
-                $trimestre[]= $comppersonnel2020 ->getTrimestre();
-                $renducompetencepersonnel2020[] = $comppersonnel2020 ->getCompetenceDuPersonnel();
-                }
-                        
-            foreach($competencepersonnel2021 as $comppersonnel2021) {
-                $trimestre[]= $comppersonnel2021 ->getTrimestre();
-                $renducompetencepersonnel2021[] = $comppersonnel2021 ->getCompetenceDuPersonnel();
-                }
-            
-            // FIELD satis_horaire
-            foreach($satishoraire2019 as $horaire2019) {
-                $trimestre[]= $horaire2019 ->getTrimestre();
-                $rendusatishoraire2019[] = $horaire2019 ->getSatisHoraires();
-                }
-                        
-            foreach($satishoraire2020 as $horaire2020) {
-                $trimestre[]= $horaire2020 ->getTrimestre();
-                $rendusatishoraire2020[] = $horaire2020 ->getSatisHoraires();
-                }
-                        
-            foreach($satishoraire2021 as $horaire2021) {
-                $trimestre[]= $horaire2021 ->getTrimestre();
-                $rendusatishoraire2021[] = $horaire2021 ->getSatisHoraires();
-                }
-            
-            // FIELD satis_temperature
-            foreach($satistemperature2019 as $temperature2019) {
-                $trimestre[]= $temperature2019 ->getTrimestre();
-                $rendusatistemperature2019[] = $temperature2019 ->getTemperatureDouche();
-                }
-                                                
-            foreach($satistemperature2020 as $temperature2020) {
-                $trimestre[]= $temperature2020 ->getTrimestre();
-                $rendusatistemperature2020[] = $temperature2020 ->getTemperatureDouche();
-                }
-                                                
-            foreach($satistemperature2021 as $temperature2021) {
-                $trimestre[]= $temperature2021 ->getTrimestre();
-                $rendusatistemperature2021[] = $temperature2021 ->getTemperatureDouche();
-                }
-
-
         // Données DR
         $satisDR = $satisfactionRepo->findBy(
             ['user' => $this->getUser()],
@@ -205,39 +119,41 @@ class FrontController extends AbstractController
         $sitesDR = $siteRepo->findBy(
             ['user' => $this->getUser()],
         );
+
         // Données DG
         $userDGS = $userRepo->findAll();
         $sitesDGS = $siteRepo->userAndSites();
         $satisDGS = $satisfactionRepo->sitesAndSatis();
+        //findbYannee("2019" pour des graph par année ? Avec graphique multiscale)
 
-        $annee = [];
-        $satisglobaleDG = $total->findAll();
+        $trimestre = [];
+        $satisglobaleDG = $total->trimestreASC();
         foreach($satisglobaleDG as $satisglobale) {
-            $annee[]= $satisglobale ->getAnnee();
+            $trimestre[]= $satisglobale ->getTrimestre();
             $globaleDG[] = $satisglobale ->getSatisGlobale();
             }
-        
-        $satistemperatureDG = $total->findAll();
+
+        $satistemperatureDG = $total->trimestreASC();
         foreach($satistemperatureDG as $satistemperature) {
-            $annee[]= $satistemperature ->getAnnee();
+            $trimestre[]= $satistemperature ->getTrimestre();
             $temperatureDG[] = $satistemperature ->getTemperatureDouche();
             }
 
-        $satiscomppersoDG = $total->findAll();
+        $satiscomppersoDG = $total->trimestreASC();
         foreach($satiscomppersoDG as $compperso) {
-            $annee[]= $compperso ->getAnnee();
+            $trimestre[]= $compperso ->getTrimestre();
             $compDG[] = $compperso ->getCompetencePersonnel();
             }
         
-        $satispropreteDG = $total->findAll();
+        $satispropreteDG = $total->trimestreASC();
         foreach($satispropreteDG as $proprete) {
-            $annee[]= $proprete ->getAnnee();
+            $trimestre[]= $proprete ->getTrimestre();
             $propreteDG[] = $proprete ->getSatisProprete();
             }
 
-        $satishoraireDG = $total->findAll();
+        $satishoraireDG = $total->trimestreASC();
         foreach($satishoraireDG as $horaire) {
-            $annee[]= $horaire ->getAnnee();
+            $trimestre[]= $horaire ->getTrimestre();
             $horaireDG[] = $horaire ->getSatisProprete();
             }
             
@@ -246,22 +162,6 @@ class FrontController extends AbstractController
         'satisDR' => $satisDR,
         'sitesDR' => $sitesDR,
         'trimestre' => json_encode($trimestre),
-        'rendusatisglobale2019' => json_encode($rendusatisglobale2019),
-        'rendusatisglobale2020' => json_encode($rendusatisglobale2020),
-        'rendusatisglobale2021' => json_encode($rendusatisglobale2021),
-        'rendusatisproprete2019' => json_encode($rendusatisglobale2019),
-        'rendusatisproprete2020' => json_encode($rendusatisglobale2020),
-        'rendusatisproprete2021' => json_encode($rendusatisglobale2021),
-        'renducompetencepersonnel2019' => json_encode($renducompetencepersonnel2019),
-        'renducompetencepersonnel2020' => json_encode($renducompetencepersonnel2020),
-        'renducompetencepersonnel2021' => json_encode($renducompetencepersonnel2021),
-        'rendusatishoraire2019' => json_encode($rendusatishoraire2019),
-        'rendusatishoraire2020' => json_encode($rendusatishoraire2020),
-        'rendusatishoraire2021' => json_encode($rendusatishoraire2020),
-        'rendusatistemperature2019' => json_encode($rendusatistemperature2019),
-        'rendusatistemperature2020' => json_encode($rendusatistemperature2020),
-        'rendusatistemperature2021' => json_encode($rendusatistemperature2021),
-        'siteduDS' => $siteduDS,
         'userDGS' => $userDGS,
         'sitesDGS' => $sitesDGS,
         'satisDGS' => $satisDGS,
@@ -270,7 +170,7 @@ class FrontController extends AbstractController
         'compDG' => json_encode($compDG),
         'temperatureDG' => json_encode($temperatureDG),
         'horaireDG' => json_encode($horaireDG),
-        'annee' => json_encode($annee),
+        'trimestre' => json_encode($trimestre),
     ]);
     }
 
@@ -454,7 +354,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/frequentation&CA", name="frequentation")
      */
-    public function freq(RigRepository $rigRepo, SitesRepository $sitesRepo): Response
+    public function freq(RigRepository $rigRepo, SitesRepository $sitesRepo, TotalRigRepository $totalrepo): Response
     {
         //ROLE_DS
         $rigRepo = $this->getDoctrine()->getRepository(Rig::class);
@@ -467,6 +367,7 @@ class FrontController extends AbstractController
         //ROLE_DG
         $freqDGS = $rigRepo ->sitesAndRig();
         $sitesDGS = $sitesRepo ->findAll();
+        $test = $totalrepo->panierMoyenTotal();
 
     return $this->render('dg/frequentation.html.twig', [
         'rig' => $rig,
@@ -533,7 +434,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/coutCommunication", name="coutCommunication")
      */
-    public function coutCommunication(PlanCommunicationRepository $planRepo, UserRepository $userRepo, SitesRepository $sitesRepo): Response
+    public function coutCommunication(PlanCommunicationRepository $planRepo, UserRepository $userRepo, SitesRepository $sitesRepo, TotalCoutComRepository $totalCoutCom, TotalRigRepository $rig): Response
     {
 
     // ************************* DS VIEW *******************************
@@ -551,10 +452,28 @@ class FrontController extends AbstractController
             }
 
     // ************************* DR VIEW *******************************
+
     // ************************* DG VIEW *******************************
     $userDGS = $userRepo->findAll();
     $sitesDGS = $sitesRepo -> userAndSites();
     $coutcomDGS = $planRepo -> sitesAndCoutCom();
+    $annee = [];
+    $conquete = [];
+    //$repartitionobjectif2017 = $planRepo->findByAnnee("2019");
+
+            //******************* EVOLUTION COUT TOTAUX PAR ANNEE */
+            $evolution_cout_total = $totalCoutCom->findAll();
+            foreach($evolution_cout_total as $evolution_cout_totaux) {
+                $anneeCoutTotaux[] = $evolution_cout_totaux->getAnnee();
+                $evolution_cout_com[] = $evolution_cout_totaux->getCoutTotaux();
+                }
+
+            //******************* EVOLUTION COUT TOTAUX PAR OBJECTIF ET PAR ANNEE*/
+            $objectifs2017 = $planRepo->findByObjectif("Conquete");
+            foreach($objectifs2017 as $objectif2017) {
+                $annee[] = $objectif2017->getAnnee();
+                $conquete[] = $objectif2017->getCoutTotal();
+                }
 
 
     return $this->render('dg/coutCommunication.html.twig', [
@@ -562,7 +481,12 @@ class FrontController extends AbstractController
         'annee' => json_encode($annee),
         'userDGS' => $userDGS,
         'sitesDGS' => $sitesDGS,
-        'coutcomDGS' => $coutcomDGS
+        'coutcomDGS' => $coutcomDGS,
+        'anneeCoutTotaux' => json_encode($anneeCoutTotaux),
+        'evolution_cout_com' => json_encode($evolution_cout_com),
+        'objectifs2017' => json_encode($objectifs2017),
+        'annee' => json_encode($annee),
+        'conquete' => json_encode($conquete),
     ]);
     }
 
@@ -593,7 +517,7 @@ class FrontController extends AbstractController
 
         return $this->render('registration/newSite.html.twig', [
             'form' => $form->createView()
-         ]);
+        ]);
     }
 
     /**
@@ -780,7 +704,6 @@ class FrontController extends AbstractController
          ]);
     }
 
-
     //
     // ********************** FORMULAIRE : EDIT ELEMENTS **********************
     //
@@ -798,7 +721,6 @@ class FrontController extends AbstractController
         return $this->render('edit/editSwot.html.twig', [
             'form' => $form->createView()
          ]);
-
     }
 
     /**
@@ -814,7 +736,6 @@ class FrontController extends AbstractController
         return $this->render('edit/editSites.html.twig', [
             'form' => $form->createView()
          ]);
-
     }
 
     /**
@@ -891,7 +812,6 @@ class FrontController extends AbstractController
             'form' => $form->createView()
          ]);
     }
-
 
     //
     // ********************** FORMULAIRE : DELETE ELEMENTS **********************
