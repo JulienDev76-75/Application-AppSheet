@@ -1,3 +1,4 @@
+// ************************************$
 window.onload = () => {
     const filtersForm = document.querySelector("#filters");
 
@@ -31,26 +32,39 @@ window.onload = () => {
     });
 } 
 
-var wrapper, content, test;
-
-// this is the scroll event handler
-function scroller() {
-  // print relevant scroll info
-  test.innerHTML = wrapper.scrollTop + " + " + wrapper.offsetHeight + " + 100 > " + content.offsetHeight;
-
-  // add more contents if user scrolled down enough
-  if (wrapper.scrollTop + wrapper.offsetHeight + 100 > content.offsetHeight) {
-    content.innerHTML += more; // NK: Here you can make an Ajax call and fetch content to append to content.innerHTML
+// ************************************$
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
   }
 }
 
-wrapper = document.getElementById("wrapper");
-content = document.getElementById("content");
-test = document.getElementById("test");
+//************************************* 
+/* Get the documentElement (<html>) to display the page in fullscreen */
+var elem = document.documentElement;
 
-// hook the scroll handler to scroll event
-if (wrapper.addEventListener) // NK: Works on all new browsers
-  wrapper.addEventListener("scroll", scroller, false);
+/* View in fullscreen */
+function openFullscreen() {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
 
-else if (wrapper.attachEvent) // NK: Works on old IE
-  wrapper.attachEvent("onscroll", scroller);
+/* Close fullscreen */
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) { /* Safari */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) { /* IE11 */
+    document.msExitFullscreen();
+  }
+}

@@ -4,6 +4,9 @@
 
 {% block body %}
 {% if is_granted('ROLE_DS') %}
+
+ <h1>fullscreenchange event example</h1>
+
 <h2 class="text-center mt-5 mb-5 text-danger"></h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
@@ -46,8 +49,17 @@
 {% endif %}
 
 {% if is_granted('ROLE_DG') %}
+<div class="container mt-5 h-75">
+  <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartPanier" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+</div>
 <div class="container">
-    <div class="w-75 mx-auto">
+    <div class="w-75 mx-auto mt-5">
     <table class="table table-bordered mb-5 mt-5">
         <thead class="bg-dark text-white">
         <tr>
@@ -90,5 +102,47 @@
     </div>
 </div>
 
+<script>
+var ctx = document.getElementById('myChartPanier').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ mois | raw }},
+        datasets: [{
+            label: 'Satisfaction propreté en %',
+            data:  {{ test | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
 {% endif %}
+{% endblock %}
+
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}

@@ -2,6 +2,10 @@
 
 {% block title %}Statisitiques Satisfaction{% endblock %}
 
+    {% block stylesheets %}
+      <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+
+    {% endblock %}
 {% block body %}
 
 {% if is_granted('ROLE_DS') %}
@@ -9,8 +13,8 @@
 <h3 class="text-center mt-4 mb-4 text-dark">{{ siteduDS.nomDuSite }}</h3>
 <div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
       <div class="col">
-          <div class="card">
-            <div class="card-body">
+          <div class="card">       
+          <div class="card-body">
                 <canvas id="myChartSatisGlobale" width="10" height="10"></canvas>
             </div>
           </div>
@@ -290,51 +294,56 @@ var myChart = new Chart(ctx, {
 {% endif %}
 
 {% if is_granted('ROLE_DG') %}
-<div class="container">
-    <div class="col">
-            <div class="card">
+<h1 class="pt-5 pb-4 mt-5 text-center"> Graphique Tous Sites</h1>
+<div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartglobaleDG" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">
+          <div class="card-body">
+            <canvas id="myChartpropreteDG" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+        <div class="card">
               <div class="card-body">
-                  <canvas id="myChartglobaleDG" width="10" height="10"></canvas>
+                  <canvas id="compDG" width="300" height="300"></canvas>
               </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
             <div class="card">
               <div class="card-body">
-                  <canvas id="myChartpropreteDG" width="10" height="10"></canvas>
+                  <canvas id="myCharttemperatureDG" width="300" height="300"></canvas>
               </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
             <div class="card">
               <div class="card-body">
-                  <canvas id="compDG" width="10" height="10"></canvas>
+                  <canvas id="myCharthoraireDG" width="300" height="300"></canvas>
               </div>
             </div>
         </div>
-        <div class="col">
-            <div class="card">
-              <div class="card-body">
-                  <canvas id="myCharttemperatureDG" width="10" height="10"></canvas>
-              </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-              <div class="card-body">
-                  <canvas id="myCharthoraireDG" width="10" height="10"></canvas>
-              </div>
-            </div>
-        </div>
-    <div>
-    <table class="table table-bordered mb-5 mt-5">
+  </div>
+
+<hr class="w-75 mx-auto mt-4 mb-5">
+
+<h1 class="pt-5 pb-4 mt-5 text-center"> Tableau Tous Sites</h1>
+<table class="table table-bordered mb-5 mt-5 w-75 mx-auto">
       <thead class="bg-dark text-white">
         <tr>
           <th scope="col">Trimestre - Année</th>
-          <th scope="col">Satisfaction globale</th>
-          <th scope="col">Satisfaction propreté</th>
-          <th scope="col">Compétence du personnel</th>
-          <th scope="col">Satisfaction température</th>
+          <th scope="col">Satisfaction globale (%)</th>
+          <th scope="col">Satisfaction propreté (%)</th>
+          <th scope="col">Compétence du personnel (%)</th>
+          <th scope="col">Satisfaction température (%)</th>
           <th scope="col">Nombre de répondants</th>
           <th scope="col">Editer</th>
           <th scope="col">Supprimer</th>
@@ -360,8 +369,8 @@ var myChart = new Chart(ctx, {
                   <td>{{satisDG.competenceDuPersonnel}}</td>
                   <td>{{satisDG.temperatureDouche}}</td>
                   <td>{{satisDG.repondant}}</td>
-                  <td><a href="{{ path('editSatisfaction', {id: satisDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-                  <td><a href="{{ path('deleteSatisfaction', {id: satisDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                  <td><a href="{{ path('editSatisfaction', {id: satisDG.id}) }}" class="card-link btn btn-danger text-white">Modifier</a></td>
+                  <td><a href="{{ path('deleteSatisfaction', {id: satisDG.id}) }}" class="card-link btn btn-danger text-white" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
                 </tr>
               {% endif %}
       {% endfor %}
@@ -372,20 +381,24 @@ var myChart = new Chart(ctx, {
           <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter une SATISFACTION.</h2>
       {% endif %}
     </tbody> 
-    </table>
-    </div>
-</div>  
+</table>
+
 <script>
 var ctx = document.getElementById('myChartglobaleDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ trimestre | raw }},
+        labels: {{ trimestreDG | raw }},
         datasets: [{
             label: 'Satisfaction globale en %',
             data:  {{ globaleDG | raw }},
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
             ],
             borderColor: [
                 'rgba(255, 99, 132, 1)',
@@ -411,7 +424,7 @@ var ctx = document.getElementById('myChartpropreteDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ trimestre | raw }},
+        labels: {{ trimestreDG1 | raw }},
         datasets: [{
             label: 'Satisfaction propreté en %',
             data:  {{ propreteDG | raw }},
@@ -447,7 +460,7 @@ var ctx = document.getElementById('compDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ trimestre | raw }},
+        labels: {{ trimestreDG2 | raw }},
         datasets: [{
             label: 'Satisfaction compétence du personnel en %',
             data:  {{ compDG | raw }},
@@ -483,7 +496,7 @@ var ctx = document.getElementById('myCharttemperatureDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ trimestre | raw }},
+        labels: {{ trimestreDG3 | raw }},
         datasets: [{
             label: 'Satisfaction température des douches en %',
             data:  {{ temperatureDG | raw }},
@@ -497,6 +510,9 @@ var myChart = new Chart(ctx, {
             ],
             borderColor: [
                 'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
             ],
             borderWidth: 1
         }]
@@ -514,7 +530,7 @@ var ctx = document.getElementById('myCharthoraireDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: {{ trimestre | raw }},
+        labels: {{ trimestreDG4 | raw }},
         datasets: [{
             label: 'Satisfaction des horaires en %',
             data:  {{ horaireDG | raw }},

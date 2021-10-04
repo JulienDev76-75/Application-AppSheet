@@ -43,3 +43,11 @@ width: 100%;
 text-align: center;
 height : 3vh;
 }
+
+#redimensionnable {
+    resize: both;
+    overflow: scroll;
+    border: 1px solid black;
+    font-size : 8em;
+  }
+  

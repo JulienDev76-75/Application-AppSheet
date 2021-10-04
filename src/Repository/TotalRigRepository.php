@@ -23,7 +23,7 @@ class TotalRigRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('t')
         ->select('AVG(t.panier_moyen) as paniermoyen')
-        ->where('t.annee = 2019')
+        ->where('t.annee = 2020 ')
         ->getQuery()
         ->getResult()
         ;

@@ -129,31 +129,31 @@ class FrontController extends AbstractController
         $trimestre = [];
         $satisglobaleDG = $total->trimestreASC();
         foreach($satisglobaleDG as $satisglobale) {
-            $trimestre[]= $satisglobale ->getTrimestre();
+            $trimestreDG[]= $satisglobale ->getTrimestre();
             $globaleDG[] = $satisglobale ->getSatisGlobale();
             }
 
         $satistemperatureDG = $total->trimestreASC();
         foreach($satistemperatureDG as $satistemperature) {
-            $trimestre[]= $satistemperature ->getTrimestre();
+            $trimestreDG1[]= $satistemperature ->getTrimestre();
             $temperatureDG[] = $satistemperature ->getTemperatureDouche();
             }
 
         $satiscomppersoDG = $total->trimestreASC();
         foreach($satiscomppersoDG as $compperso) {
-            $trimestre[]= $compperso ->getTrimestre();
+            $trimestreDG2[]= $compperso ->getTrimestre();
             $compDG[] = $compperso ->getCompetencePersonnel();
             }
         
         $satispropreteDG = $total->trimestreASC();
         foreach($satispropreteDG as $proprete) {
-            $trimestre[]= $proprete ->getTrimestre();
+            $trimestreDG3[]= $proprete ->getTrimestre();
             $propreteDG[] = $proprete ->getSatisProprete();
             }
 
         $satishoraireDG = $total->trimestreASC();
         foreach($satishoraireDG as $horaire) {
-            $trimestre[]= $horaire ->getTrimestre();
+            $trimestreDG4[]= $horaire ->getTrimestre();
             $horaireDG[] = $horaire ->getSatisProprete();
             }
             
@@ -161,7 +161,11 @@ class FrontController extends AbstractController
     return $this->render('dg/satisfaction.html.twig', [
         'satisDR' => $satisDR,
         'sitesDR' => $sitesDR,
-        'trimestre' => json_encode($trimestre),
+        'trimestreDG' => json_encode($trimestreDG),
+        'trimestreDG1' => json_encode($trimestreDG1),
+        'trimestreDG2' => json_encode($trimestreDG2),
+        'trimestreDG3' => json_encode($trimestreDG3),
+        'trimestreDG4' => json_encode($trimestreDG4),
         'userDGS' => $userDGS,
         'sitesDGS' => $sitesDGS,
         'satisDGS' => $satisDGS,
@@ -363,16 +367,27 @@ class FrontController extends AbstractController
             ['mois' => 'ASC'],
             6,
         );  
+
         //ROLE_DR
+
         //ROLE_DG
         $freqDGS = $rigRepo ->sitesAndRig();
         $sitesDGS = $sitesRepo ->findAll();
-        $test = $totalrepo->panierMoyenTotal();
+        //$test = $totalrepo->panierMoyenTotal();
+        $paniersmoyens = $totalrepo->findAll();
+
+        foreach($paniersmoyens as $paniermoyen) {
+            $mois[]= $paniermoyen ->getMois();
+            $test[] = $paniermoyen ->getPanierMoyen();
+        }
 
     return $this->render('dg/frequentation.html.twig', [
         'rig' => $rig,
         'freqDGS' => $freqDGS,
         'sitesDGS' => $sitesDGS,
+        'paniersmoyens' => $paniersmoyens,
+        'test' => json_encode($test),
+        'mois' => json_encode($mois),
     ]);
     }
 
@@ -457,6 +472,7 @@ class FrontController extends AbstractController
     $userDGS = $userRepo->findAll();
     $sitesDGS = $sitesRepo -> userAndSites();
     $coutcomDGS = $planRepo -> sitesAndCoutCom();
+    //$testfide = $planRepo->ObjectifFidelisation("Fidelisation");
     $annee = [];
     $conquete = [];
     //$repartitionobjectif2017 = $planRepo->findByAnnee("2019");
