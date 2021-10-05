@@ -56,7 +56,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/swot", name="swot")
      */
-    public function swot(Request $request, SwotRepository $swotRepo, UserRepository $userRepo): Response
+    public function swot(Request $request, SwotRepository $swotRepo, UserRepository $userRepo, PlanCommunicationRepository $plancom): Response
     {   
         $form = $this->createForm(SearchSwotType::class);
         $search = $form->handleRequest($request);
@@ -80,8 +80,9 @@ class FrontController extends AbstractController
         ); 
 
         //Données DG
-        $swotDGS = $swotRepo ->userAndSwot();
-        $userDGS = $userRepo ->findAll();
+        $swotDG = $swotRepo ->userAndSwot();
+        $userDG = $userRepo ->findAll();
+        $plancomDG = $plancom ->sitesAndCoutCom();
 
     return $this->render('dg/swot.html.twig', [
         'swot' => $swot,
@@ -89,8 +90,9 @@ class FrontController extends AbstractController
         'swotList' => $swotList,
         'swotDR' => $swotDR,
         'swotDS' => $swotDS,
-        'swotDGS' => $swotDGS,
-        'userDGS' => $userDGS,
+        'swotDG' => $swotDG,
+        'userDG' => $userDG,
+        'plancomDG' => $plancomDG,
     ]);
     }
 
@@ -201,7 +203,6 @@ class FrontController extends AbstractController
         $cartescadeauxsolde2020 = $cartesRepo->findByAnnee("2020");
         $cartescadeauxsolde2021 = $cartesRepo->findByAnnee("2021");
         $mois = [];
-        $cartesvendues = [];
 
             // FIELD nombre_cartes_vendues
             foreach($cartescadeauxvendues2020 as $cartecadeauvendues2020) {
@@ -291,7 +292,6 @@ class FrontController extends AbstractController
         
     return $this->render('dg/carteCadeau.html.twig', [
         'mois' => json_encode($mois),
-        'cartesvendues' => json_encode($cartesvendues),
         'cartesvendues2020' => json_encode($cartesvendues2020),
         'cartesvendues2021' => json_encode($cartesvendues2021),
         'cartesvendues2017' => json_encode($cartesvendues2017),
@@ -315,7 +315,7 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/planCommunication", name="planCommunication")
      */
-    public function planCommunication(PlanCommunicationRepository $plancomRepo): Response
+    public function planCommunication(TotalCoutComRepository $totalcoutcom, PlanCommunicationRepository $plancomRepo, SitesRepository $sitesRepo, UserRepository $userRepo): Response
     {
         //ROLE_DS
         $plancomRepo = $this->getDoctrine()->getRepository(PlanCommunication::class);
@@ -325,9 +325,114 @@ class FrontController extends AbstractController
             6,
         );  
         //ROLE_DR
+        $plancomRepo = $this->getDoctrine()->getRepository(PlanCommunication::class);
+        $planCom= $plancomRepo ->findby(
+            ['user' => $this->getUser()],
+            ['annee' => 'ASC'],
+            6,
+        );  
+
         //ROLE_DG
+
+        $userDG = $userRepo->findAll();
+        $sitesDG = $sitesRepo -> userAndSites();
+        $coutcomDG = $plancomRepo -> sitesAndCoutCom();
+        $totalOpCoDG = $totalcoutcom -> findAll();
+            // FIELD EVOLUTION COUT TOTAUX MENSUELS ET PAR ANNEES TOUS SITES
+            $coutstotaux2018 = $totalcoutcom->findByAnnee("2018");
+            foreach($coutstotaux2018 as $totaux2018) {
+            $sumcouttotal2018[] = $totaux2018 ->getCoutTotaux();
+            }
+            $coutstotaux2019 = $totalcoutcom->findByAnnee("2019");
+            foreach($coutstotaux2019 as $totaux2019) {
+            $sumcouttotal2019[] = $totaux2019 ->getCoutTotaux();
+            }
+            $coutstotaux2020 = $totalcoutcom->findByAnnee("2020");
+            foreach($coutstotaux2020 as $totaux2020) {
+            $sumcouttotal2020[] = $totaux2020 ->getCoutTotaux();
+            }
+            $coutstotaux2017 = $totalcoutcom->findByAnnee("2017");
+            foreach($coutstotaux2017 as $totaux2017) {
+            $sumcouttotal2017[] = $totaux2017 ->getCoutTotaux();
+            }
+
+            // FIELD EVOLUTION CA MENSUELS ET PAR ANNEES TOUS SITES
+            $catotal2018 = $totalcoutcom->findByAnnee("2018");
+            foreach($catotal2018 as $totauxca2018) {
+            $sumcatotal2018[] = $totauxca2018 ->getCaTotal();
+            }
+            $catotal2019 = $totalcoutcom->findByAnnee("2019");
+            foreach($catotal2019 as $totauxca2019) {
+            $sumcatotal2019[] = $totauxca2019 ->getCaTotal();
+            }
+            $catotal2020 = $totalcoutcom->findByAnnee("2020");
+            foreach($catotal2020 as $totauxca2019) {
+            $sumcatotal2020[] = $totaux2020 ->getCaTotal();
+            }
+            $catotal2017 = $totalcoutcom->findByAnnee("2017");
+            foreach($catotal2017 as $totauxca2017) {
+            $sumcatotal2017[] = $totauxca2017 ->getCaTotal();
+            }     
+
+            // FIELD EVOLUTION CA OP CO PAR ANNEES ET MENSUELS TOUS SITES
+            $caopco2018 = $totalcoutcom->findByAnnee("2018");
+            foreach($caopco2018 as $chaquecaopco2018) {
+            $sumcaopco2018[] = $chaquecaopco2018 ->getCaOpCo();
+            }
+            $caopco2019 = $totalcoutcom->findByAnnee("2019");
+            foreach($caopco2019 as $chaquecaopco2019) {
+            $sumcaopco2019[] = $chaquecaopco2019 ->getCaOpCo();
+            }
+            $caopco2020 = $totalcoutcom->findByAnnee("2020");
+            foreach($caopco2020 as $chaquecaopco2020) {
+            $sumcaopco2020[] = $chaquecaopco2020 ->getCaOpCo();
+            }
+            $caopco2017 = $totalcoutcom->findByAnnee("2017");
+            foreach($caopco2017 as $chaquecaopco2017) {
+            $sumcaopco2017[] = $chaquecaopco2017 ->getCaOpCo();
+            }        
+
+            // FIELD EVOLUTION COUT OP CO PAR ANNEES ET MENSUELS TOUS SITES
+            $coutopco2018 = $totalcoutcom->findByAnnee("2018");
+            foreach($coutopco2018 as $chaquecoutopco2018) {
+            $sumcoutopco2018[] = $chaquecoutopco2018 ->getCoutOpCo();
+            }
+            $coutopco2019 = $totalcoutcom->findByAnnee("2019");
+            foreach($coutopco2019 as $chaquecoutopco2019) {
+            $sumcoutopco2019[] = $chaquecoutopco2019 ->getCoutOpCo();
+            }
+            $coutopco2020 = $totalcoutcom->findByAnnee("2020");
+            foreach($coutopco2020 as $chaquecoutopco2020) {
+            $sumcoutopco2020[] = $chaquecoutopco2020 ->getCoutOpCo();
+            }
+            $coutopco2017 = $totalcoutcom->findByAnnee("2017");
+            foreach($coutopco2017 as $chaquecoutopco2017) {
+            $sumcoutopco2017[] = $chaquecoutopco2017 ->getCoutOpCo();
+            }             
+        
+
     return $this->render('dg/planCommunication.html.twig', [
+        'totalOpCoDG' => $totalOpCoDG,
+        'coutcomDG' => $coutcomDG,
+        'sitesDG' => $sitesDG,
+        'userDG' => $userDG,
         'planCom' => $planCom,
+        'sumcouttotal2017' => json_encode($sumcouttotal2017),
+        'sumcouttotal2018' => json_encode($sumcouttotal2018),
+        'sumcouttotal2019' => json_encode($sumcouttotal2019),
+        'sumcouttotal2020' => json_encode($sumcouttotal2020),
+        'sumcatotal2017' => json_encode($sumcouttotal2017),
+        'sumcatotal2018' => json_encode($sumcouttotal2018),
+        'sumcatotal2019' => json_encode($sumcouttotal2019),
+        'sumcatotal2020' => json_encode($sumcouttotal2020),
+        'sumcoutopco2017' => json_encode($sumcoutopco2017),
+        'sumcoutopco2018' => json_encode($sumcoutopco2018),
+        'sumcoutopco2019' => json_encode($sumcoutopco2019),
+        'sumcoutopco2020' => json_encode($sumcoutopco2020),
+        'sumcaopco2017' => json_encode($sumcaopco2017),
+        'sumcaopco2018' => json_encode($sumcaopco2018),
+        'sumcaopco2019' => json_encode($sumcaopco2019),
+        'sumcaopco2020' => json_encode($sumcaopco2020),
     ]);
     }
 
@@ -342,6 +447,8 @@ class FrontController extends AbstractController
             ['site' => 'ASC'],
         );  
         
+        //ROLE_DR
+
         //ROLE_DG
         $userDGS = $userRepo ->findAll();
         $sitesDGS = $sitesRepo ->userAndSites();

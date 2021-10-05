@@ -38,16 +38,6 @@ class PlanCommunicationRepository extends ServiceEntityRepository
         ;
     }
 
-    public function testObjectif2017()
-    {
-        return $this->createQueryBuilder('p')
-        ->select('COUNT(p.objectif) as objectif')
-        ->Where('p.annee = 2018')
-        ->getQuery()
-        ->getResult()
-        ;
-    }
-
     public function ObjectifFidelisation($fidelisation)
     {
         
@@ -83,6 +73,7 @@ class PlanCommunicationRepository extends ServiceEntityRepository
         ->getResult()
         ;
     }
+
     
     // /**
     //  * @return PlanCommunication[] Returns an array of PlanCommunication objects
