@@ -34,7 +34,7 @@ use App\Form\SearchSwotType;
 use App\Repository\TotalCoutComRepository;
 use App\Repository\TotalRepository;
 use App\Repository\TotalRigRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
+
 
 class FrontController extends AbstractController
 {
@@ -101,18 +101,11 @@ class FrontController extends AbstractController
      */
     public function satisfaction(SatisfactionRepository $satisfactionRepo, SitesRepository $siteRepo, UserRepository $userRepo, TotalRepository $total): Response
     {
-
         // Données DS
         $trimestre = [];
         $siteduDS = $siteRepo -> findOneBy (
             ['user' => $this->getUser()],
         );
-
-            // FIELD satis_globale
-            //foreach($satisglobale2019 as $globale2019) {
-            //    $trimestre[]= $globale2019 ->getTrimestre();
-            //    $rendusatisglobale2019[] = $globale2019 ->getSatisGlobale();
-            //}
     
         // Données DR
         $satisDR = $satisfactionRepo->findBy(
@@ -126,7 +119,6 @@ class FrontController extends AbstractController
         $userDGS = $userRepo->findAll();
         $sitesDGS = $siteRepo->userAndSites();
         $satisDGS = $satisfactionRepo->sitesAndSatis();
-        //findbYannee("2019" pour des graph par année ? Avec graphique multiscale)
 
         $trimestre = [];
         $satisglobaleDG = $total->trimestreASC();
@@ -186,7 +178,6 @@ class FrontController extends AbstractController
     public function carteCadeau(CartesCadeauxRepository $cartesRepo, SitesRepository $siteRepo): Response
     {
         // ************************* DS VIEW *******************************
-
         $cartescadeauxvendues2017 = $cartesRepo->findByAnnee("2017");
         $cartescadeauxvendues2020 = $cartesRepo->findByAnnee("2020");
         $cartescadeauxvendues2021 = $cartesRepo->findByAnnee("2021");
@@ -202,7 +193,6 @@ class FrontController extends AbstractController
         $cartescadeauxsolde2017 = $cartesRepo->findByAnnee("2017");
         $cartescadeauxsolde2020 = $cartesRepo->findByAnnee("2020");
         $cartescadeauxsolde2021 = $cartesRepo->findByAnnee("2021");
-        $mois = [];
 
             // FIELD nombre_cartes_vendues
             foreach($cartescadeauxvendues2020 as $cartecadeauvendues2020) {
@@ -268,7 +258,6 @@ class FrontController extends AbstractController
                 $cartesvaloutilisation2021[] = $cartecadeauvalorisationutilisation2021 ->getValorisationUtilisation();
             }
 
-
             // FIELD Solde
             foreach($cartescadeauxsolde2017 as $cartecadeausolde2017) {
                 $mois[]= $cartecadeausolde2017 ->getMois();
@@ -285,11 +274,27 @@ class FrontController extends AbstractController
                 $cartessolde2021[] = $cartecadeausolde2021 ->getSolde();
             }
         
+        // ************************* DR VIEW *******************************
+        $siteDRS = $siteRepo -> findBy(
+            ['user' => $this->getUser()],
+        );
+        
+        $cartescadeauxDRS = $cartesRepo -> findBy(
+            ['user' => $this->getUser()],
+        null,
+            12
+        );
+
+        $moisDR = [];
+            foreach($cartescadeauxDRS as $cartecadeauxDR) {
+                $moisDR[]= $cartecadeauxDR ->getMois();
+                $cartesSoldeDR[] = $cartecadeauxDR ->getSolde();
+            }
+
         // ************************* DG VIEW *******************************
         $cartesDGS = $cartesRepo ->SitesAndCartesCadeaux();
         $sitesDGS = $siteRepo ->findAll();
 
-        
     return $this->render('dg/carteCadeau.html.twig', [
         'mois' => json_encode($mois),
         'cartesvendues2020' => json_encode($cartesvendues2020),
@@ -309,6 +314,10 @@ class FrontController extends AbstractController
         'cartessolde2021' => json_encode($cartessolde2021),
         'cartesDGS' => $cartesDGS,
         'sitesDGS' => $sitesDGS,
+        'sitesDRS' => $siteDRS,
+        'cartescadeauxDRS' => $cartescadeauxDRS,
+        'moisDR' => json_encode($moisDR),
+        'cartesSoldeDR' => json_encode($cartesSoldeDR),
     ]);
     }
 
@@ -324,6 +333,7 @@ class FrontController extends AbstractController
             ['annee' => 'ASC'],
             6,
         );  
+
         //ROLE_DR
         $plancomRepo = $this->getDoctrine()->getRepository(PlanCommunication::class);
         $planCom= $plancomRepo ->findby(
@@ -333,7 +343,6 @@ class FrontController extends AbstractController
         );  
 
         //ROLE_DG
-
         $userDG = $userRepo->findAll();
         $sitesDG = $sitesRepo -> userAndSites();
         $coutcomDG = $plancomRepo -> sitesAndCoutCom();
@@ -516,9 +525,7 @@ class FrontController extends AbstractController
      */
     public function sites(SitesRepository $sitesRepo, UserRepository $userRepo): Response
     {
-
         //ROLE_DR
-        $sitesRepo = $this->getDoctrine()->getRepository(Sites::class);
         $sitesDR = $sitesRepo -> findBy(
             ['user' => $this->getUser()],
             ['ville' => 'ASC'],
@@ -532,24 +539,11 @@ class FrontController extends AbstractController
         $sitesDS = $sitesRepo -> findOneBy(
             ['user' => $this->getUser()]);
 
-
-        // (console.log) sur $filters à faire
-        //$filters = $request->get("sites");
-        // On vérifie si on a une requête AJAX
-        //    if ($request->get('ajax')){
-        // render des données en Json
-        //        return new JsonResponse([
-        //            $this->renderView('dg/listeDesSites.html.twig', [
-        //            'sites' => $sites,
-        //            ])
-        //        ]);
-        //    }
-
     return $this->render('dg/listeDesSites.html.twig', [
         'sitesDR' => $sitesDR,
-        'userDG' => $userDG,
         'sitesDS' => $sitesDS,
         'sitesDG' => $sitesDG,
+        'userDG' => $userDG,
     ]);
     }
 

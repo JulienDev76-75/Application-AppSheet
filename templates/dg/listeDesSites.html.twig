@@ -11,7 +11,7 @@
 {% if is_granted('ROLE_DG') %}
 <div class="container">
     <div class="col-3">
-        <p>Filter</p>
+        <p>Filtrer</p>
         <form id="filters">
             {% for siteDGS in sitesDG %}
                 <p><input type="checkbox" name="sites[]" id="sites{{siteDGS.id}}" value="{{siteDGS.id}}"> <label for="sites{{siteDGS.id}}">{{siteDGS.nomDuSite}}</p>
@@ -19,6 +19,7 @@
         </form>
     </div>
 </div>
+
 <h2 class="text-center mt-5 mb-5 text-danger" >Liste des sites</h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
@@ -83,8 +84,8 @@
     <div class="col-3">
         <p>Filter</p>
         <form id="filters">
-            {% for site in sites %}
-                <p><input type="checkbox" name="sites[]" id="sites{{site.id}}" value="{{site.id}}"> <label for="sites{{site.id}}">{{site.nomDuSite}}</p>
+            {% for sitesDRS in sitesDR %}
+                <p><input type="checkbox" name="sites[]" id="sites{{sitesDRS.id}}" value="{{sitesDRS.id}}"> <label for="sites{{sitesDRS.id}}">{{sitesDRS.nomDuSite}}</p>
             {% endfor %}
         </form>
     </div>
@@ -112,24 +113,24 @@
             </tr>
         </thead>
         <tbody>
-        {% if sitesDG is not empty %}
-            {% for siteDGS in sitesDG %}
+        {% if sitesDR is not empty %}
+            {% for sitesDRS in sitesDR %}
                 <tr class="bg-light">
-                    <td> {{siteDGS.nomDuSite}}</td>
-                    <td> {{siteDGS.ville}}</td>
-                    <td> {{siteDGS.typeContrat}}</td>
-                    <td> {{siteDGS.typeSociete}}</td>
-                    <td> {{siteDGS.raisonSociale}}</td>
-                    <td> {{siteDGS.adresse1}}</td>
-                    <td> {{siteDGS.adresse2}}</td>
-                    <td> {{siteDGS.codePostal}}</td>
-                    <td> {{siteDGS.dateDebut | date('d/m/Y')}}</td>
-                    <td> {{siteDGS.dateFin | date('d/m/Y')}}</td>
-                    <td> {{siteDGS.datePremierContrat | date('d/m/Y')}}</td>
-                    <td> {{siteDGS.ctrlAcces}}</td>
-                    <td> <a href="{{ path('singleSite', {id: siteDGS.id})}}">Détails</a></td>
-                    <td> <a href="{{ path('editSites', {id: siteDGS.id})}}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-                    <td> <a href="{{ path('deleteSites', {id: siteDGS.id})}}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                    <td> {{sitesDRS.nomDuSite}}</td>
+                    <td> {{sitesDRS.ville}}</td>
+                    <td> {{sitesDRS.typeContrat}}</td>
+                    <td> {{sitesDRS.typeSociete}}</td>
+                    <td> {{sitesDRS.raisonSociale}}</td>
+                    <td> {{sitesDRS.adresse1}}</td>
+                    <td> {{sitesDRS.adresse2}}</td>
+                    <td> {{sitesDRS.codePostal}}</td>
+                    <td> {{sitesDRS.dateDebut | date('d/m/Y')}}</td>
+                    <td> {{sitesDRS.dateFin | date('d/m/Y')}}</td>
+                    <td> {{sitesDRS.datePremierContrat | date('d/m/Y')}}</td>
+                    <td> {{sitesDRS.ctrlAcces}}</td>
+                    <td> <a href="{{ path('singleSite', {id: sitesDRS.id})}}">Détails</a></td>
+                    <td> <a href="{{ path('editSites', {id: sitesDRS.id})}}" class="card-link btn btn-danger text-white">Modifier</a></td>
+                    <td> <a href="{{ path('deleteSites', {id: sitesDRS.id})}}" class="card-link btn btn-danger text-white" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
                 </tr>
             {% endfor %}
             {% else %}
@@ -141,6 +142,7 @@
 <div class="text-center text-white mb-4 mt-2">
  <a class="footer" href="{{ path('nouveauSite')}}"><i class="btnadd fas fa-plus-circle color-danger"></i><br/></i></a>
 </div>
+
 {% endif %}
 
 {% if is_granted('ROLE_DS') %}

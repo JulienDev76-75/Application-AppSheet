@@ -14,8 +14,11 @@ class CartesCadeauxFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date', null, [
-                'label' => '(Veuillez mettre le mois correspondant aux chiffres de vente des cartes cadeaux de votre site) Date :',
+            ->add('mois', null, [
+                'label' => '(Veuillez mettre le mois correspondant aux chiffres de vente des cartes cadeaux de votre site) :',
+            ])
+            ->add('annee', null, [
+                'label' => '(Veuillez mettre l\'année correspondante aux chiffres de vente des cartes cadeaux de votre site) :',
             ])
             ->add('nombre_cartes_vendues', NumberType::class,)
             ->add('valorisation_ventes', NumberType::class,)
