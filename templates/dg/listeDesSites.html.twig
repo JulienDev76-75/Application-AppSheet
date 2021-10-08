@@ -82,14 +82,18 @@
 {% if is_granted('ROLE_DR') %}
 <div class="container">
     <div class="col-3">
-        <p>Filter</p>
-        <form id="filters">
-            {% for sitesDRS in sitesDR %}
-                <p><input type="checkbox" name="sites[]" id="sites{{sitesDRS.id}}" value="{{sitesDRS.id}}"> <label for="sites{{sitesDRS.id}}">{{sitesDRS.nomDuSite}}</p>
-            {% endfor %}
-        </form>
+     <select name="cardType" class="graph">
+           {% for siteDRS in sitesDR %}
+           <option value="{{siteDRS.id}}">{{siteDRS.nomDuSite}}</option>
+        {% endfor %}
     </div>
 </div>
+
+<div class="container">
+<canvas id="myChart" width="400" height="400"></canvas>
+</div>
+
+
 <h2 class="text-center mt-5 mb-5 text-danger">Liste des sites</h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
@@ -142,11 +146,55 @@
 <div class="text-center text-white mb-4 mt-2">
  <a class="footer" href="{{ path('nouveauSite')}}"><i class="btnadd fas fa-plus-circle color-danger"></i><br/></i></a>
 </div>
+<script>
+    function showDiv(){
+        getSelectValue = document.getElementById("sites").value;
+        if(getSelectValue == "1"){
+            document.getElementById("myChart").style.display="block";
+        }else{
+            document.getElementById("myChart").style.display="none";
+        }
+    }
 
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
 {% endif %}
 
 {% if is_granted('ROLE_DS') %}
-
 <div class="w-50 mx-auto border border-dark my-5 bg-light border border-danger">
 <p class="text-center">Nom du site :</p><p class="text-danger text-center">{{sitesDS.nomDuSite}}</p>
 <p class="text-center">Ville :</p><p class="text-danger text-center">{{sitesDS.ville}}</p>

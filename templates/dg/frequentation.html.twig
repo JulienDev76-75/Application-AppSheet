@@ -4,9 +4,6 @@
 
 {% block body %}
 {% if is_granted('ROLE_DS') %}
-
- <h1>fullscreenchange event example</h1>
-
 <h2 class="text-center mt-5 mb-5 text-danger"></h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
@@ -49,17 +46,35 @@
 {% endif %}
 
 {% if is_granted('ROLE_DG') %}
-<div class="container mt-5 h-75">
-  <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+<div class="row row-cols-1 row-cols-md-3 row-cols-mlg-3 g-4 my-5 mx-auto">
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
       <div class="card">  
           <div class="card-body">
-            <canvas id="myChartPanier" width="300" height="300"></canvas>
+            <canvas id="myChartFreq" width="300" height="300"></canvas>
           </div>
       </div>
     </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartPanierMoyen" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>   
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartChiffreAffaire" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>       
 </div>
-<div class="container">
+
+<hr class="w-75 mx-auto mt-4 mb-5">
+
+<div class="container mb-5 pb-5 row row-cols-1 row-cols-md-3 row-cols-mlg-3 g-4 ">
     <div class="w-75 mx-auto mt-5">
+        <h3 class="text-center">tableau par site</h3>
     <table class="table table-bordered mb-5 mt-5">
         <thead class="bg-dark text-white">
         <tr>
@@ -82,14 +97,13 @@
         {% for freqDG in freqDGS %}
         {% if sitesDG.id == freqDG.site.id %}
             <tr class="bg-light">
-            <td class="py-3">{{freqDG.mois}}</td>
-            <td>{{freqDG.annee}}</td>
+            <td class="py-3">{{freqDG.mois}} ~ {{freqDG.annee}}</td>
             <td>{{freqDG.activite}}</td>
             <td>{{freqDG.frequentation}}</td>
             <td>{{freqDG.chiffreAffaire}}</td>
             <td>{{freqDG.panierMoyen}}</td>
-            <td><a href="{{ path('editRig', {id: freqDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-            <td><a href="{{ path('deleteRig', {id: freqDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+            <td><a href="{{ path('editRig', {id: freqDG.id}) }}" class="card-link btn btn-danger text-white">Modifier</a></td>
+            <td><a href="{{ path('deleteRig', {id: freqDG.id}) }}" class="card-link btn btn-danger text-white" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
             </tr>
             {% endif %}
         {% endfor %}
@@ -100,17 +114,119 @@
     </tbody> 
     </table>
     </div>
+    <div class="w-75 mx-auto mt-5">
+        <h3 class="text-center">tableau récap tous sites</h3>
+    <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+        <tr>
+            <th scope="col">Mois - Année</th>
+            <th scope="col">Fréquentation</th>
+            <th scope="col">Chiffre d'Affaire</th>
+            <th scope="col">Panier Moyen</th>
+            <th scope="col">Editer</th>
+            <th scope="col">Supprimer</th>
+        </tr>
+        </thead>
+    <tbody>
+        {% if recapDGS is not empty %}
+        {% for recapDG in recapDGS %}
+            <td class="py-3">{{recapDG.moisAnnee}}</td>
+            <td>{{recapDG.freq}}</td>
+            <td>{{recapDG.chiffreAffaire}}</td>
+            <td>{{recapDG.panierMoyen}}</td>
+            <td><a href="{{ path('editRig', {id: recapDG.id}) }}" class="card-link btn btn-danger text-white">Modifier</a></td>
+            <td><a href="{{ path('deleteRig', {id: recapDG.id}) }}" class="card-link btn btn-danger text-white" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+        {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un chiffre d'affaire TOUS SITES.</h2>
+        {% endif %}
+    </tbody> 
+    </table>
+    </div>
 </div>
 
 <script>
-var ctx = document.getElementById('myChartPanier').getContext('2d');
+var ctx = document.getElementById('myChartFreq').getContext('2d');
 var myChart = new Chart(ctx, {
-    type: 'line',
+    type: 'bar',
     data: {
-        labels: {{ mois | raw }},
+        labels: {{ mois_freq_aff | raw }},
         datasets: [{
-            label: 'Satisfaction propreté en %',
-            data:  {{ test | raw }},
+            label: 'Frequence Aff à périmètre constant - TOUS SITES',
+            data:  {{ freq_aff | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var ctx = document.getElementById('myChartPanierMoyen').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ mois_paniermoyen_aff | raw }},
+        datasets: [{
+            label: 'Panier Moyen Aff à périmètre constant - TOUS SITES',
+            data:  {{ panier_moyen_aff | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var ctx = document.getElementById('myChartChiffreAffaire').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ mois_ca_aff | raw }},
+        datasets: [{
+            label: 'Chiffre d\'Affaire Aff à périmètre constant - TOUS SITES',
+            data:  {{ ca_aff | raw }},
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -141,7 +257,6 @@ var myChart = new Chart(ctx, {
 </script>
 {% endif %}
 {% endblock %}
-
 
 {% block javascripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

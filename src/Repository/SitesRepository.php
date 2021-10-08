@@ -43,15 +43,5 @@ class SitesRepository extends ServiceEntityRepository
         ->getResult()
         ;
     }
-    /*
-    public function findOneBySomeField($value): ?Sites
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+
 }

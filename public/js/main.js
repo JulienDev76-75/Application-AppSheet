@@ -34,3 +34,16 @@ function closeFullscreen() {
     document.msExitFullscreen();
   }
 }
+
+/* Menu select function */
+
+function showDiv(){
+  getSelectValue = document.getElementById("test").value;
+  if(getSelectValue == "1"){
+      document.getElementById("hidden_div").style.display="block";
+  }else{
+      document.getElementById("hidden_div").style.display="none";
+  }
+}
+
+

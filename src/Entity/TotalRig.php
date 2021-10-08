@@ -18,11 +18,6 @@ class TotalRig
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $annee;
-
-    /**
      * @ORM\Column(type="float")
      */
     private $panier_moyen;
@@ -30,7 +25,7 @@ class TotalRig
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $mois;
+    private $mois_annee;
 
     /**
      * @ORM\Column(type="float")
@@ -47,18 +42,6 @@ class TotalRig
         return $this->id;
     }
 
-    public function getAnnee(): ?int
-    {
-        return $this->annee;
-    }
-
-    public function setAnnee(int $annee): self
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
     public function getPanierMoyen(): ?float
     {
         return $this->panier_moyen;
@@ -71,14 +54,14 @@ class TotalRig
         return $this;
     }
 
-    public function getMois(): ?string
+    public function getMoisAnnee(): ?string
     {
-        return $this->mois;
+        return $this->mois_annee;
     }
 
-    public function setMois(string $mois): self
+    public function setMoisAnnee(string $mois_annee): self
     {
-        $this->mois = $mois;
+        $this->mois = $mois_annee;
 
         return $this;
     }

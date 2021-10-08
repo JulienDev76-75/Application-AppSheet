@@ -28,10 +28,12 @@ use App\Form\SwotType;
 use App\Repository\SwotRepository;
 use App\Entity\CartesCadeaux;
 use App\Entity\TotalCoutCom;
+use App\Entity\TotalPassTousSites;
 use App\Form\CartesCadeauxFormType;
 use App\Repository\CartesCadeauxRepository;
 use App\Form\SearchSwotType;
 use App\Repository\TotalCoutComRepository;
+use App\Repository\TotalPassTousSitesRepository;
 use App\Repository\TotalRepository;
 use App\Repository\TotalRigRepository;
 
@@ -103,9 +105,6 @@ class FrontController extends AbstractController
     {
         // Données DS
         $trimestre = [];
-        $siteduDS = $siteRepo -> findOneBy (
-            ['user' => $this->getUser()],
-        );
     
         // Données DR
         $satisDR = $satisfactionRepo->findBy(
@@ -327,7 +326,6 @@ class FrontController extends AbstractController
     public function planCommunication(TotalCoutComRepository $totalcoutcom, PlanCommunicationRepository $plancomRepo, SitesRepository $sitesRepo, UserRepository $userRepo): Response
     {
         //ROLE_DS
-        $plancomRepo = $this->getDoctrine()->getRepository(PlanCommunication::class);
         $planCom= $plancomRepo ->findby(
             ['user' => $this->getUser()],
             ['annee' => 'ASC'],
@@ -335,7 +333,6 @@ class FrontController extends AbstractController
         );  
 
         //ROLE_DR
-        $plancomRepo = $this->getDoctrine()->getRepository(PlanCommunication::class);
         $planCom= $plancomRepo ->findby(
             ['user' => $this->getUser()],
             ['annee' => 'ASC'],
@@ -448,9 +445,8 @@ class FrontController extends AbstractController
     /**
      * @Route("/DGdashboard/pass", name="pass")
      */
-    public function pass(PassRepository $passRepo, UserRepository $userRepo, SitesRepository $sitesRepo): Response
+    public function pass(PassRepository $passRepo, UserRepository $userRepo, SitesRepository $sitesRepo, TotalPassTousSitesRepository $totalpassRepo): Response
     {
-        $passRepo = $this->getDoctrine()->getRepository(Pass::class);
         $pass = $passRepo ->findby(
             ['site' => $this->getUser()],
             ['site' => 'ASC'],
@@ -460,14 +456,43 @@ class FrontController extends AbstractController
 
         //ROLE_DG
         $userDGS = $userRepo ->findAll();
-        $sitesDGS = $sitesRepo ->userAndSites();
-        $passDGS = $passRepo ->sitesAndPass();
+        $sitesDGS = $sitesRepo->userAndSites();
+        $passDGS = $passRepo->sitesAndPass();
+        $total_abo_DGS = $totalpassRepo->findAll();
+        $total_desabo_DGS = $totalpassRepo->findAll();
+        $total_inst_DGS = $totalpassRepo->findAll();
+        $total_taux_desabo_DGS = $totalpassRepo->findAll();
+
+        foreach($total_abo_DGS as $total_abo_DG) {
+            $periode_abo[] = $total_abo_DG ->getPeriode();
+            $abo_DGS[] = $total_abo_DG -> getTotalAbo();
+            } 
+        foreach($total_desabo_DGS as $total_desabo_DG) {
+            $periode_desabo[] = $total_desabo_DG ->getPeriode();
+            $desabo_DGS[] = $total_desabo_DG -> getTotalDesabo();
+            }  
+        foreach($total_inst_DGS as $total_inst_DG) {
+            $periode_inst[] = $total_inst_DG ->getPeriode();
+            $inst_DGS[] = $total_inst_DG -> getTotalInst();
+            }  
+        foreach($total_taux_desabo_DGS as $total_taux_desabo_DG) {
+            $periode_taux_desabo[] = $total_taux_desabo_DG ->getPeriode();
+            $tauxdesabo_DGS[] = $total_taux_desabo_DG -> getTauxDesabo();
+            }         
 
     return $this->render('dg/pass.html.twig', [
         'pass' => $pass,
         'userDGS' => $userDGS,
         'sitesDGS' => $sitesDGS,
         'passDGS' => $passDGS,
+        'periode_abo' => json_encode($periode_abo),
+        'periode_desabo' => json_encode($periode_desabo),
+        'periode_inst' => json_encode($periode_inst),
+        'periode_taux_desabo' => json_encode($periode_taux_desabo),
+        'abo_DGS' => json_encode($abo_DGS),
+        'desabo_DGS' => json_encode($desabo_DGS),
+        'inst_DGS' => json_encode($inst_DGS),
+        'tauxdesabo_DGS' => json_encode($tauxdesabo_DGS)    
     ]);
     }
 
@@ -477,7 +502,6 @@ class FrontController extends AbstractController
     public function freq(RigRepository $rigRepo, SitesRepository $sitesRepo, TotalRigRepository $totalrepo): Response
     {
         //ROLE_DS
-        $rigRepo = $this->getDoctrine()->getRepository(Rig::class);
         $rig = $rigRepo ->findby(
             ['user' => $this->getUser()],
             ['mois' => 'ASC'],
@@ -489,21 +513,35 @@ class FrontController extends AbstractController
         //ROLE_DG
         $freqDGS = $rigRepo ->sitesAndRig();
         $sitesDGS = $sitesRepo ->findAll();
-        //$test = $totalrepo->panierMoyenTotal();
-        $paniersmoyens = $totalrepo->findAll();
+        $recapDGS = $totalrepo -> findAll();
+        $freq_mois_anneeDGS = $totalrepo ->findAll();
+        $paniermoyen_mois_anneeDGS = $totalrepo -> findAll();
+        $ca_mois_anneeDGS = $totalrepo ->findAll();
 
-        foreach($paniersmoyens as $paniermoyen) {
-            $mois[]= $paniermoyen ->getMois();
-            $test[] = $paniermoyen ->getPanierMoyen();
+        foreach($freq_mois_anneeDGS as $freqDG) {
+            $mois_freq_aff[] = $freqDG->getMoisAnnee();
+            $freq_aff[] = $freqDG ->getChiffreAffaire();
+        }
+        foreach($paniermoyen_mois_anneeDGS as $paniermoyenDG) {
+            $mois_paniermoyen_aff[] = $paniermoyenDG->getMoisAnnee();
+            $panier_moyen_aff[] = $paniermoyenDG ->getPanierMoyen();
+        }
+        foreach($ca_mois_anneeDGS as $caDG) {
+            $mois_ca_aff[] = $caDG->getMoisAnnee();
+            $ca_aff[] = $caDG ->getChiffreAffaire();
         }
 
     return $this->render('dg/frequentation.html.twig', [
         'rig' => $rig,
         'freqDGS' => $freqDGS,
+        'recapDGS' => $recapDGS,
         'sitesDGS' => $sitesDGS,
-        'paniersmoyens' => $paniersmoyens,
-        'test' => json_encode($test),
-        'mois' => json_encode($mois),
+        'mois_freq_aff' => json_encode($mois_freq_aff),
+        'freq_aff' => json_encode($freq_aff),
+        'mois_paniermoyen_aff' => json_encode($mois_paniermoyen_aff),
+        'panier_moyen_aff' => json_encode($panier_moyen_aff),
+        'mois_ca_aff' => json_encode($mois_ca_aff),
+        'ca_aff' => json_encode($ca_aff),
     ]);
     }
 

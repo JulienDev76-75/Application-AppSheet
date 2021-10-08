@@ -84,6 +84,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $totals;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="user")
+     */
+    private $passes;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -92,6 +97,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->satisfactions = new ArrayCollection();
         $this->rigs = new ArrayCollection();
         $this->totals = new ArrayCollection();
+        $this->passes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -393,6 +399,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($total->getUser() === $this) {
                 $total->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Pass[]
+     */
+    public function getPasses(): Collection
+    {
+        return $this->passes;
+    }
+
+    public function addPass(Pass $pass): self
+    {
+        if (!$this->passes->contains($pass)) {
+            $this->passes[] = $pass;
+            $pass->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePass(Pass $pass): self
+    {
+        if ($this->passes->removeElement($pass)) {
+            // set the owning side to null (unless already changed)
+            if ($pass->getUser() === $this) {
+                $pass->setUser(null);
             }
         }
 

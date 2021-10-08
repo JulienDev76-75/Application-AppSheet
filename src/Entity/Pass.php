@@ -669,14 +669,15 @@ class Pass
     private $site;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $annee;
-
-    /**
      * @ORM\Column(type="float", nullable=true)
      */
     private $tx_desabo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="passes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -2243,18 +2244,6 @@ class Pass
         return $this;
     }
 
-    public function getAnnee(): ?int
-    {
-        return $this->annee;
-    }
-
-    public function setAnnee(int $annee): self
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
     public function getTxDesabo(): ?float
     {
         return $this->tx_desabo;
@@ -2263,6 +2252,18 @@ class Pass
     public function setTxDesabo(?float $tx_desabo): self
     {
         $this->tx_desabo = $tx_desabo;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
