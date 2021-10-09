@@ -46,7 +46,7 @@ class CartesCadeaux
 
     /**
      * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="cartesCadeaux")
-     * @ORM\JoinColumn(nullable=false)  
+     * @ORM\JoinColumn(nullable=false) 
      */
     private $site;
 
@@ -64,6 +64,7 @@ class CartesCadeaux
      * @ORM\Column(type="string", length=255)
      */
     private $mois;
+
 
     public function getId(): ?int
     {
@@ -177,5 +178,4 @@ class CartesCadeaux
 
         return $this;
     }
-
 }

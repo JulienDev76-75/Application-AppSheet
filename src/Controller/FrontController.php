@@ -37,7 +37,6 @@ use App\Repository\TotalPassTousSitesRepository;
 use App\Repository\TotalRepository;
 use App\Repository\TotalRigRepository;
 
-
 class FrontController extends AbstractController
 {
 
@@ -97,7 +96,7 @@ class FrontController extends AbstractController
         'plancomDG' => $plancomDG,
     ]);
     }
-
+  
     /**
      * @Route("/DGdashboard/satisfaction", name="satisfaction")
      */
@@ -150,7 +149,6 @@ class FrontController extends AbstractController
             $horaireDG[] = $horaire ->getSatisProprete();
             }
             
-
     return $this->render('dg/satisfaction.html.twig', [
         'satisDR' => $satisDR,
         'sitesDR' => $sitesDR,
@@ -172,8 +170,9 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/DGdashboard/carteCadeau", name="carteCadeau")
+     * @Route("/DGdashboard/site/{id}/carteCadeau", name="carteCadeau")
      */
+  
     public function carteCadeau(CartesCadeauxRepository $cartesRepo, SitesRepository $siteRepo): Response
     {
         // ************************* DS VIEW *******************************
@@ -316,7 +315,7 @@ class FrontController extends AbstractController
         'sitesDRS' => $siteDRS,
         'cartescadeauxDRS' => $cartescadeauxDRS,
         'moisDR' => json_encode($moisDR),
-        'cartesSoldeDR' => json_encode($cartesSoldeDR),
+        'cartesSoldeDR' => json_encode($cartesSoldeDR)
     ]);
     }
 
@@ -807,7 +806,6 @@ class FrontController extends AbstractController
     {
         $rig = new Rig();
         $form = $this->createForm(RigFormType::class, $rig);
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sites = $sitesRepo->find($id);
@@ -1048,7 +1046,6 @@ class FrontController extends AbstractController
  
         return $this->redirectToRoute('listeDesSites');
      }
-
 }
 
 

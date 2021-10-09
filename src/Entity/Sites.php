@@ -121,7 +121,6 @@ class Sites
      */
     private $totals;
 
-
     public function __construct()
     {
         $this->cartesCadeauxes = new ArrayCollection();
@@ -324,7 +323,7 @@ class Sites
 
         return $this;
     }
-    
+
     public function __toString() {
         return $this->getNomDuSite();
     }
@@ -478,5 +477,4 @@ class Sites
 
         return $this;
     }
-
 }
