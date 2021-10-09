@@ -1,8 +1,99 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ROLE = DG{% endblock %}
+{% block title %}Présensation des ou du site{% endblock %}
+
+      {% block stylesheets %}
+             <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+             {% endblock %}
 
 {% block body %}
+
+{% if is_granted('ROLE_DG') %}
+<div class="container">
+    <div class="col-3">
+        <p>Filtrer</p>
+        <form id="filters">
+            {% for siteDGS in sitesDG %}
+                <p><input type="checkbox" name="sites[]" id="sites{{siteDGS.id}}" value="{{siteDGS.id}}"> <label for="sites{{siteDGS.id}}">{{siteDGS.nomDuSite}}</p>
+            {% endfor %}
+        </form>
+    </div>
+</div>
+
+<h2 class="text-center mt-5 mb-5 text-danger" >Liste des sites</h2>
+<div class="w-75 mx-auto">
+    <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th scope="col">Nom du complexe</th>
+                <th scope="col">Ville</th>
+                <th scope="col">Type de contrat</th>
+                <th scope="col">Type de société</th>
+                <th scope="col">Raison sociale</th>
+                <th scope="col">Adresse 1</th>
+                <th scope="col">Adresse 2</th>
+                <th scope="col">Code Postal</th>
+                <th scope="col">Date de début</th>
+                <th scope="col">Date de fin</th>
+                <th scope="col">Date de premier contrat</th>
+                <th scope="col">Ctrl Accès</th>
+                <th scope="col">Détail du site</th>
+                <th scope="col">Modifier</th>
+                <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for userDGS in userDG %}
+            <tr class="bg-light">
+            <td> {{userDGS.prenomNom}}</td>
+            </tr>
+            {% for siteDGS in sitesDG %}
+        {% if userDGS.id == siteDGS.user.id %}
+            <tr class="bg-light">
+                <td> {{siteDGS.nomDuSite}}</td>
+                <td> {{siteDGS.ville}}</td>
+                <td> {{siteDGS.typeContrat}}</td>
+                <td> {{siteDGS.typeSociete}}</td>
+                <td> {{siteDGS.raisonSociale}}</td>
+                <td> {{siteDGS.adresse1}}</td>
+                <td> {{siteDGS.adresse2}}</td>
+                <td> {{siteDGS.codePostal}}</td>
+                <td> {{siteDGS.dateDebut | date('d/m/Y')}}</td>
+                <td> {{siteDGS.dateFin | date('d/m/Y')}}</td>
+                <td> {{siteDGS.datePremierContrat | date('d/m/Y')}}</td>
+                <td> {{siteDGS.ctrlAcces}}</td>
+                <td> <a href="{{ path('singleSite', {id: siteDGS.id})}}">Détails</a></td>
+                <td> <a href="{{ path('editSites', {id: siteDGS.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                <td> <a href="{{ path('deleteSites', {id: siteDGS.id}) }}" class="card-link btn btn-danger text-white my-5">Supprimer</a></td>
+            </tr>
+        {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center text-white mb-4 mt-2">
+ <a href="{{ path('nouveauSite')}}"><i class="btnadd fas fa-plus-circle color-danger"></i><br/></i></a>
+</div>
+</div>
+{% endif %}
+
+{% if is_granted('ROLE_DR') %}
+<div class="container">
+    <div class="col-3">
+     <select name="cardType" class="graph">
+           {% for siteDRS in sitesDR %}
+           <option value="{{siteDRS.id}}">{{siteDRS.nomDuSite}}</option>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container">
+<canvas id="myChart" width="400" height="400"></canvas>
+</div>
+
+
 <h2 class="text-center mt-5 mb-5 text-danger">Liste des sites</h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
@@ -20,24 +111,30 @@
                 <th scope="col">Date de fin</th>
                 <th scope="col">Date de premier contrat</th>
                 <th scope="col">Ctrl Accès</th>
+                <th scope="col">Détail du site</th>
+                <th scope="col">Modifier le site</th>
+                <th scope="col">Supprimer le site</th>
             </tr>
         </thead>
         <tbody>
-        {% if sites is not empty %}
-            {% for site in sites %}
+        {% if sitesDR is not empty %}
+            {% for sitesDRS in sitesDR %}
                 <tr class="bg-light">
-                    <td> {{site.nomDuSite}}</td>
-                    <td> {{site.ville}}</td>
-                    <td> {{site.typeContrat}}</td>
-                    <td> {{site.typeSociete}}</td>
-                    <td> {{site.raisonSociale}}</td>
-                    <td> {{site.adresse1}}</td>
-                    <td> {{site.adresse2}}</td>
-                    <td> {{site.codePostal}}</td>
-                    <td> {{site.dateDebut | date('d/m/Y')}}</td>
-                    <td> {{site.dateFin | date('d/m/Y')}}</td>
-                    <td> {{site.datePremierContrat | date('d/m/Y')}}</td>
-                    <td> {{site.ctrlAcces}}</td>
+                    <td> {{sitesDRS.nomDuSite}}</td>
+                    <td> {{sitesDRS.ville}}</td>
+                    <td> {{sitesDRS.typeContrat}}</td>
+                    <td> {{sitesDRS.typeSociete}}</td>
+                    <td> {{sitesDRS.raisonSociale}}</td>
+                    <td> {{sitesDRS.adresse1}}</td>
+                    <td> {{sitesDRS.adresse2}}</td>
+                    <td> {{sitesDRS.codePostal}}</td>
+                    <td> {{sitesDRS.dateDebut | date('d/m/Y')}}</td>
+                    <td> {{sitesDRS.dateFin | date('d/m/Y')}}</td>
+                    <td> {{sitesDRS.datePremierContrat | date('d/m/Y')}}</td>
+                    <td> {{sitesDRS.ctrlAcces}}</td>
+                    <td> <a href="{{ path('singleSite', {id: sitesDRS.id})}}">Détails</a></td>
+                    <td> <a href="{{ path('editSites', {id: sitesDRS.id})}}" class="card-link btn btn-danger text-white">Modifier</a></td>
+                    <td> <a href="{{ path('deleteSites', {id: sitesDRS.id})}}" class="card-link btn btn-danger text-white" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
                 </tr>
             {% endfor %}
             {% else %}
@@ -46,8 +143,73 @@
         </tbody>
     </table>
 </div>
-
 <div class="text-center text-white mb-4 mt-2">
- <a class="footer" href="{{ path('nouveauSite')}}"><i class="fas fa-plus-circle color-danger"></i><br/></i></a>
+ <a class="footer" href="{{ path('nouveauSite')}}"><i class="btnadd fas fa-plus-circle color-danger"></i><br/></i></a>
 </div>
+<script>
+    function showDiv(){
+        getSelectValue = document.getElementById("sites").value;
+        if(getSelectValue == "1"){
+            document.getElementById("myChart").style.display="block";
+        }else{
+            document.getElementById("myChart").style.display="none";
+        }
+    }
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endif %}
+
+{% if is_granted('ROLE_DS') %}
+<div class="w-50 mx-auto border border-dark my-5 bg-light border border-danger">
+<p class="text-center">Nom du site :</p><p class="text-danger text-center">{{sitesDS.nomDuSite}}</p>
+<p class="text-center">Ville :</p><p class="text-danger text-center">{{sitesDS.ville}}</p>
+<p class="text-center">Type de contrat :</p><p class="text-danger text-center"> {{sitesDS.typeContrat}}</p>
+<p class="text-center">Type de société :</p><p class="text-danger text-center"> {{sitesDS.typeSociete}}</p>
+<p class="text-center">Raison sociale :</p><p class="text-danger text-center"> {{sitesDS.raisonSociale}}</p>
+<p class="text-center">Adresse :</p><p class="text-danger text-center"> {{sitesDS.adresse1}}</p>
+<p class="text-center">Code postal :</p><p class="text-danger text-center"> {{sitesDS.codePostal}}</p>
+<p class="text-center">Date de début :</p><p class="text-danger text-center"> {{sitesDS.dateDebut | date('d/m/Y')}}</p>
+<p class="text-center">Date de fin :</p><p class="text-danger text-center"> {{sitesDS.dateFin | date('d/m/Y')}}</p>
+<p class="text-center">Date de premier contrat :</p> <p class="text-danger text-center">{{sitesDS.datePremierContrat | date('d/m/Y')}}</p>
+<p class="text-center">Accès :</p><p class="text-danger text-center"> {{sitesDS.ctrlAcces}}</p>
+</div>
+
+{% endif %}
 {% endblock %}
+
+

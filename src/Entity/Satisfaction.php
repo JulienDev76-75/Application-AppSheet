@@ -4,28 +4,20 @@ namespace App\Entity;
 
 use App\Repository\SatisfactionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SatisfactionRepository::class)
  */
 class Satisfaction
 {
+    const Trimestre = ["T1", "T2", "T3", "T4"];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $site;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $trimestre;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -57,33 +49,26 @@ class Satisfaction
      */
     private $repondant;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="satisfactions")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="satisfactions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $site;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Satisfaction::Trimestre, message="Veuillez choisir entre ces 4 trimestres.")
+     */
+    private $trimestre;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSite(): ?string
-    {
-        return $this->site;
-    }
-
-    public function setSite(string $site): self
-    {
-        $this->site = $site;
-
-        return $this;
-    }
-
-    public function getTrimestre(): ?string
-    {
-        return $this->trimestre;
-    }
-
-    public function setTrimestre(string $trimestre): self
-    {
-        $this->trimestre = $trimestre;
-
-        return $this;
     }
 
     public function getSatisGlobale(): ?float
@@ -157,4 +142,41 @@ class Satisfaction
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getSite(): ?Sites
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Sites $site): self
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    public function getTrimestre(): ?string
+    {
+        return $this->trimestre;
+    }
+
+    public function setTrimestre(string $trimestre): self
+    {
+        $this->trimestre = $trimestre;
+
+        return $this;
+    }
+
 }

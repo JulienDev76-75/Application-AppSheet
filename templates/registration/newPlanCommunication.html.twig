@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+{% block body %}
+    <div class="container my-5 bg-light border border-danger p-5">
+        <h2 class="mb-2 mt-5 text-center text-dark">Enregistrez nouveau plan de com' :</h2>
+            <div>
+                <div class="row">
+                {{include('messages.html.twig')}}
+                {{ form(form) }}
+                </div>
+        </div>
+    </div>
+{% endblock %}

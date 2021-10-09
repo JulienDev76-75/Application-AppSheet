@@ -25,7 +25,17 @@ DG A DEF DANS LES ROLE
 ROLE HIERARCHY A ANNULER #}
 
 
-{% block title %}ROLE = DG{% endblock %}
+{% block title %}Cartes Cadeaux{% endblock %}
+
+{% block stylesheets %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+input, textarea, select {
+  display : block;
+  width : 75%;
+}
+</style>
+{% endblock %}
 
 {% block body %}
 {% if is_granted('ROLE_ADMIN') %}
@@ -124,9 +134,455 @@ var myChart = new Chart(ctx, {
     }
 });
 </script>
-
 {% endblock %}
+
+{################# DS CHARTS ####################}
+{% if is_granted('ROLE_DS') %}
+<h2 class="text-center mb-2 mt-5 text-dark">Voici les détails de votre site</h2>
+<div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartCartesVendues" width="10" height="10"></canvas>
+            </div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartCartesUtilisees" width="10" height="10"></canvas>
+            </div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartCartesValoVente" width="10" height="10"></canvas>
+            </div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartCartesValoUtilisation" width="10" height="10"></canvas>
+            </div>
+          </div>
+      </div>
+      <div class="col">
+          <div class="card">
+            <div class="card-body">
+                <canvas id="myChartCartesSolde" width="10" height="10"></canvas>
+            </div>
+          </div>
+      </div>
+</div>
+{% endif %} 
+
+{# Cartes vendues #}
+<script>
+var ctx = document.getElementById('myChartCartesVendues').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Nombre de cartes vendues / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ cartesvendues2017|raw }},
+    }, {
+      type: 'bar',
+      label: 'Nombre de cartes vendues / mois 2020',
+      backgroundColor:  'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ cartesvendues2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Nombre de cartes vendues / mois 2021',
+      backgroundColor:   'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ cartesvendues2021|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+{# Cartes utilisées #}
+<script>
+var ctx = document.getElementById('myChartCartesUtilisees').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Nombre de cartes utilisées / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ cartesutilisees2017|raw }},
+    }, {
+      type: 'bar',
+      label: 'Nombre de cartes utilisées / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ cartesutilisees2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Nombre de cartes utilisées / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ cartesutilisees2021|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+{# valorisation ventes #}
+<script>
+var ctx = document.getElementById('myChartCartesValoVente').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Valorisation des ventes / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ cartesvalovente2017|raw }},
+    }, {
+      type: 'bar',
+      label: 'Valorisation des ventes / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ cartesvalovente2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Valorisation des ventes / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ cartesvalovente2021|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+{# valorisation utilisation#}
+<script>
+var ctx = document.getElementById('myChartCartesValoUtilisation').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ cartesvaloutilisation2017|raw }},
+    }, {
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ cartesvaloutilisation2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ cartesvaloutilisation2021|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+
+{# Solde #}
+<script>
+var ctx = document.getElementById('myChartCartesSolde').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Solde total / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ cartessolde2017|raw }},
+    }, {
+      type: 'bar',
+      label: 'Solde total / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ cartessolde2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Solde total / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ cartessolde2021|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+
+{################# DR CHARTS ####################}
+{% if is_granted('ROLE_DR') %}
+<div class="w-75 mx-auto">
+  <table class="table table-bordered mb-5 mt-5">
+    <thead class="bg-dark text-white">
+      <tr>
+        <th scope="col">Mois</th>
+        <th scope="col">Année</th>
+        <th scope="col">Nombre de cartes vendues</th>
+        <th scope="col">Valorisation des ventes de cartes cadeaux</th>
+        <th scope="col">Nombre de cartes utilisées</th>
+        <th scope="col">Valorisation des utilisations de cartes cadeaux</th>
+        <th scope="col">Solde</th>
+        <th scope="col">Editer</th>
+        <th scope="col">Supprimer</th>
+      </tr>
+    </thead>
+  <tbody>
+    {% if sitesDRS is not empty %}
+        {% for siteDR in sitesDRS %}
+        <tr class="bg-light">
+          <td> {{siteDR.nomDuSite}}</td>
+        </tr>
+         {% for cartescadeauxDR in cartescadeauxDRS %}
+            {% if siteDR.id == cartescadeauxDR.site.id %}
+        <tr class="bg-light">
+          <td class="py-3">{{cartescadeauxDR.mois}}</td>
+          <td>{{cartescadeauxDR.annee}}</td>
+          <td>{{cartescadeauxDR.nombreCartesVendues}}</td>
+          <td>{{cartescadeauxDR.valorisationVentes}}</td>
+          <td>{{cartescadeauxDR.nombreCarteUtilisees}}</td>
+          <td>{{cartescadeauxDR.valorisationUtilisation}}</td>
+          <td>{{cartescadeauxDR.solde}}</td>
+          <td><a href="{{ path('editCartesCadeaux', {id: cartescadeauxDR.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+          <td><a href="{{ path('deleteCarteCadeau', {id: cartescadeauxDR.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+        </tr>
+            {% endif %}
+    {% endfor %}
+    {% endfor %}
+    {% else %}
+        <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter une carte cadeau à votre SITE, pour cela aller sur l'onglet site, cliquez sur le "détail" du site correspondant et ajoutez votre carte cadeau !.</h2>
+    {% endif %}
+  </tbody> 
+  </table>
+</div> 
+{% endif %} 
+
+<hr class="w-75 mx-auto">
+
+<div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartNbreCartesVendues" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">
+          <div class="card-body">
+            <canvas id="myChartValorisationVente" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+       <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartNbreCartesUtilisees" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">
+          <div class="card-body">
+            <canvas id="myChartValorisationUtilisation" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col mb-5" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">
+          <div class="card-body">
+            <canvas id="myChartSolde" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+</div>
+
+{# Solde #}
+<script>
+var ctx = document.getElementById('myChartSolde').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ moisDR | raw }},
+        datasets: [{
+            label: 'carte cadeaux solde',
+            data:  {{ cartesSoldeDR | raw }},
+            backgroundColor: [
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+
+{################# DG CHARTS ####################}
+{% if is_granted('ROLE_DG') %}
+<div class="w-75 mx-auto">
+  <table class="table table-bordered mb-5 mt-5">
+    <thead class="bg-dark text-white">
+      <tr>
+        <th scope="col">Mois</th>
+        <th scope="col">Année</th>
+        <th scope="col">Nombre de cartes vendues</th>
+        <th scope="col">Valorisation des ventes de cartes cadeaux</th>
+        <th scope="col">Nombre de cartes utilisées</th>
+        <th scope="col">Valorisation des utilisations de cartes cadeaux</th>
+        <th scope="col">Solde</th>
+        <th scope="col">Editer</th>
+        <th scope="col">Supprimer</th>
+      </tr>
+    </thead>
+  <tbody>
+    {% if sitesDGS is not empty %}
+    {% for sitesDG in sitesDGS %}
+        <tr class="bg-light">
+          <td> {{sitesDG.nomDuSite}}</td>
+        </tr>
+    {% for cartesDG in cartesDGS %}
+       {% if sitesDG.id == cartesDG.site.id %}
+        <tr class="bg-light">
+          <td class="py-3">{{cartesDG.mois}}</td>
+          <td>{{cartesDG.annee}}</td>
+          <td>{{cartesDG.nombreCartesVendues}}</td>
+          <td>{{cartesDG.valorisationVentes}}</td>
+          <td>{{cartesDG.nombreCarteUtilisees}}</td>
+          <td>{{cartesDG.valorisationUtilisation}}</td>
+          <td>{{cartesDG.solde}}</td>
+          <td><a href="{{ path('editCartesCadeaux', {id: cartesDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+          <td><a href="{{ path('deleteCarteCadeau', {id: cartesDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+        </tr>
+          {% endif %}
+    {% endfor %}
+    {% endfor %}
+    {% else %}
+        <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un site avec la stratégie SWOT.</h2>
+    {% endif %}
+  </tbody> 
+  </table>
+</div>
+{% endif %} 
+
 
 {% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"> </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {% endblock %}
+{% endblock %}
+

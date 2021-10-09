@@ -1,22 +1,18 @@
-<footer>
-<div class="text-center py-5 text-white bg-dark mt-5 mb-0">
+<footer class="text-center py-5 pt-2 text-white bg-dark">
+<div>
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <a class="footer text-white" href="{{ path('DGdashboard') }}"><i class="fas fa-house-user"><br/></i></a>
-        <a class="footer text-white" href="{{ path('listeDesSites') }}"><i class="fas fa-swimming-pool ms-4"><br/></i></a>
-        <a class="footer text-white" href="{{ path('pass') }}"><i class="far fa-id-card ms-4"><br/></i></a>
-        <a class="footer text-white" href="{{ path('frequentation') }}"><i class="fas fa-chart-line ms-4"><br/></i></a>
-        <a class="footer text-white " href="{{ path('pass') }}"><i class="fas fa-file-export ms-4"><br/></i></a>
-    {% endif %} 
-
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <br/>
-        <br/>
-        <br/>
-        <a class="footer text-white mt-3" href="{{ path('app_logout') }}"><i class="fas fa-times-circle"></i></a>
+        <div class="container">
+            <a class="footer text-white" href="{{ path('DGdashboard') }}"><i class="fas fa-house-user"><p class="pfas">Home</p></i></a>
+            <a class="footer text-white" href="{{ path('listeDesSites') }}"><i class="fas fa-swimming-pool ms-4"><p class="pfas">Site</p></i></a>
+            <a class="footer text-white" href="{{ path('pass') }}"><i class="far fa-id-card ms-4"><p class="pfar">Pass</p></i></a>
+            <a class="footer text-white" href="{{ path('frequentation') }}"><i class="fas fa-chart-line ms-4"><p class="pfas">C.A</p></i></a>
+            <a class="footer text-white" href="{{ path('pass') }}"><i class="fas fa-file-export ms-4"><p class="pfas">Export</p></i></a>
+            <a class="footer text-white ms-5" href="{{ path('app_logout') }}"><i class="fas fa-times-circle"><p class="pfas">Log-Out</p></i></a>
+        </div>
     {% else %}
         <div>
-            <a class="footer text-white" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i></a>
-            <a class="footer text-white ms-5" href="{{ path('app_register') }}"><i class="fas fa-book-reader"></i></a>
+            <a class="footer text-white" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"><p class="pfas">Se Connecter</p></i></a>
+            <a class="footer text-white ms-5" href="{{ path('app_register') }}"><i class="fas fa-book-reader"><p class="pfas">S'inscrire</p></i></a>
         </div>
     {% endif %} 
 </div>

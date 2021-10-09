@@ -4,12 +4,15 @@ namespace App\Entity;
 
 use App\Repository\RigRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=RigRepository::class)
  */
 class Rig
 {
+
+    const Mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+    const Activite = ["PISC", "PAT", "TL"];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -19,64 +22,49 @@ class Rig
 
     /**
      * @ORM\Column(type="string", length=255)
-     */
-    private $ville;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Rig::Activite, message="Veuillez choisir entre ces 3 activités.")
      */
     private $activite;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $type_societe;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $type_contrat;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Choice(choices=Rig::Mois, message="Veuillez choisir un mois valide et en minuscule, par exemple : 'janvier'.")
      */
-    private $periode;
+    private $mois;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $date;
-
-    /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=false)
      */
     private $chiffre_affaire;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=false)
      */
     private $frequentation;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\Column(type="float", nullable=false)
      */
     private $panier_moyen;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="rigs")
+     */
+    private $site;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="rigs")
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $annee;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getVille(): ?string
-    {
-        return $this->ville;
-    }
-
-    public function setVille(string $ville): self
-    {
-        $this->ville = $ville;
-
-        return $this;
     }
 
     public function getActivite(): ?string
@@ -91,50 +79,14 @@ class Rig
         return $this;
     }
 
-    public function getTypeSociete(): ?string
+    public function getMois(): ?string
     {
-        return $this->type_societe;
+        return $this->mois;
     }
 
-    public function setTypeSociete(string $type_societe): self
+    public function setMois(?string $mois): self
     {
-        $this->type_societe = $type_societe;
-
-        return $this;
-    }
-
-    public function getTypeContrat(): ?string
-    {
-        return $this->type_contrat;
-    }
-
-    public function setTypeContrat(string $type_contrat): self
-    {
-        $this->type_contrat = $type_contrat;
-
-        return $this;
-    }
-
-    public function getPeriode(): ?string
-    {
-        return $this->periode;
-    }
-
-    public function setPeriode(?string $periode): self
-    {
-        $this->periode = $periode;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(?\DateTimeInterface $date): self
-    {
-        $this->date = $date;
+        $this->mois = $mois;
 
         return $this;
     }
@@ -171,6 +123,42 @@ class Rig
     public function setPanierMoyen(?float $panier_moyen): self
     {
         $this->panier_moyen = $panier_moyen;
+
+        return $this;
+    }
+
+    public function getSite(): ?Sites
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Sites $site): self
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
 
         return $this;
     }

@@ -1,8 +1,207 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ROLE = DG{% endblock %}
+{% block title %}Cout de communication{% endblock %}
 
 {% block body %}
 
-<p>je suis la page cout dfe communication</p>
+{% if is_granted('ROLE_DG') %}
+<div class="container">
+    <div class="container">
+    <div class="w-75 mx-auto">
+        <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+            <th scope="col">Mois - Année</th>
+            <th scope="col">Type d'opération</th>
+            <th scope="col">Cible</th>
+            <th scope="col">Objectif</th>
+            <th scope="col">Offre</th>
+            <th scope="col">Cout de communication interne</th>
+            <th scope="col">Cout de communication externe</th>
+            <th scope="col">Frais d'organisation</th>
+            <th scope="col">Participation des partenaires</th>
+            <th scope="col">Chiffre d'Affaire</th>
+            <th scope="col">ROI</th>
+            <th scope="col">Pass</th>
+            <th scope="col">Editer</th>
+            <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if userDGS is not empty %}
+        {% for userDG in userDGS %}
+            <tr class="text-white bg-dark">
+                <td> {{userDG.prenomNom}}</td>
+            </tr>
+            {% for sitesDG in sitesDGS %}
+                {% if userDG.id == sitesDG.user.id %}
+                <tr class="bg-light">
+                <td> {{sitesDG.nomDuSite}}</td>
+                </tr>
+                {% for coutcomDG in coutcomDGS %}
+                {% if sitesDG.id == coutcomDG.site.id %}
+                    <tr class="bg-light">
+                    <td class="py-3">{{coutcomDG.mois}} . {{coutcomDG.annee}}</td>
+                    <td>{{coutcomDG.typeOperation}}</td>
+                    <td>{{coutcomDG.cible}}</td>
+                    <td>{{coutcomDG.objectif}}</td>
+                    <td>{{coutcomDG.offre}}</td>
+                    <td>{{coutcomDG.coutComInterne}}</td>
+                    <td>{{coutcomDG.coutComExterne}}</td>
+                    <td>{{coutcomDG.fraisOrganisation}}</td>
+                    <td>{{coutcomDG.participationPartenaire}}</td>
+                    <td>{{coutcomDG.chiffreAffaire}}</td>
+                    <td>{{coutcomDG.roi}}</td>
+                    <td>{{coutcomDG.pass}}</td>
+                    <td><a href="{{ path('editPlanCom', {id: coutcomDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                    <td><a href="{{ path('deletePlanCommunication', {id: coutcomDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                    </tr>
+                {% endif %}
+        {% endfor %}
+                {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter rajouter des coûts de communication, pour cela aller rajouter les chiffres correspondant à votre site sur l'onglet "BDD SITE".</h2>
+        {% endif %}
+        </tbody> 
+        </table>
+    </div>
+    </div>  
+</div>  
+
+<div class="container pb-5 mb-5 mt-5">
+<canvas id="myChartCoutTotalParAnnee" width="200" height="200"></canvas>
+</div>
+<div class="container pb-5 mb-5 mt-5">
+<canvas id="myChartCoutTotalParObjectif" width="200" height="200"></canvas>
+</div>
+<div class="container pb-5 mb-5 mt-5">
+<canvas id="myChartRépartitionobjectif2018" width="200" height="200"></canvas>
+</div>
+
+<script>
+var ctx = document.getElementById('myChartCoutTotalParAnnee').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ anneeCoutTotaux | raw }},
+        datasets: [{
+            label: 'Evolution Cout Total / Année - TOUS SITES',
+            data: {{ evolution_cout_com | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var ctx = document.getElementById('myChartCoutTotalParObjectif').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2017',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: [22,12,50,12],
+    }, {
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2020',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: [22,12,50,12],
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'bar',
+      label: 'Valorisation utilisation / mois 2021',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: [22,12,50,12],
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+
+var ctx = document.getElementById('myChartRépartitionobjectif2018');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ annee| raw }},
+        datasets: [{
+            label: "Cout total TOUT SITE par Objectif et par année",
+            data: {{ conquete | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CartesCadeauxRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,11 +18,6 @@ class CartesCadeaux
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $date;
 
     /**
      * @ORM\Column(type="float")
@@ -49,25 +46,29 @@ class CartesCadeaux
 
     /**
      * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="cartesCadeaux")
-     * @ORM\JoinColumn(nullable=false)  
+     * @ORM\JoinColumn(nullable=false) 
      */
     private $site;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="cartesCadeaux")
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $annee;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $mois;
+
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
     }
 
     public function getNombreCartesVendues(): ?float
@@ -142,4 +143,39 @@ class CartesCadeaux
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    public function getMois(): ?string
+    {
+        return $this->mois;
+    }
+
+    public function setMois(string $mois): self
+    {
+        $this->mois = $mois;
+
+        return $this;
+    }
 }

@@ -1,14 +1,171 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ROLE = DG{% endblock %}
+{% block title %}Pass{% endblock %}
 
 {% block body %}
 
-<div>
+{% if is_granted('ROLE_DG') %}
+<div class="container">
+    <div class="container">
+    <div class="w-75 mx-auto">
+        <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+            <th scope="col">Mois - Année</th>
+            <th scope="col">Total abonnement</th>
+            <th scope="col">Total désabonnement</th>
+            <th scope="col">Inst Total</th>
+            <th scope="col">Taux de désabonnement</th>
+            <th scope="col">Editer</th>
+            <th scope="col">Supprimer</th>
+            <th>graph</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if userDGS is not empty %}
+        {% for userDG in userDGS %}
+            <tr class="text-white bg-dark">
+                <td> {{userDG.prenomNom}}</td>
+            </tr>
+            {% for sitesDG in sitesDGS %}
+                {% if userDG.id == sitesDG.user.id %}
+                <tr class="bg-light">
+                <td> {{sitesDG.nomDuSite}}</td>
+                </tr>
+                {% for passDG in passDGS %}
+                {% if sitesDG.id == passDG.site.id %}
+                    <tr class="bg-light">
+                   <td><canvas id="myCharttest" width="400" height="400"></canvas></td> 
+                    <td class="py-3">{{passDG.perdiode}} . {{passDG.annee}}</td>
+                    <td>{{passDG.totalAbo}}</td>
+                    <td>{{passDG.totalDesabo}}</td>
+                    <td>{{passDG.instTotal}}</td>
+                    <td>{{passDG.txDesabo}}</td>
+                    <td><a href="{{ path('editPass', {id: passDG.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                    <td><a href="{{ path('deletePass', {id: passDG.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                    </tr>
+                {% endif %}
+        {% endfor %}
+                {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter rajouter des coûts de communication, pour cela aller rajouter les chiffres correspondant à votre site sur l'onglet "BDD SITE".</h2>
+        {% endif %}
+        </tbody> 
+        </table>
+    </div>
+    </div>  
+</div>  
+{% endif %}
 
-   {% for site in sites %}
-   <p>{{site.site}}</p>
-    {% endfor %}
 
+
+<script>
+    var ctx = document.getElementById('myCharttest').getContext('2d');
+    var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["janvier", "février", "mars"],
+        datasets: [{
+            label: '# of Votes',
+            data:  [2,3,5],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+
+{% if is_granted('ROLE_DR') %}
+<div class="container">
+    <div class="col-3">
+        <p>Filtrer</p>
+        <form id="filters">
+            {% for siteDGS in sitesDG %}
+                <select type="checkbox" name="sites[]" id="sites{{siteDGS.id}}" value="{{siteDGS.id}}"> <label for="sites{{siteDGS.id}}" onchange="showDiv()">{{siteDGS.nomDuSite}}</p>
+            {% endfor %}
+        </form>
+    </div>
 </div>
+
+<div class="container">
+<canvas id="myChart" width="400" height="400"></canvas>
+</div>
+
+<script>
+    function showDiv(){
+        getSelectValue = document.getElementById("sites").value;
+        if(getSelectValue == "1"){
+            document.getElementById("myChart").style.display="block";
+        }else{
+            document.getElementById("myChart").style.display="none";
+        }
+    }
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endif %}
+
 {% endblock %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+

@@ -19,32 +19,29 @@ class SitesRepository extends ServiceEntityRepository
         parent::__construct($registry, Sites::class);
     }
 
-    // /**
-    //  * @return Sites[] Returns an array of Sites objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findBySites(Sites $sites, int $user)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->innerjoin("s.user", "u")
+            ->addSelect("u")
+            ->where("s.user = :user")
+            ->setParameter('user', $user)
+            ->andWhere('u = :user')
+            ->setParameter('sites', $sites)
+            ->orderBy('s.dueDate', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Sites
+    public function userAndSites()
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+        ->leftJoin('s.user','u')
+        ->addSelect('u')
+        ->getQuery()
+        ->getResult()
         ;
     }
-    */
+
 }

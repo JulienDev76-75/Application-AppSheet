@@ -1,8 +1,385 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ROLE = DG{% endblock %}
+{% block title %}Plan de Communication{% endblock %}
 
 {% block body %}
+{% if is_granted('ROLE_DS') %}
+<h2 class="text-center mt-5 mb-5 text-danger"></h2>
+<div class="w-75 mx-auto">
+    <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th scope="col">Trimestre</th>
+                <th scope="col">Type d'opération</th>
+                <th scope="col">Cible</th>
+                <th scope="col">Objectif</th>
+                <th scope="col">Offre</th>
+                <th scope="col">Coût de communication interne</th>
+                <th scope="col">Coût de communication externe</th>
+                <th scope="col">Frais d'organisation</th>
+                <th scope="col">Participation partenaires</th>
+                <th scope="col">Coût total</th>
+                <th scope="col">Pass</th>
+                <th scope="col">Chiffre d'Affaire</th>
+                <th scope="col">ROI</th>
+                <th scope="col">detail</th>
+                <th scope="col">edit</th>
+                <th scope="col">supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% if planCom is not empty %}
+            {% for plancoms in planCom %}
+                <tr class="bg-light">
+                    <td> {{plancoms.annee}}</td>
+                </tr>
+                <tr class="bg-light">
+                    <td><p>trimestre</p></td>
+                    <td> {{plancoms.typeOperation}}</td>
+                    <td> {{plancoms.cible}}</td>
+                    <td> {{plancoms.objectif}}</td>
+                    <td> {{plancoms.offre}}</td>
+                    <td> {{plancoms.coutComInterne}}</td>
+                    <td> {{plancoms.coutComExterne}}</td>
+                    <td> {{plancoms.fraisOrganisation}}</td>
+                    <td> {{plancoms.participationPartenaire}}</td>
+                    <td> {{plancoms.coutTotal}}</td>
+                    <td> {{plancoms.pass}}</td>
+                    <td> {{plancoms.chiffreAffaire}}</td>
+                    <td> {{plancoms.roi}}</td>
+                    <td><p>modal</p></td>
+                    <td> <a href="{{ path('editPlanCom', {id: plancoms.id})}}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                    <td> <a href="{{ path('deletePlanCommunication', {id: plancoms.id})}}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un Plan de communication</h2>
+        {% endif %}
+        </tbody>
+    </table>
+{% endif %}
 
-<p>je suis la page plan de communciation</p>
+{# ROLE DR ************************************************************************************************************ #}
+{% if is_granted('ROLE_DR') %}
+{% endif %}
+
+{# ROLE DG ************************************************************************************************************ #}
+{% if is_granted('ROLE_DG') %}
+
+<h1 class="pt-5 pb-4 mt-5 text-center"> Graphique Tous Sites</h1>
+<div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartEvolutionCouttotauxMensuels" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">
+          <div class="card-body">
+            <canvas id="myChartEvolutionCatotauxMensuels" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">
+          <div class="card-body">
+            <canvas id="myChartCaOpCo" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">
+          <div class="card-body">
+            <canvas id="myChartCoutOpCo" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+</div>
+
+<hr class="w-75 mx-auto">
+
+<h2 class="text-center mt-5 mb-5 text-danger"></h2>
+<div class="container">
+    <div class=" mx-auto">
+        <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+            <th scope="col">Mois - Année</th>
+            <th scope="col">Type d'opération</th>
+            <th scope="col">Cible</th>
+            <th scope="col">Objectif</th>
+            <th scope="col">Offre</th>
+            <th scope="col">Cout de communication interne</th>
+            <th scope="col">Cout de communication externe</th>
+            <th scope="col">Frais d'organisation</th>
+            <th scope="col">Participation des partenaires</th>
+            <th scope="col">Chiffre d'Affaire</th>
+            <th scope="col">ROI</th>
+            <th scope="col">Pass</th>
+            <th scope="col">Editer</th>
+            <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if userDG is not empty %}
+        {% for userDGS in userDG %}
+            <tr class="text-white bg-dark">
+                <td> {{userDGS.prenomNom}}</td>
+            </tr>
+            {% for sitesDGS in sitesDG %}
+                {% if userDGS.id == sitesDGS.user.id %}
+                <tr class="bg-light">
+                <td> {{sitesDGS.nomDuSite}}</td>
+                </tr>
+                {% for coutcomDGS in coutcomDG %}
+                {% if sitesDGS.id == coutcomDGS.site.id %}
+                    <tr class="bg-light">
+                    <td class="py-3">{{coutcomDGS.mois}} . {{coutcomDGS.annee}}</td>
+                    <td>{{coutcomDGS.typeOperation}}</td>
+                    <td>{{coutcomDGS.cible}}</td>
+                    <td>{{coutcomDGS.objectif}}</td>
+                    <td>{{coutcomDGS.offre}}</td>
+                    <td>{{coutcomDGS.coutComInterne}}</td>
+                    <td>{{coutcomDGS.coutComExterne}}</td>
+                    <td>{{coutcomDGS.fraisOrganisation}}</td>
+                    <td>{{coutcomDGS.participationPartenaire}}</td>
+                    <td>{{coutcomDGS.chiffreAffaire}}</td>
+                    <td>{{coutcomDGS.roi}}</td>
+                    <td>{{coutcomDGS.pass}}</td>
+                    <td><a href="{{ path('editPlanCom', {id: coutcomDGS.id}) }}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
+                    <td><a href="{{ path('deletePlanCommunication', {id: coutcomDGS.id}) }}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+                    </tr>
+                {% endif %}
+        {% endfor %}
+                {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter rajouter des coûts de communication, pour cela aller rajouter les chiffres correspondant à votre site sur l'onglet "BDD SITE".</h2>
+        {% endif %}
+        </tbody> 
+        </table>
+    </div>
+
+    <div class="mx-auto">
+        <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+            <th scope="col">Mois</th>
+            <th scope="col">Année</th>
+            <th scope="col">Coût Total</th>
+            <th scope="col">Coût Op_Co</th>
+            <th scope="col">Chiffre d'Affaire total</th>
+            <th scope="col">CA Op_Co</th>
+            <th scope="col">Editer</th>
+            <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for totalOpCoDGS in totalOpCoDG %}
+                  <tr class="bg-light">
+                  <td> {{totalOpCoDGS.mois}}</td>
+                  <td> {{totalOpCoDGS.annee}}</td>
+                  <td> {{totalOpCoDGS.coutTotaux}}</td>
+                  <td> {{totalOpCoDGS.coutOpCo}}</td>
+                  <td> {{totalOpCoDGS.catotal}}</td>
+                  <td> {{totalOpCoDGS.caOpCo}}</td>
+                  <td> éditer : mettre dans controller formaulaire add/edit/delete pour ton ENTITY TOTALCOUTCOM</td>
+                  <td> supprimer: mettre dans controller formaulaire add/edit/delete pour ton ENTITY TOTALCOUTCOM</td>
+                {% endfor %}
+        </tbody> 
+        </table>
+</div>  
+
+<script>
+var ctx = document.getElementById('myChartEvolutionCouttotauxMensuels').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2018',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ sumcouttotal2018|raw }},
+    }, {
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2019',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ sumcouttotal2019|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2020',
+      backgroundColor: 'rgb(10,14,30)',
+      stack: 'Stack 0',
+      data: {{ sumcouttotal2020|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+
+var ctx = document.getElementById('myChartEvolutionCatotauxMensuels').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2018',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ sumcatotal2017|raw }},
+    }, {
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2019',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ sumcatotal2018|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2020',
+      backgroundColor: 'rgb(100,140,210)',
+      stack: 'Stack 0',
+      data: {{ sumcatotal2019|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+
+var ctx = document.getElementById('myChartCaOpCo').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2018',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ sumcaopco2018|raw }},
+    }, {
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2019',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ sumcaopco2019|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2020',
+      backgroundColor: 'rgb(100,140,210)',
+      stack: 'Stack 0',
+      data: {{ sumcaopco2020|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+
+var ctx = document.getElementById('myChartCoutOpCo').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre"],
+    datasets: [{
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2018',
+      borderColor: 'rgb(30,144,255)',
+      borderWidth: 2,
+      fill: false,
+      data: {{ sumcoutopco2018|raw }},
+    }, {
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2019',
+      backgroundColor: 'rgb(30,100,200)',
+      stack: 'Stack 1',
+      data: {{ sumcoutopco2019|raw }},
+      borderColor: 'white',
+      borderWidth: 2
+    }, {
+      type: 'line',
+      label: 'Evolution Coûts Totaux mensuels / mois 2020',
+      backgroundColor: 'rgb(100,140,210)',
+      stack: 'Stack 0',
+      data: {{ sumcoutopco2020|raw }},
+    }]
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+    },
+    tooltips: {
+      mode: 'index',
+      intersect: true
+    },
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }]
+    }
+  }
+});
+</script>
+{% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}

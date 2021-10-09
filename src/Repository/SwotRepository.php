@@ -18,23 +18,32 @@ class SwotRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Swot::class);
     }
+    
 
-    // /**
-    //  * @return Swot[] Returns an array of Swot objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+    * Recherche les mots clés sur la page Swot
+    * @return void
+    */
+    public function search($mots = null)
+    {
+    $query = $this->createQueryBuilder('a');
+    $query->andWhere('a.active = 1');
+    if ($mots != null){
+        $query->andWhere('MATCH_AGAINST(a.forces, a.faiblesses, a.opportunites, a.menaces) AGAINST(:mots boolean)>0')
+        ->setParameter('mots', $mots);
+    }
+    return $query->getQuery()->getResult();
+    }
+
+    public function userAndSwot()
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        ->leftJoin('s.user','u')
+        ->addSelect('u')
+        ->getQuery()
+        ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Swot
@@ -45,6 +54,12 @@ class SwotRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    public function test() {
+          $query = $this->_em->createQuery('SELECT * FROM swot);
+        $resultats = $query->getResult();
+            return $resultats;
     }
     */
 }

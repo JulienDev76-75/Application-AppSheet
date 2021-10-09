@@ -19,6 +19,16 @@ class PassRepository extends ServiceEntityRepository
         parent::__construct($registry, Pass::class);
     }
 
+    public function sitesAndPass()
+    {
+        return $this->createQueryBuilder('p')
+        ->leftJoin('p.site','s')
+        ->addSelect('s')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Pass[] Returns an array of Pass objects
     //  */

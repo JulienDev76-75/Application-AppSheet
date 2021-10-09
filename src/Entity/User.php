@@ -54,10 +54,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $activation_token;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CartesCadeaux::class, mappedBy="user")
+     */
+    private $cartesCadeaux;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PlanCommunication::class, mappedBy="user")
+     */
+    private $planCommunications;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Satisfaction::class, mappedBy="user")
+     */
+    private $satisfactions;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $prenom_nom;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Rig::class, mappedBy="USER")
+     */
+    private $rigs;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Total::class, mappedBy="user")
+     */
+    private $totals;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="user")
+     */
+    private $passes;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
         $this->cartesCadeaux = new ArrayCollection();
+        $this->planCommunications = new ArrayCollection();
+        $this->satisfactions = new ArrayCollection();
+        $this->rigs = new ArrayCollection();
+        $this->totals = new ArrayCollection();
+        $this->passes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,4 +243,195 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection|CartesCadeaux[]
+     */
+    public function getCartesCadeaux(): Collection
+    {
+        return $this->cartesCadeaux;
+    }
+
+    public function addCartesCadeaux(CartesCadeaux $cartesCadeaux): self
+    {
+        if (!$this->cartesCadeaux->contains($cartesCadeaux)) {
+            $this->cartesCadeaux[] = $cartesCadeaux;
+            $cartesCadeaux->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartesCadeaux(CartesCadeaux $cartesCadeaux): self
+    {
+        if ($this->cartesCadeaux->removeElement($cartesCadeaux)) {
+            // set the owning side to null (unless already changed)
+            if ($cartesCadeaux->getUser() === $this) {
+                $cartesCadeaux->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlanCommunication[]
+     */
+    public function getPlanCommunications(): Collection
+    {
+        return $this->planCommunications;
+    }
+
+    public function addPlanCommunication(PlanCommunication $planCommunication): self
+    {
+        if (!$this->planCommunications->contains($planCommunication)) {
+            $this->planCommunications[] = $planCommunication;
+            $planCommunication->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanCommunication(PlanCommunication $planCommunication): self
+    {
+        if ($this->planCommunications->removeElement($planCommunication)) {
+            // set the owning side to null (unless already changed)
+            if ($planCommunication->getUser() === $this) {
+                $planCommunication->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Satisfaction[]
+     */
+    public function getSatisfactions(): Collection
+    {
+        return $this->satisfactions;
+    }
+
+    public function addSatisfaction(Satisfaction $satisfaction): self
+    {
+        if (!$this->satisfactions->contains($satisfaction)) {
+            $this->satisfactions[] = $satisfaction;
+            $satisfaction->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSatisfaction(Satisfaction $satisfaction): self
+    {
+        if ($this->satisfactions->removeElement($satisfaction)) {
+            // set the owning side to null (unless already changed)
+            if ($satisfaction->getUser() === $this) {
+                $satisfaction->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPrenomNom(): ?string
+    {
+        return $this->prenom_nom;
+    }
+
+    public function setPrenomNom(string $prenom_nom): self
+    {
+        $this->prenom_nom = $prenom_nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rig[]
+     */
+    public function getRigs(): Collection
+    {
+        return $this->rigs;
+    }
+
+    public function addRig(Rig $rig): self
+    {
+        if (!$this->rigs->contains($rig)) {
+            $this->rigs[] = $rig;
+            $rig->setUSER($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRig(Rig $rig): self
+    {
+        if ($this->rigs->removeElement($rig)) {
+            // set the owning side to null (unless already changed)
+            if ($rig->getUSER() === $this) {
+                $rig->setUSER(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Total[]
+     */
+    public function getTotals(): Collection
+    {
+        return $this->totals;
+    }
+
+    public function addTotal(Total $total): self
+    {
+        if (!$this->totals->contains($total)) {
+            $this->totals[] = $total;
+            $total->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTotal(Total $total): self
+    {
+        if ($this->totals->removeElement($total)) {
+            // set the owning side to null (unless already changed)
+            if ($total->getUser() === $this) {
+                $total->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Pass[]
+     */
+    public function getPasses(): Collection
+    {
+        return $this->passes;
+    }
+
+    public function addPass(Pass $pass): self
+    {
+        if (!$this->passes->contains($pass)) {
+            $this->passes[] = $pass;
+            $pass->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePass(Pass $pass): self
+    {
+        if ($this->passes->removeElement($pass)) {
+            // set the owning side to null (unless already changed)
+            if ($pass->getUser() === $this) {
+                $pass->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }

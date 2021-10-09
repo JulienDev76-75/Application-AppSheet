@@ -6,12 +6,16 @@ use App\Repository\SitesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SitesRepository::class)
  */
 class Sites
 {
+
+    const TypeContrat = ['Affermage', 'Marché Service', 'Régie Interne'];
+    const TypeSociete = ['OPA', 'FILL'];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -26,11 +30,13 @@ class Sites
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Sites::TypeContrat, message="Veuillez choisir entre ces 3 contrats.")
      */
     private $type_contrat;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Sites::TypeSociete, message="Veuillez choisir entre ces 2 types de société.")
      */
     private $type_societe;
 
@@ -86,14 +92,44 @@ class Sites
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=CartesCadeaux::class, mappedBy="site", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity=CartesCadeaux::class, inversedBy="site")
      */
     private $cartesCadeaux;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PlanCommunication::class, mappedBy="site")
+     */
+    private $planCommunications;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Rig::class, mappedBy="site")
+     */
+    private $rigs;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="site")
+     */
+    private $passes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Satisfaction::class, mappedBy="site")
+     */
+    private $satisfactions;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Total::class, mappedBy="site")
+     */
+    private $totals;
 
     public function __construct()
     {
         $this->cartesCadeauxes = new ArrayCollection();
         $this->cartesCadeaux = new ArrayCollection();
+        $this->planCommunications = new ArrayCollection();
+        $this->rigs = new ArrayCollection();
+        $this->passes = new ArrayCollection();
+        $this->satisfactions = new ArrayCollection();
+        $this->totals = new ArrayCollection();
     }
 
 
@@ -288,4 +324,157 @@ class Sites
         return $this;
     }
 
+    public function __toString() {
+        return $this->getNomDuSite();
+    }
+
+    /**
+     * @return Collection|PlanCommunication[]
+     */
+    public function getPlanCommunications(): Collection
+    {
+        return $this->planCommunications;
+    }
+
+    public function addPlanCommunication(PlanCommunication $planCommunication): self
+    {
+        if (!$this->planCommunications->contains($planCommunication)) {
+            $this->planCommunications[] = $planCommunication;
+            $planCommunication->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanCommunication(PlanCommunication $planCommunication): self
+    {
+        if ($this->planCommunications->removeElement($planCommunication)) {
+            // set the owning side to null (unless already changed)
+            if ($planCommunication->getSite() === $this) {
+                $planCommunication->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rig[]
+     */
+    public function getRigs(): Collection
+    {
+        return $this->rigs;
+    }
+
+    public function addRig(Rig $rig): self
+    {
+        if (!$this->rigs->contains($rig)) {
+            $this->rigs[] = $rig;
+            $rig->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRig(Rig $rig): self
+    {
+        if ($this->rigs->removeElement($rig)) {
+            // set the owning side to null (unless already changed)
+            if ($rig->getSite() === $this) {
+                $rig->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Pass[]
+     */
+    public function getPasses(): Collection
+    {
+        return $this->passes;
+    }
+
+    public function addPass(Pass $pass): self
+    {
+        if (!$this->passes->contains($pass)) {
+            $this->passes[] = $pass;
+            $pass->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removePass(Pass $pass): self
+    {
+        if ($this->passes->removeElement($pass)) {
+            // set the owning side to null (unless already changed)
+            if ($pass->getSite() === $this) {
+                $pass->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Satisfaction[]
+     */
+    public function getSatisfactions(): Collection
+    {
+        return $this->satisfactions;
+    }
+
+    public function addSatisfaction(Satisfaction $satisfaction): self
+    {
+        if (!$this->satisfactions->contains($satisfaction)) {
+            $this->satisfactions[] = $satisfaction;
+            $satisfaction->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSatisfaction(Satisfaction $satisfaction): self
+    {
+        if ($this->satisfactions->removeElement($satisfaction)) {
+            // set the owning side to null (unless already changed)
+            if ($satisfaction->getSite() === $this) {
+                $satisfaction->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Total[]
+     */
+    public function getTotals(): Collection
+    {
+        return $this->totals;
+    }
+
+    public function addTotal(Total $total): self
+    {
+        if (!$this->totals->contains($total)) {
+            $this->totals[] = $total;
+            $total->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTotal(Total $total): self
+    {
+        if ($this->totals->removeElement($total)) {
+            // set the owning side to null (unless already changed)
+            if ($total->getSite() === $this) {
+                $total->setSite(null);
+            }
+        }
+
+        return $this;
+    }
 }

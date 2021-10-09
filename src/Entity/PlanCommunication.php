@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PlanCommunicationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PlanCommunicationRepository::class)
@@ -18,44 +19,9 @@ class PlanCommunication
     private $id;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $validation_sophie;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $type_activite;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $type_contrat;
-
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $date_debut;
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $date_de_fin;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $periode;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $type_operation;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $operation_nationale;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -68,12 +34,12 @@ class PlanCommunication
     private $objectif;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $offre;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $cout_com_interne;
 
@@ -83,7 +49,7 @@ class PlanCommunication
     private $cout_com_externe;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $frais_organisation;
 
@@ -103,11 +69,6 @@ class PlanCommunication
     private $pass;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $cartes;
-
-    /**
      * @ORM\Column(type="float")
      */
     private $chiffre_affaire;
@@ -118,30 +79,28 @@ class PlanCommunication
     private $roi;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\ManyToOne(targetEntity=Sites::class, inversedBy="planCommunications")
      */
-    private $numero_ddc;
+    private $site;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="planCommunications")
      */
-    private $photo;
+    private $user;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $annee;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $mois;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getValidationSophie(): ?string
-    {
-        return $this->validation_sophie;
-    }
-
-    public function setValidationSophie(?string $validation_sophie): self
-    {
-        $this->validation_sophie = $validation_sophie;
-
-        return $this;
     }
 
     public function getTypeActivite(): ?string
@@ -152,18 +111,6 @@ class PlanCommunication
     public function setTypeActivite(string $type_activite): self
     {
         $this->type_activite = $type_activite;
-
-        return $this;
-    }
-
-    public function getTypeContrat(): ?string
-    {
-        return $this->type_contrat;
-    }
-
-    public function setTypeContrat(string $type_contrat): self
-    {
-        $this->type_contrat = $type_contrat;
 
         return $this;
     }
@@ -192,18 +139,6 @@ class PlanCommunication
         return $this;
     }
 
-    public function getPeriode(): ?string
-    {
-        return $this->periode;
-    }
-
-    public function setPeriode(?string $periode): self
-    {
-        $this->periode = $periode;
-
-        return $this;
-    }
-
     public function getTypeOperation(): ?string
     {
         return $this->type_operation;
@@ -212,18 +147,6 @@ class PlanCommunication
     public function setTypeOperation(string $type_operation): self
     {
         $this->type_operation = $type_operation;
-
-        return $this;
-    }
-
-    public function getOperationNationale(): ?string
-    {
-        return $this->operation_nationale;
-    }
-
-    public function setOperationNationale(string $operation_nationale): self
-    {
-        $this->operation_nationale = $operation_nationale;
 
         return $this;
     }
@@ -336,18 +259,6 @@ class PlanCommunication
         return $this;
     }
 
-    public function getCartes(): ?float
-    {
-        return $this->cartes;
-    }
-
-    public function setCartes(?float $cartes): self
-    {
-        $this->cartes = $cartes;
-
-        return $this;
-    }
-
     public function getChiffreAffaire(): ?float
     {
         return $this->chiffre_affaire;
@@ -372,27 +283,52 @@ class PlanCommunication
         return $this;
     }
 
-    public function getNumeroDdc(): ?float
+    public function getSite(): ?Sites
     {
-        return $this->numero_ddc;
+        return $this->site;
     }
 
-    public function setNumeroDdc(?float $numero_ddc): self
+    public function setSite(?Sites $site): self
     {
-        $this->numero_ddc = $numero_ddc;
+        $this->site = $site;
 
         return $this;
     }
 
-    public function getPhoto()
+    public function getUser(): ?User
     {
-        return $this->photo;
+        return $this->user;
     }
 
-    public function setPhoto($photo): self
+    public function setUser(?User $user): self
     {
-        $this->photo = $photo;
+        $this->user = $user;
 
         return $this;
     }
+
+    public function getAnnee(): ?int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    public function getMois(): ?string
+    {
+        return $this->mois;
+    }
+
+    public function setMois(string $mois): self
+    {
+        $this->mois = $mois;
+
+        return $this;
+    }
+
 }

@@ -19,6 +19,28 @@ class RigRepository extends ServiceEntityRepository
         parent::__construct($registry, Rig::class);
     }
 
+    public function sitesAndRig()
+    {
+        return $this->createQueryBuilder('r')
+        ->leftJoin('r.site','s')
+        ->addSelect('s')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
+    public function findByContrat($contrat)
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.site','s')
+            ->addSelect('s')
+            ->andWhere('s.type_contrat = :type_contrat')
+            ->setParameter('type_contrat', $contrat)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Rig[] Returns an array of Rig objects
     //  */

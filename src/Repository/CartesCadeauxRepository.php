@@ -19,6 +19,17 @@ class CartesCadeauxRepository extends ServiceEntityRepository
         parent::__construct($registry, CartesCadeaux::class);
     }
 
+    public function SitesAndCartesCadeaux()
+    {
+        return $this->createQueryBuilder('c')
+        ->leftJoin('c.site','s')
+        ->addSelect('s')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
+
     // /**
     //  * @return CartesCadeaux[] Returns an array of CartesCadeaux objects
     //  */

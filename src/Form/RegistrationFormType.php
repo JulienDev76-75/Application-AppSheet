@@ -26,7 +26,7 @@ class RegistrationFormType extends AbstractType
                 'placeholder' => "e-mail de confirmation"],
                 'label' => "Email :"
             ])
-            ->add('poste', null, [
+            ->add('poste', TextType::class, [
                 'label' => 'Poste :'
             ])
             ->add('plainPassword', PasswordType::class, [
