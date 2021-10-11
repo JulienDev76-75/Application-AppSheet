@@ -4,12 +4,42 @@
 
 {% block body %}
 {% if is_granted('ROLE_DS') %}
+
+<h1 class="pt-5 pb-4 mt-5 text-center"> Graphique Tous Sites</h1>
+<div class="row row-cols-1 row-cols-md-4 row-cols-mlg-4 g-4 mt-5 mb-5 mx-auto">
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartEvolutionCouttotauxMensuels" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">
+          <div class="card-body">
+            <canvas id="myChartEvolutionCatotauxMensuels" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">
+          <div class="card-body">
+            <canvas id="myChartCaOpCo" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+</div>
+
+<hr class="w-75 mx-auto">
+{% for site in siteDS %}
+<h3 class="text-center">{{ site.nomDuSite }}</h3>
+{% endfor %}
 <h2 class="text-center mt-5 mb-5 text-danger"></h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
         <thead class="bg-dark text-white">
             <tr>
-                <th scope="col">Trimestre</th>
+                <th scope="col">Année</th>
                 <th scope="col">Type d'opération</th>
                 <th scope="col">Cible</th>
                 <th scope="col">Objectif</th>
@@ -23,18 +53,13 @@
                 <th scope="col">Chiffre d'Affaire</th>
                 <th scope="col">ROI</th>
                 <th scope="col">detail</th>
-                <th scope="col">edit</th>
-                <th scope="col">supprimer</th>
             </tr>
         </thead>
         <tbody>
           {% if planCom is not empty %}
             {% for plancoms in planCom %}
                 <tr class="bg-light">
-                    <td> {{plancoms.annee}}</td>
-                </tr>
-                <tr class="bg-light">
-                    <td><p>trimestre</p></td>
+                    <td><p>{{plancoms.annee}}</p></td>
                     <td> {{plancoms.typeOperation}}</td>
                     <td> {{plancoms.cible}}</td>
                     <td> {{plancoms.objectif}}</td>
@@ -48,15 +73,62 @@
                     <td> {{plancoms.chiffreAffaire}}</td>
                     <td> {{plancoms.roi}}</td>
                     <td><p>modal</p></td>
-                    <td> <a href="{{ path('editPlanCom', {id: plancoms.id})}}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-                    <td> <a href="{{ path('deletePlanCommunication', {id: plancoms.id})}}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
-                </tr>
             {% endfor %}
             {% else %}
             <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un Plan de communication</h2>
         {% endif %}
         </tbody>
     </table>
+</div>
+
+<div class="w-75 mx-auto">
+    <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th scope="col">Année</th>
+                <th scope="col">Type d'opération</th>
+                <th scope="col">Cible</th>
+                <th scope="col">Objectif</th>
+                <th scope="col">Offre</th>
+                <th scope="col">Coût de communication interne</th>
+                <th scope="col">Coût de communication externe</th>
+                <th scope="col">Frais d'organisation</th>
+                <th scope="col">Participation partenaires</th>
+                <th scope="col">Coût total</th>
+                <th scope="col">Pass</th>
+                <th scope="col">Chiffre d'Affaire</th>
+                <th scope="col">ROI</th>
+                <th scope="col">detail</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% if planCom is not empty %}
+            {% for plancoms in planCom %}
+                <tr class="bg-light">
+                    <td><p>{{plancoms.annee}}</p></td>
+                    <td> {{plancoms.typeOperation}}</td>
+                    <td> {{plancoms.cible}}</td>
+                    <td> {{plancoms.objectif}}</td>
+                    <td> {{plancoms.offre}}</td>
+                    <td> {{plancoms.coutComInterne}}</td>
+                    <td> {{plancoms.coutComExterne}}</td>
+                    <td> {{plancoms.fraisOrganisation}}</td>
+                    <td> {{plancoms.participationPartenaire}}</td>
+                    <td> {{plancoms.coutTotal}}</td>
+                    <td> {{plancoms.pass}}</td>
+                    <td> {{plancoms.chiffreAffaire}}</td>
+                    <td> {{plancoms.roi}}</td>
+                    <td><p>modal</p></td>
+            {% endfor %}
+            {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un Plan de communication</h2>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+</script>
 {% endif %}
 
 {# ROLE DR ************************************************************************************************************ #}

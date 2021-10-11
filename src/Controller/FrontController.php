@@ -36,7 +36,11 @@ use App\Repository\TotalCoutComRepository;
 use App\Repository\TotalPassTousSitesRepository;
 use App\Repository\TotalRepository;
 use App\Repository\TotalRigRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+/**
+ * @IsGranted("IS_AUTHENTICATED_FULLY")
+ */
 
 class FrontController extends AbstractController
 {
@@ -76,7 +80,6 @@ class FrontController extends AbstractController
         );
 
         //Données DS
-        $swotRepo = $this->getDoctrine()->getRepository(Swot::class);
         $swotDS = $swotRepo -> findOneBy(
             ['user' => $this->getUser()],
         ); 
@@ -104,8 +107,35 @@ class FrontController extends AbstractController
     public function satisfaction(SatisfactionRepository $satisfactionRepo, SitesRepository $siteRepo, UserRepository $userRepo, TotalRepository $total): Response
     {
         // Données DS
-        $trimestre = [];
-    
+        $satisDSS = $satisfactionRepo->findBy(
+            ['user' => $this->getUser()],
+            ['trimestre' => 'ASC'],
+        );
+        $siteDS = $siteRepo->findBy(
+            ['user' => $this->getUser()],
+        );
+
+            foreach($satisDSS as $satisDS) {
+                $trimestreglobaleDS[]= $satisDS ->getTrimestre();
+                $globaleDS[] = $satisDS ->getSatisGlobale();
+                }
+            foreach($satisDSS as $satisDS) {
+                $trimestretemperatureDS[]= $satisDS ->getTrimestre();
+                $temperatureDS[] = $satisDS ->getTemperatureDouche();
+                }
+            foreach($satisDSS as $satisDS) {
+                $trimestrecompDS[]= $satisDS ->getTrimestre();
+                $compDS[] = $satisDS ->getCompetenceDuPersonnel();
+                }
+            foreach($satisDSS as $satisDS) {
+                $trimestrepropreteDS[]= $satisDS ->getTrimestre();
+                $propreteDS[] = $satisDS ->getSatisProprete();
+                }
+            foreach($satisDSS as $satisDS) {
+                $trimestrehoraireDS[]= $satisDS ->getTrimestre();
+                $horaireDS[] = $satisDS ->getSatisHoraires();
+                }
+
         // Données DR
         $satisDR = $satisfactionRepo->findBy(
             ['user' => $this->getUser()],
@@ -119,39 +149,50 @@ class FrontController extends AbstractController
         $sitesDGS = $siteRepo->userAndSites();
         $satisDGS = $satisfactionRepo->sitesAndSatis();
 
-        $trimestre = [];
         $satisglobaleDG = $total->trimestreASC();
-        foreach($satisglobaleDG as $satisglobale) {
-            $trimestreDG[]= $satisglobale ->getTrimestre();
-            $globaleDG[] = $satisglobale ->getSatisGlobale();
-            }
+            foreach($satisglobaleDG as $satisglobale) {
+                $trimestreDG[]= $satisglobale ->getTrimestre();
+                $globaleDG[] = $satisglobale ->getSatisGlobale();
+                }
 
         $satistemperatureDG = $total->trimestreASC();
-        foreach($satistemperatureDG as $satistemperature) {
-            $trimestreDG1[]= $satistemperature ->getTrimestre();
-            $temperatureDG[] = $satistemperature ->getTemperatureDouche();
-            }
+            foreach($satistemperatureDG as $satistemperature) {
+                $trimestreDG1[]= $satistemperature ->getTrimestre();
+                $temperatureDG[] = $satistemperature ->getTemperatureDouche();
+                }
 
         $satiscomppersoDG = $total->trimestreASC();
         foreach($satiscomppersoDG as $compperso) {
-            $trimestreDG2[]= $compperso ->getTrimestre();
-            $compDG[] = $compperso ->getCompetencePersonnel();
-            }
+                $trimestreDG2[]= $compperso ->getTrimestre();
+                $compDG[] = $compperso ->getCompetencePersonnel();
+                }
         
         $satispropreteDG = $total->trimestreASC();
-        foreach($satispropreteDG as $proprete) {
-            $trimestreDG3[]= $proprete ->getTrimestre();
-            $propreteDG[] = $proprete ->getSatisProprete();
-            }
+            foreach($satispropreteDG as $proprete) {
+                $trimestreDG3[]= $proprete ->getTrimestre();
+                $propreteDG[] = $proprete ->getSatisProprete();
+                }
 
         $satishoraireDG = $total->trimestreASC();
-        foreach($satishoraireDG as $horaire) {
-            $trimestreDG4[]= $horaire ->getTrimestre();
-            $horaireDG[] = $horaire ->getSatisProprete();
-            }
+            foreach($satishoraireDG as $horaire) {
+                $trimestreDG4[]= $horaire ->getTrimestre();
+                $horaireDG[] = $horaire ->getSatisProprete();
+                }
             
 
     return $this->render('dg/satisfaction.html.twig', [
+        'siteDS' => $siteDS,
+        'satisDSS' => $satisDSS,
+        'trimestreglobaleDS' =>json_encode($trimestreglobaleDS),    
+        'trimestretemperatureDS' =>json_encode($trimestretemperatureDS), 
+        'trimestrecompDS' =>json_encode($trimestrecompDS), 
+        'trimestrepropreteDS' =>json_encode($trimestrepropreteDS), 
+        'trimestrehoraireDS' => json_encode($trimestrehoraireDS), 
+        'globaleDS' => json_encode($globaleDS), 
+        'temperatureDS' => json_encode($temperatureDS), 
+        'compDS' => json_encode($compDS), 
+        'propreteDS' => json_encode($propreteDS), 
+        'horaireDS' => json_encode($horaireDS), 
         'satisDR' => $satisDR,
         'sitesDR' => $sitesDR,
         'trimestreDG' => json_encode($trimestreDG),
@@ -167,7 +208,6 @@ class FrontController extends AbstractController
         'compDG' => json_encode($compDG),
         'temperatureDG' => json_encode($temperatureDG),
         'horaireDG' => json_encode($horaireDG),
-        'trimestre' => json_encode($trimestre),
     ]);
     }
 
@@ -326,17 +366,34 @@ class FrontController extends AbstractController
     public function planCommunication(TotalCoutComRepository $totalcoutcom, PlanCommunicationRepository $plancomRepo, SitesRepository $sitesRepo, UserRepository $userRepo): Response
     {
         //ROLE_DS
-        $planCom= $plancomRepo ->findby(
+        $planComDS= $plancomRepo ->findby(
             ['user' => $this->getUser()],
-            ['annee' => 'ASC'],
-            6,
         );  
+        $siteDS = $sitesRepo->findBy(
+            ['user' => $this->getUser()],
+        );
+
+        $plancomdss = $plancomRepo ->findby(
+            ['user' => $this->getUser()],
+        );  
+        $conqueteDSS = $plancomRepo->ObjectifConquete("Conquete");
+        dd($conqueteDSS);
+            foreach($conqueteDSS as $conqueteDS) {
+                $conqDS = $conqueteDS ->getCoutTotal();
+            }
+        $fidelisationDSS = $plancomRepo->ObjectifFidelisation("Fidelisation");
+            foreach($fidelisationDSS as $fidelisationDS) {
+                $fidDS = $fidelisationDS ->getCoutTotal();
+            }
+        $conqfidelisationDSS = $plancomRepo->ObjectifFideConq("Fidelisation-Conquete");
+            foreach($conqfidelisationDSS as $conqfidelisationDS) {
+                $conqfidDS = $conqfidelisationDS ->getCoutTotal();
+            }
 
         //ROLE_DR
         $planCom= $plancomRepo ->findby(
             ['user' => $this->getUser()],
             ['annee' => 'ASC'],
-            6,
         );  
 
         //ROLE_DG
@@ -344,6 +401,7 @@ class FrontController extends AbstractController
         $sitesDG = $sitesRepo -> userAndSites();
         $coutcomDG = $plancomRepo -> sitesAndCoutCom();
         $totalOpCoDG = $totalcoutcom -> findAll();
+
             // FIELD EVOLUTION COUT TOTAUX MENSUELS ET PAR ANNEES TOUS SITES
             $coutstotaux2018 = $totalcoutcom->findByAnnee("2018");
             foreach($coutstotaux2018 as $totaux2018) {
@@ -418,6 +476,10 @@ class FrontController extends AbstractController
         
 
     return $this->render('dg/planCommunication.html.twig', [
+        'siteDS' => $siteDS,
+        'planComDS' => $planComDS,
+        'conqueteDSS' => $conqueteDSS,
+        'conqueteDS' => json_encode($conqueteDS),
         'totalOpCoDG' => $totalOpCoDG,
         'coutcomDG' => $coutcomDG,
         'sitesDG' => $sitesDG,
@@ -447,6 +509,7 @@ class FrontController extends AbstractController
      */
     public function pass(PassRepository $passRepo, UserRepository $userRepo, SitesRepository $sitesRepo, TotalPassTousSitesRepository $totalpassRepo): Response
     {
+        //ROLE_DS
         $pass = $passRepo ->findby(
             ['site' => $this->getUser()],
             ['site' => 'ASC'],
@@ -502,11 +565,28 @@ class FrontController extends AbstractController
     public function freq(RigRepository $rigRepo, SitesRepository $sitesRepo, TotalRigRepository $totalrepo): Response
     {
         //ROLE_DS
-        $rig = $rigRepo ->findby(
+        $siteDS = $sitesRepo->findBy(
             ['user' => $this->getUser()],
-            ['mois' => 'ASC'],
-            6,
-        );  
+        );
+        $rigDSS = $rigRepo->findBy(
+            ['user' => $this->getUser()],
+            ['periode' => 'ASC'],
+        );
+
+        foreach($rigDSS as $rigDS) {
+            $periodecaDS[] = $rigDS->getPeriode();
+            $ca_aff_DS[] = $rigDS ->getChiffreAffaire();
+        }
+
+        foreach($rigDSS as $rigDS) {
+            $periodefreqDS[] = $rigDS->getPeriode();
+            $freq_aff_DS[] = $rigDS ->getFrequentation();
+        }
+
+        foreach($rigDSS as $rigDS) {
+            $periodepaniermoyenDS[] = $rigDS->getPeriode();
+            $panier_moyenDS[] = $rigDS ->getPanierMoyen();
+        }
 
         //ROLE_DR
 
@@ -532,7 +612,14 @@ class FrontController extends AbstractController
         }
 
     return $this->render('dg/frequentation.html.twig', [
-        'rig' => $rig,
+        'siteDS' => $siteDS,
+        'rigDSS' => $rigDSS,
+        'periodecaDS' => json_encode($periodecaDS),
+        'periodefreqDS' => json_encode($periodefreqDS),
+        'periodepaniermoyenDS' => json_encode($periodepaniermoyenDS),
+        'ca_aff_DS' => json_encode($ca_aff_DS),
+        'panier_moyenDS' => json_encode($panier_moyenDS),
+        'freq_aff_DS' => json_encode($freq_aff_DS),
         'freqDGS' => $freqDGS,
         'recapDGS' => $recapDGS,
         'sitesDGS' => $sitesDGS,

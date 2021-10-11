@@ -27,12 +27,6 @@ class Rig
     private $activite;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Choice(choices=Rig::Mois, message="Veuillez choisir un mois valide et en minuscule, par exemple : 'janvier'.")
-     */
-    private $mois;
-
-    /**
      * @ORM\Column(type="float", nullable=false)
      */
     private $chiffre_affaire;
@@ -58,9 +52,9 @@ class Rig
     private $user;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      */
-    private $annee;
+    private $periode;
 
     public function getId(): ?int
     {
@@ -75,18 +69,6 @@ class Rig
     public function setActivite(string $activite): self
     {
         $this->activite = $activite;
-
-        return $this;
-    }
-
-    public function getMois(): ?string
-    {
-        return $this->mois;
-    }
-
-    public function setMois(?string $mois): self
-    {
-        $this->mois = $mois;
 
         return $this;
     }
@@ -151,14 +133,14 @@ class Rig
         return $this;
     }
 
-    public function getAnnee(): ?int
+    public function getPeriode(): ?string
     {
-        return $this->annee;
+        return $this->periode;
     }
 
-    public function setAnnee(int $annee): self
+    public function setPeriode(string $periode): self
     {
-        $this->annee = $annee;
+        $this->periode = $periode;
 
         return $this;
     }
