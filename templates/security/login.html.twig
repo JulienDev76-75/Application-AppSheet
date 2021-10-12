@@ -3,6 +3,22 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+{% for message in app.flashes('message') %}
+    <div class="alert alert-success" role="alert">
+    {{ message }}
+    </div>
+{% endfor %}
+{% for message in app.flashes('warning') %}
+    <div class="alert alert-warning" role="alert">
+    {{ message }}
+    </div>
+{% endfor %}
+{% for message in app.flashes('danger') %}
+    <div class="alert alert-danger" role="alert">
+    {{ message }}
+    </div>
+{% endfor %}
+
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -36,9 +52,8 @@
             Valider
         </button>
         <hr>
-        <p class=" text-login mb-5 pb-5">* En continuant avec Google, Apple ou votre adresse e-mail, vous acceptez les conditions d'utilisation et la politique de confidentialité de AppSheet.</p>
         <p class=" text-login mb-5 pb-5">* Vous avez oublié votre mot de passe ? Cliquez sur le lien <a href=""></a>pour obtenir un nouveau mot de passe.</p>
 </div>
 </form>
 {% endblock %}
-
+    {#{{ path('app_reset_password') }}    #}

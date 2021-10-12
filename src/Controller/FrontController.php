@@ -372,28 +372,19 @@ class FrontController extends AbstractController
         $siteDS = $sitesRepo->findBy(
             ['user' => $this->getUser()],
         );
-
         $plancomdss = $plancomRepo ->findby(
             ['user' => $this->getUser()],
         );  
-        $conqueteDSS = $plancomRepo->ObjectifConquete("Conquete");
-        dd($conqueteDSS);
-            foreach($conqueteDSS as $conqueteDS) {
-                $conqDS = $conqueteDS ->getCoutTotal();
-            }
-        $fidelisationDSS = $plancomRepo->ObjectifFidelisation("Fidelisation");
-            foreach($fidelisationDSS as $fidelisationDS) {
-                $fidDS = $fidelisationDS ->getCoutTotal();
-            }
-        $conqfidelisationDSS = $plancomRepo->ObjectifFideConq("Fidelisation-Conquete");
-            foreach($conqfidelisationDSS as $conqfidelisationDS) {
-                $conqfidDS = $conqfidelisationDS ->getCoutTotal();
-            }
+
+        //$conqueteDSS = $plancomRepo->ObjectifConquete("Conquete");
+        //    foreach($conqueteDSS as $conqueteDS) {
+        //        $conqDS = $conqueteDS ->getCoutTotal();
+        //    }
 
         //ROLE_DR
         $planCom= $plancomRepo ->findby(
             ['user' => $this->getUser()],
-            ['annee' => 'ASC'],
+            ['mois' => 'ASC'],
         );  
 
         //ROLE_DG
@@ -478,8 +469,6 @@ class FrontController extends AbstractController
     return $this->render('dg/planCommunication.html.twig', [
         'siteDS' => $siteDS,
         'planComDS' => $planComDS,
-        'conqueteDSS' => $conqueteDSS,
-        'conqueteDS' => json_encode($conqueteDS),
         'totalOpCoDG' => $totalOpCoDG,
         'coutcomDG' => $coutcomDG,
         'sitesDG' => $sitesDG,
@@ -689,7 +678,6 @@ class FrontController extends AbstractController
         // Type objectif par année : récapitulatif / répartition
     foreach($typeobjectif as $repartitionTypeObjectif) {
             $repartitionObjectif[] = ($repartitionTypeObjectif->getObjectif());//count()
-            $annee[] = $repartitionTypeObjectif->getAnnee();
             }
 
     // ************************* DR VIEW *******************************

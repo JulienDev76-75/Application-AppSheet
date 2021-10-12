@@ -11,7 +11,7 @@
 {% if is_granted('ROLE_DG') %}
 <div class="container">
     <div class="col-3">
-        <p>Filtrer</p>
+        <p class="mt-3 mb-3">La fameuse liste :</p>
         <form id="filters">
             {% for siteDGS in sitesDG %}
                 <p><input type="checkbox" name="sites[]" id="sites{{siteDGS.id}}" value="{{siteDGS.id}}"> <label for="sites{{siteDGS.id}}">{{siteDGS.nomDuSite}}</p>

@@ -38,38 +38,27 @@ class PlanCommunicationRepository extends ServiceEntityRepository
         ;
     }
 
-    public function ObjectifFidelisation($fidelisation)
-    {
+    //public function ObjectifConquete($conquete)
+    //{
         
-        return $this->createQueryBuilder('p')
-        ->andWhere('p.objectif = :Fidelisation')
-        ->setParameter('Fidelisation', $fidelisation)
-        ->getQuery()
-        ->getResult()
-        ;
-    }
+    //   return $this->createQueryBuilder('p')
+    //    ->andWhere('p.objectif = :Conquete')
+    //    ->setParameter('Conquete', $conquete)
+    //    ->getQuery()
+    //    ->getResult()
+    //   ;
+    //}
 
-    public function ObjectifConquete($conquete)
-    {
+    //public function ObjectifFideConq($fideconquete)
+    //{
         
-        return $this->createQueryBuilder('p')
-        ->andWhere('p.objectif = :Conquete')
-        ->setParameter('Conquete', $conquete)
-        ->getQuery()
-        ->getResult()
-        ;
-    }
-
-    public function ObjectifFideConq($fideconquete)
-    {
-        
-        return $this->createQueryBuilder('p')
-        ->andWhere('p.objectif = :Fidelisation-Conquete')
-        ->setParameter('Fidelisation-Conquete', $fideconquete)
-        ->getQuery()
-        ->getResult()
-        ;
-    }
+    //   return $this->createQueryBuilder('p')
+    //    ->andWhere('p.objectif = :Fidelisation-Conquete')
+    //    ->setParameter('Fidelisation-Conquete', $fideconquete)
+    //   ->getQuery()
+    //   ->getResult()
+    //    ;
+    //}
 
     
     // /**

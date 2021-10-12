@@ -92,7 +92,7 @@ class Sites
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity=CartesCadeaux::class, inversedBy="site")
+     * @ORM\OneToMany(targetEntity=CartesCadeaux::class, mappedBy="site")
      */
     private $cartesCadeaux;
 
@@ -115,11 +115,6 @@ class Sites
      * @ORM\OneToMany(targetEntity=Satisfaction::class, mappedBy="site")
      */
     private $satisfactions;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Total::class, mappedBy="site")
-     */
-    private $totals;
 
 
     public function __construct()
@@ -448,35 +443,4 @@ class Sites
 
         return $this;
     }
-
-    /**
-     * @return Collection|Total[]
-     */
-    public function getTotals(): Collection
-    {
-        return $this->totals;
-    }
-
-    public function addTotal(Total $total): self
-    {
-        if (!$this->totals->contains($total)) {
-            $this->totals[] = $total;
-            $total->setSite($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTotal(Total $total): self
-    {
-        if ($this->totals->removeElement($total)) {
-            // set the owning side to null (unless already changed)
-            if ($total->getSite() === $this) {
-                $total->setSite(null);
-            }
-        }
-
-        return $this;
-    }
-
 }

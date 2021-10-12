@@ -11,7 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class PlanCommunication
 {
-    const TypeOpe = ["Conquete", "Fidelisation", "Fidelisation-Conquete"];
+    const TypeObj = ["Conquete", "Fidelisation", "Fidelisation-Conquete"];
+    const TypeOpe = ["Animation", "Commercial", "Notoriété"];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -21,7 +22,7 @@ class PlanCommunication
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice(choices=PlanCommunication::TypeOpe, message="Veuillez choisir entre ces 3 objectifs.")
+     * @Assert\Choice(choices=PlanCommunication::TypeOpe, message="Veuillez choisir entre ces 3 types d'opération.")
      */
     private $type_operation;
 
@@ -32,6 +33,7 @@ class PlanCommunication
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=PlanCommunication::TypeObj, message="Veuillez choisir entre ces 3 objectifs.")
      */
     private $objectif;
 

@@ -112,4 +112,34 @@
   </div>
 {% endif %}
 </div>
+<p>test js div apparition</p>
+	<h1>TEST</h1>
+<form action="">
+        <select name="fonction" id="fonction" OnChange="affichernouv();">
+            <option name="empty" id="empty"></option>
+            <option name="pouf" id="pouf">Pouf</option>
+            <option name="nouveau" id="nouveau">Nouveau</option>
+        </select>
+        <div id="ajout" style="display:none"><input type="text" name="ajouter_nouv"/></div>
+    </form>
+
+<script type="text/javascript">
+function affichenouv() {
+if (document.fonction.options.value == "nouveau")
+    document.getElementById('ajout').style.display = 'block';
+else
+    document.getElementById('ajout').style.display = 'none';
+}
+
+let div;
+function afficher(select){
+    let nouvdiv = div || document.getElementById("nouv"),
+        i = select.selectedIndex;
+    nouvdiv.style.display = (select.options[i].value == "nouv") ? "block" : "none";
+}
+</script>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
