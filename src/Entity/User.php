@@ -404,7 +404,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-<<<<<<< HEAD
 
     public function getResetToken(): ?string
     {
@@ -418,6 +417,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-=======
->>>>>>> e04c834bd43097f579a8ed7cafccbc49cb94cedb
 }
