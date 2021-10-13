@@ -116,6 +116,13 @@ class Sites
      */
     private $satisfactions;
 
+<<<<<<< HEAD
+=======
+    /**
+     * @ORM\OneToMany(targetEntity=Total::class, mappedBy="site")
+     */
+    private $totals;
+>>>>>>> e04c834bd43097f579a8ed7cafccbc49cb94cedb
 
     public function __construct()
     {
@@ -319,7 +326,7 @@ class Sites
 
         return $this;
     }
-    
+
     public function __toString() {
         return $this->getNomDuSite();
     }
@@ -443,4 +450,37 @@ class Sites
 
         return $this;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * @return Collection|Total[]
+     */
+    public function getTotals(): Collection
+    {
+        return $this->totals;
+    }
+
+    public function addTotal(Total $total): self
+    {
+        if (!$this->totals->contains($total)) {
+            $this->totals[] = $total;
+            $total->setSite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTotal(Total $total): self
+    {
+        if ($this->totals->removeElement($total)) {
+            // set the owning side to null (unless already changed)
+            if ($total->getSite() === $this) {
+                $total->setSite(null);
+            }
+        }
+
+        return $this;
+    }
+>>>>>>> e04c834bd43097f579a8ed7cafccbc49cb94cedb
 }
