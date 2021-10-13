@@ -47,11 +47,6 @@ class Total
      */
     private $trimestre;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $mois;
-
 
     public function getId(): ?int
     {
@@ -126,18 +121,6 @@ class Total
     public function setTrimestre(string $trimestre): self
     {
         $this->trimestre = $trimestre;
-
-        return $this;
-    }
-
-    public function getMois(): ?string
-    {
-        return $this->mois;
-    }
-
-    public function setMois(string $mois): self
-    {
-        $this->mois = $mois;
 
         return $this;
     }

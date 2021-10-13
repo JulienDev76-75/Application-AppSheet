@@ -4,42 +4,175 @@
 
 {% block body %}
 {% if is_granted('ROLE_DS') %}
+<div class="row row-cols-1 row-cols-md-3 row-cols-mlg-3 g-4 my-5 mx-auto">
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartFreqDS" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartPanierMoyenDS" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>   
+    <div class="col" id="redimensionnable" style="resize: both; overflow: scroll;">
+      <div class="card">  
+          <div class="card-body">
+            <canvas id="myChartChiffreAffaireDS" width="300" height="300"></canvas>
+          </div>
+      </div>
+    </div>       
+</div>
+
+<hr class="w-75 mx-auto">
+{% for site in siteDS %}
+<h3 class="text-center pt-3">{{ site.nomDuSite }}</h3>
+{% endfor %}
 <h2 class="text-center mt-5 mb-5 text-danger"></h2>
-<div class="w-75 mx-auto">
+<div class="w-75 mx-auto mb-5 pb-5">
     <table class="table table-bordered mb-5 mt-5">
         <thead class="bg-dark text-white">
             <tr>
-                <th scope="col">Année</th>
-                <th scope="col">Mois</th>
+                <th scope="col">Période</th>
                 <th scope="col">Activité</th>
                 <th scope="col">Chiffre d'Affaire</th>
                 <th scope="col">Fréquentation</th>
                 <th scope="col">Panier Moyen</th>
-                <th scope="col">edit</th>
-                <th scope="col">supprimer</th>
             </tr>
         </thead>
         <tbody>
-          {% if rig is not empty %}
-            {% for rigs in rig %}
-                <tr class="bg-light">
-                    <td> {{rigs.annee}}</td>
-                </tr>
-                <tr class="bg-light">
-                    <td> {{rigs.mois}}</td>
-                    <td> {{rigs.activite}}</td>
-                    <td> {{rigs.chiffreAffaire}}</td>
-                    <td> {{rigs.frequentation}}</td>
-                    <td> {{rigs.panierMoyen}}</td>
-                    <td> <a href="{{ path('editRig', {id: rigs.id})}}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-                    <td> <a href="{{ path('deleteRig', {id: rigs.id})}}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
+          {% if rigDSS is not empty %}
+            {% for rigDS in rigDSS %}
+                    <td> {{rigDS.periode}}</td>
+                    <td> {{rigDS.activite}}</td>
+                    <td> {{rigDS.chiffreAffaire}}</td>
+                    <td> {{rigDS.frequentation}}</td>
+                    <td> {{rigDS.panierMoyen}}</td> 
                 </tr>
             {% endfor %}
             {% else %}
-            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un Rig</h2>
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un Rig pour votre site</h2>
         {% endif %}
         </tbody>
     </table>
+
+{# Frequentation TOUS SITE PAR MOIS ET ANNEE#}
+<script>
+var ctx = document.getElementById('myChartFreqDS').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ periodecaDS | raw }},
+        datasets: [{
+            label: 'Frequentation (flux) PAR MOIS ET ANNEE',
+            data:  {{ ca_aff_DS | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+{# Panier Moyen TOUS SITE PAR MOIS ET ANNEE #}
+var ctx = document.getElementById('myChartPanierMoyenDS').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ periodefreqDS | raw }},
+        datasets: [{
+            label: 'Panier Moyen en Euros PAR MOIS ET ANNEE',
+            data:  {{ freq_aff_DS | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+{# chiffe Affaire TOUS SITE PAR MOIS ET ANNEE #}
+var ctx = document.getElementById('myChartChiffreAffaireDS').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ periodepaniermoyenDS | raw }},
+        datasets: [{
+            label: 'Chiffre d\'affaire en Euros PAR MOIS ET ANNEE',
+            data:  {{ panier_moyenDS | raw }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+</script>
 {% endif %}
 
 {% if is_granted('ROLE_DR') %}
@@ -146,6 +279,7 @@
     </div>
 </div>
 
+{# Frequentation TOUS SITE PAR MOIS ET ANNEE#}
 <script>
 var ctx = document.getElementById('myChartFreq').getContext('2d');
 var myChart = new Chart(ctx, {
@@ -183,6 +317,7 @@ var myChart = new Chart(ctx, {
     }
 });
 
+{# Panier Moyen TOUS SITE PAR MOIS ET ANNEE #}
 var ctx = document.getElementById('myChartPanierMoyen').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
@@ -219,6 +354,7 @@ var myChart = new Chart(ctx, {
     }
 });
 
+{# chiffe Affaire TOUS SITE PAR MOIS ET ANNEE #}
 var ctx = document.getElementById('myChartChiffreAffaire').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',

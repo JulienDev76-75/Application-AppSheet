@@ -80,14 +80,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $rigs;
 
     /**
-     * @ORM\OneToMany(targetEntity=Total::class, mappedBy="user")
-     */
-    private $totals;
-
-    /**
      * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="user")
      */
     private $passes;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $reset_token;
 
     public function __construct()
     {
@@ -376,36 +376,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Total[]
-     */
-    public function getTotals(): Collection
-    {
-        return $this->totals;
-    }
-
-    public function addTotal(Total $total): self
-    {
-        if (!$this->totals->contains($total)) {
-            $this->totals[] = $total;
-            $total->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTotal(Total $total): self
-    {
-        if ($this->totals->removeElement($total)) {
-            // set the owning side to null (unless already changed)
-            if ($total->getUser() === $this) {
-                $total->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Pass[]
      */
     public function getPasses(): Collection
@@ -434,4 +404,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getResetToken(): ?string
+    {
+        return $this->reset_token;
+    }
+
+    public function setResetToken(?string $reset_token): self
+    {
+        $this->reset_token = $reset_token;
+
+        return $this;
+    }
+
 }

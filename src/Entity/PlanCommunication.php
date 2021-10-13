@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class PlanCommunication
 {
+    const TypeObj = ["Conquete", "Fidelisation", "Fidelisation-Conquete"];
+    const TypeOpe = ["Animation", "Commercial", "Notoriété"];
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -20,6 +22,7 @@ class PlanCommunication
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=PlanCommunication::TypeOpe, message="Veuillez choisir entre ces 3 types d'opération.")
      */
     private $type_operation;
 
@@ -30,6 +33,7 @@ class PlanCommunication
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=PlanCommunication::TypeObj, message="Veuillez choisir entre ces 3 objectifs.")
      */
     private $objectif;
 
@@ -87,11 +91,6 @@ class PlanCommunication
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="planCommunications")
      */
     private $user;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $annee;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -303,18 +302,6 @@ class PlanCommunication
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getAnnee(): ?int
-    {
-        return $this->annee;
-    }
-
-    public function setAnnee(int $annee): self
-    {
-        $this->annee = $annee;
 
         return $this;
     }

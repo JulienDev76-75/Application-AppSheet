@@ -4,12 +4,108 @@
 
 {% block body %}
 {% if is_granted('ROLE_DS') %}
+
+<h1 class="pt-5 pb-4 mt-5 text-center"> Graphique Tous Sites</h1>
+<div class="row row-cols-1 row-cols-md-3 g-4 mx-auto">
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-body">
+        <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td colspan="2">Larry the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-body">
+    <table class="table table-bordered border-primary">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+            <td>@twitter</td>
+          </tr>
+  </tbody>
+</table>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-body">
+<canvas id="myChart" width="400" height="400"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+  
+</div>
+
+<hr class="w-75 mx-auto">
+{% for site in siteDS %}
+<h3 class="text-center">{{ site.nomDuSite }}</h3>
+{% endfor %}
 <h2 class="text-center mt-5 mb-5 text-danger"></h2>
 <div class="w-75 mx-auto">
     <table class="table table-bordered mb-5 mt-5">
         <thead class="bg-dark text-white">
             <tr>
-                <th scope="col">Trimestre</th>
+                <th scope="col">Année</th>
                 <th scope="col">Type d'opération</th>
                 <th scope="col">Cible</th>
                 <th scope="col">Objectif</th>
@@ -23,18 +119,13 @@
                 <th scope="col">Chiffre d'Affaire</th>
                 <th scope="col">ROI</th>
                 <th scope="col">detail</th>
-                <th scope="col">edit</th>
-                <th scope="col">supprimer</th>
             </tr>
         </thead>
         <tbody>
           {% if planCom is not empty %}
             {% for plancoms in planCom %}
                 <tr class="bg-light">
-                    <td> {{plancoms.annee}}</td>
-                </tr>
-                <tr class="bg-light">
-                    <td><p>trimestre</p></td>
+                    <td><p>{{plancoms.mois}}</p></td>
                     <td> {{plancoms.typeOperation}}</td>
                     <td> {{plancoms.cible}}</td>
                     <td> {{plancoms.objectif}}</td>
@@ -48,15 +139,97 @@
                     <td> {{plancoms.chiffreAffaire}}</td>
                     <td> {{plancoms.roi}}</td>
                     <td><p>modal</p></td>
-                    <td> <a href="{{ path('editPlanCom', {id: plancoms.id})}}" class="card-link btn btn-danger text-white my-5">Modifier</a></td>
-                    <td> <a href="{{ path('deletePlanCommunication', {id: plancoms.id})}}" class="card-link btn btn-danger text-white my-5" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
-                </tr>
             {% endfor %}
             {% else %}
             <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un Plan de communication</h2>
         {% endif %}
         </tbody>
     </table>
+</div>
+
+<div class="w-75 mx-auto">
+    <table class="table table-bordered mb-5 mt-5">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th scope="col">Année</th>
+                <th scope="col">Type d'opération</th>
+                <th scope="col">Cible</th>
+                <th scope="col">Objectif</th>
+                <th scope="col">Offre</th>
+                <th scope="col">Coût de communication interne</th>
+                <th scope="col">Coût de communication externe</th>
+                <th scope="col">Frais d'organisation</th>
+                <th scope="col">Participation partenaires</th>
+                <th scope="col">Coût total</th>
+                <th scope="col">Pass</th>
+                <th scope="col">Chiffre d'Affaire</th>
+                <th scope="col">ROI</th>
+                <th scope="col">detail</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% if planCom is not empty %}
+            {% for plancoms in planCom %}
+                <tr class="bg-light">
+                    <td><p>{{plancoms.mois}}</p></td>
+                    <td> {{plancoms.typeOperation}}</td>
+                    <td> {{plancoms.cible}}</td>
+                    <td> {{plancoms.objectif}}</td>
+                    <td> {{plancoms.offre}}</td>
+                    <td> {{plancoms.coutComInterne}}</td>
+                    <td> {{plancoms.coutComExterne}}</td>
+                    <td> {{plancoms.fraisOrganisation}}</td>
+                    <td> {{plancoms.participationPartenaire}}</td>
+                    <td> {{plancoms.coutTotal}}</td>
+                    <td> {{plancoms.pass}}</td>
+                    <td> {{plancoms.chiffreAffaire}}</td>
+                    <td> {{plancoms.roi}}</td>
+                    <td><p>modal</p></td>
+            {% endfor %}
+            {% else %}
+            <h2 class="text-danger text-center mt-5 mb-5">Veuillez rajouter un Plan de communication</h2>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
 {% endif %}
 
 {# ROLE DR ************************************************************************************************************ #}

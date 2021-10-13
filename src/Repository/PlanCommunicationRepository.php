@@ -38,41 +38,27 @@ class PlanCommunicationRepository extends ServiceEntityRepository
         ;
     }
 
-    public function ObjectifFidelisation($fidelisation)
-    {
+    //public function ObjectifConquete($conquete)
+    //{
         
-        return $this->createQueryBuilder('p')
-        ->select('type_operation as type_operation')
-        ->andWhere('p.type_operation = :Animation')
-        ->setParameter('Animation', $fidelisation)
-        ->getQuery()
-        ->getResult()
-        ;
-    }
+    //   return $this->createQueryBuilder('p')
+    //    ->andWhere('p.objectif = :Conquete')
+    //    ->setParameter('Conquete', $conquete)
+    //    ->getQuery()
+    //    ->getResult()
+    //   ;
+    //}
 
-    public function ObjectifConquete($conquete)
-    {
+    //public function ObjectifFideConq($fideconquete)
+    //{
         
-        return $this->createQueryBuilder('p')
-        ->select('p.cout_total as cout_total')
-        ->andWhere('p.objectif = :Conquete')
-        ->setParameter('Conquete', $conquete)
-        ->getQuery()
-        ->getResult()
-        ;
-    }
-
-    public function ObjectifFideConq($fideconquete)
-    {
-        
-        return $this->createQueryBuilder('p')
-        ->select('p.cout_total as cout_total')
-        ->andWhere('p.objectif = :Fidelisation-Conquete')
-        ->setParameter('Fidelisation-Conquete', $fideconquete)
-        ->getQuery()
-        ->getResult()
-        ;
-    }
+    //   return $this->createQueryBuilder('p')
+    //    ->andWhere('p.objectif = :Fidelisation-Conquete')
+    //    ->setParameter('Fidelisation-Conquete', $fideconquete)
+    //   ->getQuery()
+    //   ->getResult()
+    //    ;
+    //}
 
     
     // /**
