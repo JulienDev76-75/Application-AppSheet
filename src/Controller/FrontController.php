@@ -38,13 +38,10 @@ use App\Repository\TotalRepository;
 use App\Repository\TotalRigRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-<<<<<<< HEAD
 /**
  * @IsGranted("IS_AUTHENTICATED_FULLY")
  */
 
-=======
->>>>>>> e04c834bd43097f579a8ed7cafccbc49cb94cedb
 class FrontController extends AbstractController
 {
 
@@ -103,7 +100,7 @@ class FrontController extends AbstractController
         'plancomDG' => $plancomDG,
     ]);
     }
-  
+
     /**
      * @Route("/DGdashboard/satisfaction", name="satisfaction")
      */
@@ -182,6 +179,7 @@ class FrontController extends AbstractController
                 $horaireDG[] = $horaire ->getSatisProprete();
                 }
             
+
     return $this->render('dg/satisfaction.html.twig', [
         'siteDS' => $siteDS,
         'satisDSS' => $satisDSS,
@@ -214,9 +212,8 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/DGdashboard/site/{id}/carteCadeau", name="carteCadeau")
+     * @Route("/DGdashboard/carteCadeau", name="carteCadeau")
      */
-  
     public function carteCadeau(CartesCadeauxRepository $cartesRepo, SitesRepository $siteRepo): Response
     {
         // ************************* DS VIEW *******************************
@@ -359,7 +356,7 @@ class FrontController extends AbstractController
         'sitesDRS' => $siteDRS,
         'cartescadeauxDRS' => $cartescadeauxDRS,
         'moisDR' => json_encode($moisDR),
-        'cartesSoldeDR' => json_encode($cartesSoldeDR)
+        'cartesSoldeDR' => json_encode($cartesSoldeDR),
     ]);
     }
 
@@ -885,6 +882,7 @@ class FrontController extends AbstractController
     {
         $rig = new Rig();
         $form = $this->createForm(RigFormType::class, $rig);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sites = $sitesRepo->find($id);
