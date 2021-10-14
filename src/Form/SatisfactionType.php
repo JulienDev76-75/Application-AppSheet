@@ -17,7 +17,6 @@ class SatisfactionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('annee')
             ->add('trimestre', TextType::class, [
                 'attr' => ['class' => '',
                 'placeholder' => "Veuillez mettre T1, T2, T3 ou T4"],

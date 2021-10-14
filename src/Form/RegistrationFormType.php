@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,7 +11,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
@@ -22,11 +20,11 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'attr' => ['class' => 'mb-4 h-full-width',
-                'placeholder' => "e-mail de confirmation"],
+                'attr' => ['class' => 'mb-4 ms-4 rounded'],
                 'label' => "Email :"
             ])
             ->add('poste', TextType::class, [
+                'attr' => ['class' => 'mb-4 ms-4 rounded'],
                 'label' => 'Poste :'
             ])
             ->add('plainPassword', PasswordType::class, [
@@ -34,7 +32,8 @@ class RegistrationFormType extends AbstractType
                 // this is read and encoded in the controller
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
-                'row_attr' => ['class' => 'mt-4 h-full-width'],
+                'attr' => ['class' => 'mb-4 ms-4 rounded'],
+                'row_attr' => ['class' => 'mb-4 rounded'],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez rentrer un mot de passe',
@@ -48,7 +47,7 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('enregistrer', SubmitType::class, [
-                'attr' => ['class' => 'bg-dark text-white mb-5 mt-4'],
+                'attr' => ['class' => 'bg-success text-white mb-5 mt-4'],
                 'row_attr' => ['class' => 'text-center']
             ])
         ;

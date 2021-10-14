@@ -37,6 +37,8 @@ use App\Repository\TotalPassTousSitesRepository;
 use App\Repository\TotalRepository;
 use App\Repository\TotalRigRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 /**
  * @IsGranted("IS_AUTHENTICATED_FULLY")
@@ -374,12 +376,12 @@ class FrontController extends AbstractController
         );
         $plancomdss = $plancomRepo ->findby(
             ['user' => $this->getUser()],
-        );  
+        );      
 
-        //$conqueteDSS = $plancomRepo->ObjectifConquete("Conquete");
-        //    foreach($conqueteDSS as $conqueteDS) {
-        //        $conqDS = $conqueteDS ->getCoutTotal();
-        //    }
+        $conqueteDSS = $plancomRepo->ObjectifConquete("Conquete");
+            foreach($conqueteDSS as $conqueteDS) {
+                $conqDS = $conqueteDS ->getCoutTotal();
+            }
 
         //ROLE_DR
         $planCom= $plancomRepo ->findby(
@@ -499,12 +501,49 @@ class FrontController extends AbstractController
     public function pass(PassRepository $passRepo, UserRepository $userRepo, SitesRepository $sitesRepo, TotalPassTousSitesRepository $totalpassRepo): Response
     {
         //ROLE_DS
-        $pass = $passRepo ->findby(
+        $passDSS = $passRepo ->findby(
             ['site' => $this->getUser()],
             ['site' => 'ASC'],
         );  
+
+        foreach($passDSS as $passDS) {
+            $periode_tx_desabo_DSS[] = $passDS ->getPeriode();
+            $taux_desabo_DSS[] = $passDS -> getTxDesabo();
+        }
+        foreach($passDSS as $passDS) {
+            $periode_inst_total_DSS[] = $passDS ->getPeriode();
+            $inst_total_DSS[] = $passDS -> getInstTotal();
+        }
+        foreach($passDSS as $passDS) {
+            $periode_total_abo_DSS[] = $passDS ->getPeriode();
+            $total_abo_DSS[] = $passDS -> getTotalAbo();
+        }
+        foreach($passDSS as $passDS) {
+            $periode_total_desabo_DSS[] = $passDS ->getPeriode();
+            $total_desabo_DSS[] = $passDS -> getTotalDesabo();
+        }
+        foreach($passDSS as $passDS) {
+            $periode_abo_fitness_DSS[] = $passDS ->getPeriode();
+            $abo_fitness_DSS[] = $passDS -> getAboFitness();
+        }
+        foreach($passDSS as $passDS) {
+            $periode_abo_fitness_DSS[] = $passDS ->getPeriode();
+            $abo_fitness_DSS[] = $passDS -> getAboFitness();
+        }
+        foreach($passDSS as $passDS) {
+            $periode_desabo_fitness_DSS[] = $passDS ->getPeriode();
+            $desabo_fitness_DSS[] = $passDS -> getDesaboFitness();
+        }
+        foreach($passDSS as $passDS) {
+            $periode_inst_fitness_DSS[] = $passDS ->getPeriode();
+            $inst_fitness_DSS[] = $passDS -> getInstFitness();
+        }
         
         //ROLE_DR
+        $passDRS = $passRepo ->findby(
+            ['site' => $this->getUser()],
+            ['site' => 'ASC'],
+        );  
 
         //ROLE_DG
         $userDGS = $userRepo ->findAll();
@@ -533,7 +572,7 @@ class FrontController extends AbstractController
             }         
 
     return $this->render('dg/pass.html.twig', [
-        'pass' => $pass,
+        'passDSS' => $passDSS,
         'userDGS' => $userDGS,
         'sitesDGS' => $sitesDGS,
         'passDGS' => $passDGS,
@@ -559,7 +598,6 @@ class FrontController extends AbstractController
         );
         $rigDSS = $rigRepo->findBy(
             ['user' => $this->getUser()],
-            ['periode' => 'ASC'],
         );
 
         foreach($rigDSS as $rigDS) {
@@ -677,7 +715,7 @@ class FrontController extends AbstractController
 
         // Type objectif par année : récapitulatif / répartition
     foreach($typeobjectif as $repartitionTypeObjectif) {
-            $repartitionObjectif[] = ($repartitionTypeObjectif->getObjectif());//count()
+            $repartitionObjectif[] = ($repartitionTypeObjectif->getObjectif());
             }
 
     // ************************* DR VIEW *******************************
@@ -719,6 +757,95 @@ class FrontController extends AbstractController
         'conquete' => json_encode($conquete),
     ]);
     }
+
+    /**
+     * @Route("/DGdashboard/export", name="export")
+     */
+    public function export(SitesRepository $sitesRepo, UserRepository $userRepo): Response
+    {
+        //ROLE_DR
+        $sitesDR = $sitesRepo -> findBy(
+            ['user' => $this->getUser()],
+            ['ville' => 'ASC'],
+        );  
+
+        //ROLE_DG
+        $userDG = $userRepo -> findAll();
+        $sitesDG = $sitesRepo -> userAndSites();
+
+        //ROLE_DS
+        $sitesDS = $sitesRepo -> findOneBy(
+            ['user' => $this->getUser()]);
+
+    return $this->render('export/listeSites.html.twig', [
+        'sitesDR' => $sitesDR,
+        'sitesDS' => $sitesDS,
+        'sitesDG' => $sitesDG,
+        'userDG' => $userDG,
+    ]);
+    }
+
+    /**
+    * @Route("/DGdashboard/export/download", name="download")
+    */
+
+    public function exportdata(SitesRepository $sitesRepo, UserRepository $userRepo): Response
+    {
+    
+    //On définit les options du PDF, pour cela il faut instancier un nouvel objet Options
+    $pdfOptions = new Options();
+    $pdfOptions ->set('defaultFont', 'Calibri');
+    $pdfOptions->setIsRemoteEnabled(true);
+    //on instancie Dompdf
+    $dompdf = new Dompdf($pdfOptions);
+    $context =stream_context_create([
+        'ssl' => [
+            'verify_peer' => FALSE,
+            'verify_peer' => FALSE, 
+            'allow_self_signed' => TRUE,
+        ]
+        ]);
+        //transmet le contexte
+        $dompdf->setHttpContext($context);
+        //on génère le HTML
+        $html = $this->renderView('users/download.html.twig');
+        $dompdf->loadHtml($html);
+        //dimension de la feuille
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        //génère un nom de fichier
+        $fichier = 'userdata-listeDesSites'. $this->getUser->getPrenomNom() .'.pdf';
+
+        //on envoie le pdf au navigateur, on définit entrer [] la méthode de téléchargement
+        $dompdf->stream($fichier, [
+            'Attachment' => true
+        ]);
+
+        return new Response(); // Une fois cela terminé, tu n'as plus
+
+        //ROLE_DR
+        $sitesDR = $sitesRepo -> findBy(
+            ['user' => $this->getUser()],
+            ['ville' => 'ASC'],
+        );  
+
+        //ROLE_DG
+        $userDG = $userRepo -> findAll();
+        $sitesDG = $sitesRepo -> userAndSites();
+
+        //ROLE_DS
+        $sitesDS = $sitesRepo -> findOneBy(
+            ['user' => $this->getUser()]);
+
+    return $this->render('export/listeSites.html.twig', [
+        'sitesDR' => $sitesDR,
+        'sitesDS' => $sitesDS,
+        'sitesDG' => $sitesDG,
+        'userDG' => $userDG,
+    ]);
+    }
+
 
     //
     // ********************** FORMULAIRE : ADD ELEMENTS **********************
@@ -915,10 +1042,37 @@ class FrontController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $rig = $passRepo->find($id);
-            $rig->setSite($rig);
+            $pass = $passRepo->find($id);
+            $pass->setSite($pass);
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($rig);
+            $entityManager->persist($pass);
+            $entityManager->flush();
+
+            $this->addFlash(
+                "success",
+                "Votre projet a bien été ajoutée votre site, vous n'avez plus qu'à mettre vos premières tâches afin d'atteindre vos objectifs ! :)"
+            );
+
+            return $this->redirectToRoute('newPass', ['id' => $pass->getSite()->getId()]);
+        }
+
+        return $this->render('registration/newSatisfaction.html.twig', [
+            'form' => $form->createView()
+         ]);
+    }
+
+    /**
+    * @Route("/DGdashboard/listeDesSites/{id}/newPass", name="newTotalSatisfaction")
+    */
+    public function newTotalSatisfaction(Request $request, TotalRepository $totalRepo): Response
+    {
+        $totalsatis = new Total();
+        $form = $this->createForm(TotalFormType::class, $totalsatis);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($totalsatis);
             $entityManager->flush();
 
             $this->addFlash(
