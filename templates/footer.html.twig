@@ -1,7 +1,7 @@
-<footer class="text-center py-5 pt-2 text-white bg-dark">
+<footer style="background: url(https://bootstrapious.com/i/snippets/sn-bg-image/bg.jpg)" class="page-holder bg-cover">
 <div>
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <div class="container">
+        <div class="container mt-2">
             <a class="footer text-white" href="{{ path('DGdashboard') }}"><i class="fas fa-house-user"><p class="pfas">Home</p></i></a>
             <a class="footer text-white" href="{{ path('listeDesSites') }}"><i class="fas fa-swimming-pool ms-4"><p class="pfas">Site</p></i></a>
             <a class="footer text-white" href="{{ path('pass') }}"><i class="far fa-id-card ms-4"><p class="pfar">Pass</p></i></a>
@@ -10,7 +10,7 @@
             <a class="footer text-white ms-5" href="{{ path('app_logout') }}"><i class="fas fa-times-circle"><p class="pfas">Log-Out</p></i></a>
         </div>
     {% else %}
-        <div>
+        <div class="mt-2">
             <a class="footer text-white" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"><p class="pfas">Se Connecter</p></i></a>
             <a class="footer text-white ms-5" href="{{ path('app_register') }}"><i class="fas fa-book-reader"><p class="pfas">S'inscrire</p></i></a>
         </div>

@@ -65,13 +65,150 @@
     <div class="card p-4">
       <i class="fas fa-microphone-alt"></i>
         <div class="card-body">
+          <h5 class="card-title">Plan de com'</h5>
+          <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPlanCommunication', {id: sites.id})}}">Ajouter</a></p> 
+        </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if is_granted('ROLE_DS') %}
+<h3 class="text-center mt-1 mb-5 pt-5">Détail du site :</h3>
+
+<div class="container my-5 bg-light border border-danger p-5"> 
+<p class="text-center">Nom du site :</p><p class="text-danger text-center">{{sites.nomDuSite}}</p>
+<p class="text-center">Ville :</p><p class="text-danger text-center">{{sites.ville}}</p>
+<p class="text-center">Type de contrat :</p><p class="text-danger text-center"> {{sites.typeContrat}}</p>
+<p class="text-center">Type de société :</p><p class="text-danger text-center"> {{sites.typeSociete}}</p>
+<p class="text-center">Raison sociale :</p><p class="text-danger text-center"> {{sites.raisonSociale}}</p>
+<p class="text-center">Adresse :</p><p class="text-danger text-center"> {{sites.adresse1}}</p>
+<p class="text-center">Code postal :</p><p class="text-danger text-center"> {{sites.codePostal}}</p>
+<p class="text-center">Date de début :</p><p class="text-danger text-center"> {{sites.dateDebut | date('d/m/Y')}}</p>
+<p class="text-center">Date de fin :</p><p class="text-danger text-center"> {{sites.dateFin | date('d/m/Y')}}</p>
+<p class="text-center">Date de premier contrat :</p> <p class="text-danger text-center">{{sites.datePremierContrat | date('d/m/Y')}}</p>
+<p class="text-center">Accès :</p><p class="text-danger text-center"> {{sites.ctrlAcces}}</p>
+</div>
+
+
+<hr class="w-50 mx-auto mb-4"></hr>
+
+<div class="row row-cols-1 row-cols-md-5 g-12 w-75 mx-auto mb-5 pb-5 text-center">
+  <div class="col">
+    <div class="card p-4">
+      <i class="fas fa-gift"></i>
+      <div class="card-body">
+        <h5 class="card-title">Cartes Cadeaux</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newCartesCadeaux', {id: sites.id})}}">Ajouter</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card p-4">
+      <i class="far fa-laugh"></i>
+      <div class="card-body">
+        <h5 class="card-title">Satisfaction</h5>
+       <p><a class="btn btn-danger text-white mt-3" href="{{ path('newSatisfaction', {id: sites.id})}}">Ajouter</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card p-4">
+   <i class="fas fa-euro-sign"></i>
+      <div class="card-body">
+        <h5 class="card-title">Fréquentation/C.A</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newRig', {id: sites.id})}}">Ajouter</a></p> 
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card p-4">
+      <i class="far fa-address-card"></i>
+      <div class="card-body">
+        <h5 class="card-title">Pass</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPass', {id: sites.id})}}">Ajouter</a></p> 
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card p-4">
+      <i class="fas fa-microphone-alt"></i>
+        <div class="card-body">
+          <h5 class="card-title">Plan de Com'</h5>
+          <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPlanCommunication', {id: sites.id})}}">Ajouter</a></p> 
+        </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if is_granted('ROLE_DG') %}
+<h3 class="text-center mt-1 mb-5 pt-5">Détail du site :</h3>
+
+<div class="container my-5 bg-light border border-danger p-5"> 
+<p class="text-center">Nom du site :</p><p class="text-danger text-center">{{sites.nomDuSite}}</p>
+<p class="text-center">Ville :</p><p class="text-danger text-center">{{sites.ville}}</p>
+<p class="text-center">Type de contrat :</p><p class="text-danger text-center"> {{sites.typeContrat}}</p>
+<p class="text-center">Type de société :</p><p class="text-danger text-center"> {{sites.typeSociete}}</p>
+<p class="text-center">Raison sociale :</p><p class="text-danger text-center"> {{sites.raisonSociale}}</p>
+<p class="text-center">Adresse :</p><p class="text-danger text-center"> {{sites.adresse1}}</p>
+<p class="text-center">Code postal :</p><p class="text-danger text-center"> {{sites.codePostal}}</p>
+<p class="text-center">Date de début :</p><p class="text-danger text-center"> {{sites.dateDebut | date('d/m/Y')}}</p>
+<p class="text-center">Date de fin :</p><p class="text-danger text-center"> {{sites.dateFin | date('d/m/Y')}}</p>
+<p class="text-center">Date de premier contrat :</p> <p class="text-danger text-center">{{sites.datePremierContrat | date('d/m/Y')}}</p>
+<p class="text-center">Accès :</p><p class="text-danger text-center"> {{sites.ctrlAcces}}</p>
+</div>
+
+
+<hr class="w-50 mx-auto mb-4"></hr>
+
+<div class="row row-cols-1 row-cols-md-5 g-12 w-75 mx-auto mb-5 pb-5 text-center">
+  <div class="col">
+    <div class="card p-4">
+      <i class="fas fa-gift"></i>
+      <div class="card-body">
+        <h5 class="card-title">Cartes Cadeaux</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newCartesCadeaux', {id: sites.id})}}">Ajouter</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card p-4">
+      <i class="far fa-laugh"></i>
+      <div class="card-body">
+        <h5 class="card-title">Satisfaction</h5>
+       <p><a class="btn btn-danger text-white mt-3" href="{{ path('newSatisfaction', {id: sites.id})}}">Ajouter</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card p-4">
+   <i class="fas fa-euro-sign"></i>
+      <div class="card-body">
+        <h5 class="card-title">Fréquentation/C.A</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newRig', {id: sites.id})}}">Ajouter</a></p> 
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card p-4">
+      <i class="far fa-address-card"></i>
+      <div class="card-body">
+        <h5 class="card-title">Pass</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPass', {id: sites.id})}}">Ajouter</a></p> 
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card p-4">
+      <i class="fas fa-microphone-alt"></i>
+        <div class="card-body">
           <h5 class="card-title">Plan de communication</h5>
           <p><a class="btn btn-danger text-white mt-3" href="{{ path('newPlanCommunication', {id: sites.id})}}">Ajouter</a></p> 
         </div>
     </div>
   </div>
 </div>
-
 {% endif %}
 
 

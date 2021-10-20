@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Statisitiques Satisfaction{% endblock %}
+{% block title %}Statistiques Satisfaction{% endblock %}
 
     {% block stylesheets %}
       <link rel="stylesheet" href="{{ asset('css/main.css') }}">
@@ -10,7 +10,7 @@
 
 {% if is_granted('ROLE_DS') %}
 <h2 class="text-center mb-2 mt-5 text-dark">Taux de satisfaction / Trimestre et année</h2>
-<div class="row row-cols-1 row-cols-md-2 row-cols-mlg-3 g-4 mt-5 mb-5 mx-auto">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-6 mt-5 mb-5 mx-auto ">
       <div class="col">
           <div class="card">       
           <div class="card-body">
@@ -63,6 +63,8 @@
           <th scope="col">Compétence du personnel (%)</th>
           <th scope="col">Satisfaction température (%)</th>
           <th scope="col">Nombre de répondants</th>
+          <th scope="col">Modifier</th>
+          <th scope="col">éditer</th>
         </tr>
       </thead>
     <tbody>
@@ -75,6 +77,8 @@
                   <td>{{satisDS.competenceDuPersonnel}}</td>
                   <td>{{satisDS.temperatureDouche}}</td>
                   <td>{{satisDS.repondant}}</td>
+                  <td><a href="{{ path('editSatisfaction', {id: satisDS.id}) }}" class="card-link btn btn-danger text-white">Modifier</a></td>
+                  <td><a href="{{ path('deleteSatisfaction', {id: satisDS.id}) }}" class="card-link btn btn-danger text-white" onclick="return confirm('Attention ! Ceci va supprimer définitivement votre fiche. Cliquez sur ok pour valider')">Supprimer</a></td>
                 </tr>
       {% endfor %}
       {% else %}
@@ -272,6 +276,19 @@ var myChart = new Chart(ctx, {
             </div>
         </div>
   </div>
+</div>
+
+<div class="w-25 mx-auto mb-5 pb-5 text-center">
+  <div class="col">
+    <div class="card p-4">
+      <i class="fas fa-gift"></i>
+      <div class="card-body">
+        <h5 class="card-title">Ajouter Satis. Globale Tous Sites</h5>
+        <p><a class="btn btn-danger text-white mt-3" href="{{ path('newTotalSatisfaction') }}">Ajouter</a></p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <hr class="w-75 mx-auto mt-4 mb-5">
 
@@ -359,7 +376,6 @@ var myChart = new Chart(ctx, {
         }
     }
 });
-
 var ctx = document.getElementById('myChartpropreteDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
@@ -395,7 +411,6 @@ var myChart = new Chart(ctx, {
         }
     }
 });
-
 var ctx = document.getElementById('compDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
@@ -431,7 +446,6 @@ var myChart = new Chart(ctx, {
         }
     }
 });
-
 var ctx = document.getElementById('myCharttemperatureDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',
@@ -465,7 +479,6 @@ var myChart = new Chart(ctx, {
         }
     }
 });
-
 var ctx = document.getElementById('myCharthoraireDG').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'bar',

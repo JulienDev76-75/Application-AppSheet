@@ -3,11 +3,11 @@
 {% block title %}{% endblock %}
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 {% block body %}
-    <div class="mt-5 mb-5 bg-light border border-danger w-75 mx-auto">
-        <h2 class="mb-5 mt-5 text-center text-dark">Enregistrez une nouvelle satisfaction pour votre site :</h2>
+    <div class="container my-5 bg-light border border-danger p-5">
+        <h2 class="mb-5 mt-5 text-center text-dark">Enregistrez la satisfaction globale de tous les sites :</h2>
             <div class="m-5 p-5">
                 <div class="row">
-                {{include('messages.html.twig')}}
+                  {{include('messages.html.twig')}}
                 {{ form(form) }}
                 </div>
         </div>

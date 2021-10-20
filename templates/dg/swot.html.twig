@@ -1,9 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Page Swot{% endblock %}
-      {% block stylesheets %}
-             <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-      {% endblock %}
 {% block body %}
 
 {% if is_granted('ROLE_DG') %}
@@ -60,6 +57,7 @@
 {% endif %}
 
 {% if is_granted('ROLE_DR') %}
+
 <div class="w-25 mx-auto mt-5 pt-3">
   {{ form(form)}}
 </div>
@@ -121,6 +119,8 @@
     {% endif %}
 </div>
 {% endif %}
+    {% block javascripts %}
+        <link href="{{ asset('js/main.js') }}" rel="stylesheet"/>
+        {% endblock %}
 
 {% endblock %}
-
