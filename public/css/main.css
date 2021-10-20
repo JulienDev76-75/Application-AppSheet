@@ -41,19 +41,12 @@ left: 0;
 bottom: 0;
 width: 100%;
 text-align: center;
-height : 5vh;
+height : 3vh;
 }
 
 #redimensionnable {
-    border: 3px groove;
     resize: both;
-    overflow: auto;
+    overflow: scroll;
+    border: 1px solid black;
+    font-size : 8em;
   }
-
-.bg-cover {
-    background-size: cover !important;
-  }
-  
-
-
-

@@ -5,13 +5,12 @@ namespace App\Entity;
 use App\Repository\RigRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass=RigRepository::class)
  */
 class Rig
 {
-
-    const Mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
     const Activite = ["PISC", "PAT", "TL"];
     /**
      * @ORM\Id

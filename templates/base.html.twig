@@ -7,10 +7,10 @@
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     {% endblock %}
+    {% block javascripts %}
+            <link src="{{ asset('js/scripts.js') }}">
+    {% endblock %}
 
-        {% block javascripts %}
-        <link href="{{ asset('js/main.js') }}" rel="stylesheet"/>
-        {% endblock %}
     </head>
     <body>
         {% include "header.html.twig" %}
