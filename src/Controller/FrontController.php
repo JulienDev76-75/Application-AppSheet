@@ -197,6 +197,19 @@ class FrontController extends AbstractController
             'horaireDS' => json_encode($horaireDS),
             'satisDR' => $satisDR,
             'sitesDR' => $sitesDR,
+            'trimestreDG' => json_encode($trimestreDG),
+            'trimestreDG1' => json_encode($trimestreDG1),
+            'trimestreDG2' => json_encode($trimestreDG2),
+            'trimestreDG3' => json_encode($trimestreDG3),
+            'trimestreDG4' => json_encode($trimestreDG4),
+            'userDGS' => $userDGS,
+            'sitesDGS' => $sitesDGS,
+            'satisDGS' => $satisDGS,
+            'globaleDG' => json_encode($globaleDG),
+            'propreteDG' => json_encode($propreteDG),
+            'compDG' => json_encode($compDG),
+            'temperatureDG' => json_encode($temperatureDG),
+            'horaireDG' => json_encode($horaireDG),
         ]);
     }
 
@@ -324,6 +337,7 @@ class FrontController extends AbstractController
         $sitesDGS = $siteRepo->findAll();
 
         return $this->render('dg/carteCadeau.html.twig', [
+            'mois' => json_encode($mois),
             'cartesvendues2020' => json_encode($cartesvendues2020),
             'cartesvendues2021' => json_encode($cartesvendues2021),
             'cartesvendues2017' => json_encode($cartesvendues2017),
