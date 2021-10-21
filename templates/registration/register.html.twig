@@ -11,6 +11,7 @@
     <div class="ms-4">
     {{ form_start(registrationForm) }}
     <div class="container">
+    {{ form_row(registrationForm.prenom_nom) }}
     {{ form_row(registrationForm.email) }}
     {{ form_row(registrationForm.poste) }}
     {{ form_row(registrationForm.plainPassword, {

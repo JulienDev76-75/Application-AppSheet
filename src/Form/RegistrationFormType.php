@@ -19,6 +19,10 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('prenom_nom', TextType::class, [
+                'attr' => ['class' => 'mb-4 ms-4 rounded'],
+                'label' => 'Prénom et nom   :'
+            ])
             ->add('email', EmailType::class, [
                 'attr' => ['class' => 'mb-4 ms-4 rounded'],
                 'label' => "Email :"
@@ -49,8 +53,7 @@ class RegistrationFormType extends AbstractType
             ->add('enregistrer', SubmitType::class, [
                 'attr' => ['class' => 'bg-success text-white mb-5 mt-4'],
                 'row_attr' => ['class' => 'text-center']
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -1,25 +1,4 @@
 {% extends 'base.html.twig' %}
-{# CARTE CADEAU ORGANISATION :
-DS OU DR : GRAHIQUE QUE DE LEUR SITE ou LEURS SITES, graphique par site ou par date 
-DG : GRAPHIQUE NATONALE, graphique donnée nationale par site ou date
-DONC ROUTE DIFFERENTE, CONTROLLER DIFFERENT ET FIND DIFFERENT
-DR OU DS -> données par  DATE
-DG : DONNEE PAR SITE ET PAR ANNEE
-UN ROLE SPECIAL POUR PIERRE OU LE DEV POUR JUSTE AJOUTER DES CHAMPS POUR CAS SPECIFIQUE DONC IS GRANTED et bim
-exemple requete spécifique :
-      $projectRepository = $this->getDoctrine()->getRepository(Project::class);
-        $projects = $projectRepository->findby(
-            ['user' => $this->getu()],
-            ['projet_deadline' => 'DESC'],
-        );
-        return $this->render('front/index.html.twig', [
-            'projects' => $projects,
-        ]);
-        
-DG FIND ALL PROPRE PAGE OU AUTRE CONTROLLER
-DG A DEF DANS LES ROLE
-ROLE HIERARCHY A ANNULER #}
-
 
 {% block title %}Cartes Cadeaux{% endblock %}
 
