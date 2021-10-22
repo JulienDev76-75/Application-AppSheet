@@ -19,7 +19,17 @@ class TotalCoutComRepository extends ServiceEntityRepository
         parent::__construct($registry, TotalCoutCom::class);
     }
 
-    
+    public function findByYearAsc()
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy("t.annee", "ASC")
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
+
 
 
     // /**

@@ -708,7 +708,6 @@ class FrontController extends AbstractController
         // ************************* DS VIEW *******************************
         $typeobjectif = $planRepo->findby(
             ['user' => $this->getUser()],
-            ['annee' => 'ASC']
         );
         $repartitionObjectif = [];
         $annee = [];
@@ -725,15 +724,17 @@ class FrontController extends AbstractController
         $sitesDGS = $sitesRepo->userAndSites();
         $coutcomDGS = $planRepo->sitesAndCoutCom();
         //$testfide = $planRepo->ObjectifFidelisation("Fidelisation");
-        $annee = [];
         $conquete = [];
         //$repartitionobjectif2017 = $planRepo->findByAnnee("2019");
 
         //******************* EVOLUTION COUT TOTAUX PAR ANNEE */
         $evolution_cout_total = $totalCoutCom->findAll();
+        $annee_cout_totaux = $totalCoutCom->findByYearAsc();
         foreach ($evolution_cout_total as $evolution_cout_totaux) {
-            $anneeCoutTotaux[] = $evolution_cout_totaux->getAnnee();
             $evolution_cout_com[] = $evolution_cout_totaux->getCoutTotaux();
+        }
+        foreach ($annee_cout_totaux as $ASC_cout_totaux) {
+            $ASCYearcouttotaux[] = $ASC_cout_totaux->getAnnee();
         }
 
         //******************* EVOLUTION COUT TOTAUX PAR OBJECTIF ET PAR ANNEE*/
@@ -750,7 +751,7 @@ class FrontController extends AbstractController
             'userDGS' => $userDGS,
             'sitesDGS' => $sitesDGS,
             'coutcomDGS' => $coutcomDGS,
-            'anneeCoutTotaux' => json_encode($anneeCoutTotaux),
+            'ASCYearcouttotaux' => json_encode($ASCYearcouttotaux),
             'evolution_cout_com' => json_encode($evolution_cout_com),
             'objectifs2017' => json_encode($objectifs2017),
             'annee' => json_encode($annee),
